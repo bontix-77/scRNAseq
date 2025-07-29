@@ -7,13 +7,13 @@ The result are presented as a HTML knit of a RMarkdown file (also available in t
 
 #### 📂 What’s Inside the script:
 
-\item **Basic QC** (filtering by features, counts, mitochondrial content).<br>\\
- **Normalization** with SCTransform.<br>
- **Dimensionality reduction** (PCA, UMAP).<br>
- **Clustering** of cells usin knn.<br>
- **Marker gene identification** Markers are calculated using specific features or between all the clusters.<br>
- **Visualizations** like UMAP, violin plots, feature plots among others.<br>
- **Anottation of cell type** This has been performed using the markers and litterature or by using references profiles, cell by cell using SingleR and celldex.<br>
+ -**Basic QC** (filtering by features, counts, mitochondrial content).<br>
+ -**Normalization** with SCTransform.<br>
+ -**Dimensionality reduction** (PCA, UMAP).<br>
+ -**Clustering** of cells usin knn.<br>
+ -**Marker gene identification** Markers are calculated using specific features or between all the clusters.<br>
+ -**Visualizations** like UMAP, violin plots, feature plots among others.<br>
+ -**Anottation of cell type** This has been performed using the markers and litterature or by using references profiles, cell by cell using SingleR and celldex.<br>
 
 
 
