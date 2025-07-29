@@ -7,13 +7,13 @@ The result are presented as a HTML knit of a RMarkdown file (also available in t
 
 #### 📂 What’s Inside the script:
 
-**Basic QC** (filtering by features, counts, mitochondrial content)
- **Normalization** with SCTransform
- **Dimensionality reduction** (PCA, UMAP)
- **Clustering** of cells
- **Marker gene identification** Markers are calculated using specific features or between all the clusters.
- **Visualizations** like UMAP, violin plots, feature plots among others
- **Anottation of cell type** This has been performed using the markers and litterature or by using references profiles, cell by cell using SingleR and celldex.
+**Basic QC** (filtering by features, counts, mitochondrial content).<br>
+ **Normalization** with SCTransform.<br>
+ **Dimensionality reduction** (PCA, UMAP).<br>
+ **Clustering** of cells usin knn.<br>
+ **Marker gene identification** Markers are calculated using specific features or between all the clusters.<br>
+ **Visualizations** like UMAP, violin plots, feature plots among others.<br>
+ **Anottation of cell type** This has been performed using the markers and litterature or by using references profiles, cell by cell using SingleR and celldex.<br>
 
 
 
@@ -32,3 +32,4 @@ library(presto)
 library(SingleR) # For cell type annotation; Bioconductor
 library(celldex) # For cell type annotation reference; Bioconductor
 library(MAST) # For differential expression; Bioconductor
+```
