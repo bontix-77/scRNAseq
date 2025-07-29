@@ -2,7 +2,7 @@ library(Seurat)
 library(tidyverse)
 
 
-# List files
+# List of the .h5 files. h5 files are outpur of CellRanger, used to map raw reads in X10 Genomics Chromium systems.
 files <- list.files(path = "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/R project dowloaded from manual/GettingStarted_scRNASeq/data", recursive = T, pattern = "*.h5")
 
 files
@@ -108,7 +108,8 @@ library(ggplot2)
 glimpse(adp)
 
 
-# calculate meitocondril genes porcentage for quality control and normalization
+# calculate mitocondrial genes porcentage for quality control and normalization. Mitocondrial RNA increase need to be assesd 
+#to determine if related to poor cell viability or in response of biological relevant processes.
 
 adp[["percent.mt"]] <- PercentageFeatureSet(adp, pattern = "^mt-")
 # set colors
@@ -151,7 +152,7 @@ adp$condition <- ifelse(stringr::str_detect(adp@meta.data$orig.ident, "^W"),
 # a condition and time point merged metadata
 adp$condition_tp <- paste(adp$condition, adp$time_point)
 
-# scatter the point by number of features and mitocndrial genes
+# scatter the point by number of features and mitocondrial genes
 
 FeatureScatter(adp, feature1 = "percent.mt", feature2 = "nFeature_RNA", group.by = "orig.ident", split.by = "time_point")
 
