@@ -1,13 +1,13 @@
-# scRNAseq
+# scRNAseq usin Seurat
 This is my first single-cell RNA-seq (scRNA-seq) analysis using the Seurat package in R. It's a learning project where I explore how to process, analyze, and visualize scRNA-seq data step by step.
-This script is a comprehensive collection of capabilities provided by the Seurat library.
+This script is a comprehensive collection of capabilities provided by the Seurat library.<br>
 The result are presented as a HTML knit of a RMarkdown file (also available in the "Code" folder).
 
 ## The three is composed of 3 folders: Data, Results and Code.
 
 #### 📂 What’s Inside the script:
 
-**Basic QC** (filtering by features, counts, mitochondrial content).<br>
+\item **Basic QC** (filtering by features, counts, mitochondrial content).<br>\\
  **Normalization** with SCTransform.<br>
  **Dimensionality reduction** (PCA, UMAP).<br>
  **Clustering** of cells usin knn.<br>
