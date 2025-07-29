@@ -1,7 +1,7 @@
 # scRNAseq using Seurat
 This is my first single-cell RNA-seq (scRNA-seq) analysis using the Seurat package in R. It's a learning project where I explore how to process, analyze, and visualize scRNA-seq data step by step.
 This script is a comprehensive collection of capabilities provided by the Seurat library.<br>
-The result are presented as a HTML knit of a RMarkdown file (also available in the "Code" folder).
+The result are presented as a [HTML](https://github.com/bontix-77/scRNAseq/blob/e7702093c5a2bc25f8bafb7c596b5b5334db631e/Results/final-Seurat-pipeline.html) knit of a RMarkdown file (also available in the "Code" folder).
 
 ## The three is composed of 2 folders: Data and Results.
 
