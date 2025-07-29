@@ -5,7 +5,7 @@ The result are presented as a HTML knit of a RMarkdown file (also available in t
 
 ## The three is composed of 3 folders: Data, Results and Code.
 
-#### 📂 What’s Inside the script:
+#### 📂 What’s Inside the [script](https://github.com/bontix-77/scRNAseq/blob/73dbdc6cad8a683d4c84116f58426034b654f272/Code/final%20Seurat%20script.R):
 
  -**Basic QC** (filtering by features, counts, mitochondrial content).<br>
  -**Normalization** with SCTransform.<br>
