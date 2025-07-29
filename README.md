@@ -5,7 +5,7 @@ The result are presented as a HTML knit of a RMarkdown file (also available in t
 
 ## The three is composed of 2 folders: Data and Results.
 
-Database used for this demonstration can be founde [here](https://bioinformatics.ccr.cancer.gov/docs/getting-started-with-scrna-seq/GettingStarted_scRNASeq.zip).
+Database used for this demonstration can be found [here](https://bioinformatics.ccr.cancer.gov/docs/getting-started-with-scrna-seq/GettingStarted_scRNASeq.zip).
 
 
 #### 📂 What’s Inside the [script](https://github.com/bontix-77/scRNAseq/blob/73dbdc6cad8a683d4c84116f58426034b654f272/Code/final%20Seurat%20script.R):
