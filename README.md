@@ -13,7 +13,7 @@ Database used for this demonstration can be found [here](https://bioinformatics.
  -**Basic QC** (filtering by features, counts, mitochondrial content).<br>
  -**Normalization** with SCTransform.<br>
  -**Dimensionality reduction** (PCA, UMAP).<br>
- -**Clustering** of cells usin knn.<br>
+ -**Clustering** of cells using knn.<br>
  -**Marker gene identification** Markers are calculated using specific features or between all the clusters.<br>
  -**Visualizations** like UMAP, violin plots, feature plots among others.<br>
  -**Anottation of cell type** This has been performed using the markers and litterature or by using references profiles, cell by cell using SingleR and celldex.<br>
