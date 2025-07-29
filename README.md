@@ -3,8 +3,10 @@ This is my first single-cell RNA-seq (scRNA-seq) analysis using the Seurat packa
 This script is a comprehensive collection of capabilities provided by the Seurat library.<br>
 The result are presented as a HTML knit of a RMarkdown file (also available in the "Code" folder).
 
+## The three is composed of 2 folders: Data and Results.
+
 Database used for this demonstration can be founde [here](https://bioinformatics.ccr.cancer.gov/docs/getting-started-with-scrna-seq/GettingStarted_scRNASeq.zip).
-## The three is composed of 3 folders: Data, Results and Code.
+
 
 #### 📂 What’s Inside the [script](https://github.com/bontix-77/scRNAseq/blob/73dbdc6cad8a683d4c84116f58426034b654f272/Code/final%20Seurat%20script.R):
 
