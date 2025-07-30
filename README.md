@@ -27,7 +27,7 @@ This project was done in R. Main packages used:
 
 ```r
 library(Seurat) # Seurat toolkit
-install.packages("tidyverse") # For some graphs in ggplot2 an dyplr
+library(tidyverse) # For some graphs in ggplot2 an dyplr
 library(hdf5r) # For data import
 library(patchwork) # For plotting
 library(glmGamPoi) # For SCTtransform using poisson gamma distribution
