@@ -1,0 +1,73 @@
+import os  # Provides functions for interacting with the operating system
+import io  # Provides tools for working with streams (used for in-memory text streams)
+from ftplib import FTP  # For FTP file transfers
+
+
+# Set the working directory
+os.chdir("C:/Users/Owner/Documents/scRNAseq")  # Change to the directory where you want to save the files
+
+from ftplib import FTP
+import os
+
+def FTP_GSM_Down(gsm_id, tag,ext, local_dir):
+    ftp_host = "ftp.ncbi.nlm.nih.gov"
+    ftp_dir = f"/geo/samples/GSM6817nnn/{gsm_id}/suppl"
+    filename = f"{gsm_id}{tag}{ext}"
+    local_file = os.path.join(local_dir, filename)
+
+    os.makedirs(local_dir, exist_ok=True)
+    print(filename)
+    try:
+        ftp = FTP(ftp_host)
+        ftp.login()
+        ftp.cwd(ftp_dir)
+        with open(local_file, "wb") as f:
+            ftp.retrbinary(f"RETR {filename}", f.write)
+        ftp.quit()
+        print(f"✅ Downloaded: {filename}")
+    except Exception as e:
+        print(f"❌ Error downloading {filename}: {e}")
+
+
+
+gsm_id = [("GSM6817423","_A"),("GSM6817424","_B"),("GSM6817425","_C"),("GSM6817426","_D"),("GSM6817427","_E"),("GSM6817428","_F")] #GSM6817428","GSM6817429"]#],"GSM6817430_H","GSM6817431_I","GSM6817432_J"]
+extensions = [".barcodes.tsv.gz", ".features.tsv.gz", ".matrix.mtx.gz"]
+
+local_dir = "C:/Users/Owner/Documents/scRNAseq/Data/GSM"
+
+for id,tag in gsm_id:
+    for ext in extensions:
+        FTP_GSM_Down(id, tag,ext, local_dir)
+
+
+import re
+
+files = []
+
+folder_path = "C:/Users/Owner/Documents/scRNAseq/Data/GSM/"
+files=[f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+print(files)
+
+for file in files:
+    code=re.findall(r'\d+', file)
+    print("############"+file)
+    if not os.path.isdir(folder_path+code[0]):
+       os.makedirs(folder_path+code[0])
+     
+
+
+    if re.search(r'matrix', file): 
+        os.rename(os.path.join(folder_path, file), os.path.join(folder_path, "matrix.mtx.gz"),)
+        move_file = os.path.join(folder_path, "matrix.mtx.gz")
+        os.replace(move_file, os.path.join(folder_path+code[0]+"/matrix.mtx.gz"))
+    elif re.search(r'barcodes', file):
+        os.rename(os.path.join(folder_path, file), os.path.join(folder_path, "barcodes.tsv.gz"))
+        move_file = os.path.join(folder_path, "barcodes.tsv.gz")
+        os.replace(move_file, os.path.join(folder_path+code[0]+"/barcodes.tsv.gz")) 
+    elif re.search(r'features', file):
+        os.rename(os.path.join(folder_path, file), os.path.join(folder_path, "features.tsv.gz"))
+        move_file = os.path.join(folder_path, "features.tsv.gz")
+        os.replace(move_file, os.path.join(folder_path+code[0]+"/features.tsv.gz"))
+    else:
+        print(f"File {file} does not match any expected patterns.")
+
