@@ -75,7 +75,7 @@ HIV <- merge(HIV[[1]],
 ## LayerData(W10_filtered_feature_bc_matrix.h5, assay="RNA", layer='counts') |> head()
 
 
-# The metadata in the Seurat object is located in adp@metadata and contains the
+# The metadata in the Seurat object is located in HIV@metadata and contains the
 # information associated with each cell.
 ################################################################################
 
@@ -106,7 +106,7 @@ library(glmGamPoi) # for sctransform
 library(ggplot2)
 
 # read the object
-## adp <- readRDS("C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merged.rds")
+## HIV <- readRDS("C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/HIV_merged.rds")
 
 
 glimpse(HIV)
@@ -216,10 +216,10 @@ saveRDS(HIV_filt, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/interm
 HIV_filt <- SCTransform(HIV_filt, vars.to.regress = "percent.mt", verbose = FALSE)
 
 # Check default assay
-############ DefaultAssay(object = adp_filt)
+############ DefaultAssay(object = HIV_filt)
 
 # Set default assay
-########### DefaultAssay(object = adp_filt) <- "RNA"
+########### DefaultAssay(object = HIV_filt) <- "RNA"
 
 
 # run PCA
@@ -251,7 +251,7 @@ DimPlot(HIV_filt,
   reduction = "umap", group.by = c("orig.ident", "seurat_clusters"),
   alpha = 0.2, ncol = 2
 )
-# save the adp filtered file
+# save the HIV filtered file
 
 saveRDS(HIV_filt, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files//HIV_merge_filt_sctran_clust0.1.rds")
 
@@ -264,22 +264,22 @@ HIV_filt <- PrepSCTFindMarkers(HIV_filt, verbose = T)
 # devtools::install_github('immunogenomics/presto')
 library(presto)
 # find all markers
-adp_filt_markers <- FindAllMarkers(adp_filt, only.pos = TRUE)
+HIV_filt_markers <- FindAllMarkers(HIV_filt, only.pos = TRUE)
 # ordering the results
-adp_filt_markers <- adp_filt_markers %>%
+HIV_filt_markers <- HIV_filt_markers %>%
   arrange(cluster, desc(avg_log2FC), p_val_adj)
 
 # examine a small subset
-adp_filt_markers %>%
+HIV_filt_markers %>%
   group_by(cluster) %>%
   slice_max(n = 5, order_by = avg_log2FC)
 # markers visualization
-top20 <- adp_filt_markers %>%
+top20 <- HIV_filt_markers %>%
   group_by(cluster) %>%
   dplyr::filter(avg_log2FC > 1) %>%
   slice_head(n = 20) %>%
   ungroup()
-DoHeatmap(adp_filt, features = top20$gene) + NoLegend()
+DoHeatmap(HIV_filt, features = top20$gene) + NoLegend()
 
 # associate pubblished markers with cell type
 # contaminants
@@ -293,17 +293,17 @@ prolif <- "Mki67"
 # differentiating adipocytes
 diffadip <- c("Col5a3", "Serpina3n")
 
-VlnPlot(adp_filt, features = contam)
+VlnPlot(HIV_filt, features = contam)
 
 # visualize in the cluster the cel type corresponding to the  feature= parameter above (this case contam)
-FeaturePlot(adp_filt, features = contam)
+FeaturePlot(HIV_filt, features = contam)
 
-saveRDS(adp_filt_markers, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files/adp_merge_filt_markers.rds")
+saveRDS(HIV_filt_markers, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files/HIV_merge_filt_markers.rds")
 
 ##############################################
 ##    Differential Expression analisys      ##
 ##############################################
-DefaultAssay(adp_filt)
+DefaultAssay(HIV_filt)
 
 
 library(SingleR) # for cell type annotation; Bioconductor
@@ -311,10 +311,10 @@ library(celldex) # for cell type annotation reference; Bioconductor
 library(MAST) # for differential expression; Bioconductor
 
 mem.maxVSize(vsize = 15000)
-glimpse(adp_filt)
-table(adp_filt$condition_tp)
-Idents(adp_filt) <- "SCT_snn_res.0.1"
-table(Idents(adp_filt))
+glimpse(HIV_filt)
+table(HIV_filt$condition_tp)
+Idents(HIV_filt) <- "SCT_snn_res.0.1"
+table(Idents(HIV_filt))
 ######################################################################################
 #         Createa new metadata with the expression of gene (example CD3D)           ##
 #                                                                                   ##
@@ -327,36 +327,36 @@ table(Idents(adp_filt))
 
 # Viewing the code, JoinLayers was called to link all the data sets together. This is
 # a new feature of Seurat5, and is required for analyzing data after integration and batch correction, in this case fue all the samples (D10,D16 , etc.)
-plot(density(sample(JoinLayers(adp_filt@assays$RNA)$count["Gapdh", ], 2500)), cex = 0, lty = 1, main = "Density of Gapdh in 2500 random cells")
+plot(density(sample(JoinLayers(HIV_filt@assays$RNA)$count["Gapdh", ], 2500)), cex = 0, lty = 1, main = "Density of Gapdh in 2500 random cells")
 
-hist(sample(JoinLayers(adp@assays$RNA)$count["Gapdh", ], 2500), breaks = 52, main = "Histogram of Gapdh in 2500 random cells", ylab = "Frequency", xlab = "Gene counts")
+hist(sample(JoinLayers(HIV@assays$RNA)$count["Gapdh", ], 2500), breaks = 52, main = "Histogram of Gapdh in 2500 random cells", ylab = "Frequency", xlab = "Gene counts")
 
 ###############################################################################
 ##        how estract expression matrixes                                    ##
-##  expr<-GetAssayData(adp_filt,assay = "SCT",slot = "data")                 ##
+##  expr<-GetAssayData(HIV_filt,assay = "SCT",slot = "data")                 ##
 ##  expr_df <- as.data.frame(as.matrix(expr)) %>%                            ##
 ##   rownames_to_column(var = "gene") %>%                                    ##
 ##   pivot_longer(-gene, names_to = "cell", values_to = "expression")        ##
 ###############################################################################
 
 
-adp_pp <- adp_filt
+HIV_pp <- HIV_filt
 
-Idents(adp_pp) <- "SCT"
-adp_pp_mks <- PrepSCTFindMarkers(adp_pp)
-Idents(adp_pp_mks) <- "time_point"
-table(Idents(adp_pp_mks))
+Idents(HIV_pp) <- "SCT"
+HIV_pp_mks <- PrepSCTFindMarkers(HIV_pp)
+Idents(HIV_pp_mks) <- "time_point"
+table(Idents(HIV_pp_mks))
 
 ## to find different expression betwe a label and the others in a metadata idents (if between two specific labels "idents.2=" can be used to specify.)
-Day0_Day6_DE <- FindMarkers(adp_pp_mks, ident.1 = "Day 0", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
+Day0_Day6_DE <- FindMarkers(HIV_pp_mks, ident.1 = "Day 0", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
 
 
-Idents(adp_pp_mks) <- "SCT_snn_res.0.1"
-DefaultAssay(adp_pp_mks) <- "SCT"
+Idents(HIV_pp_mks) <- "SCT_snn_res.0.1"
+DefaultAssay(HIV_pp_mks) <- "SCT"
 
 ## find all markers between clusters
 
-de_allClusters <- FindAllMarkers(adp_pp_mks, test.use = "wilcox", min.pct = 0.1, only.pos = TRUE)
+de_allClusters <- FindAllMarkers(HIV_pp_mks, test.use = "wilcox", min.pct = 0.1, only.pos = TRUE)
 
 head(de_allClusters)
 
@@ -369,42 +369,42 @@ for (i in 0:7) {
 top5PerCluster <- top5PerCluster[-1, ]
 top5PerCluster
 
-DoHeatmap(adp_pp_mks, features = top5PerCluster$gene, slot = "scale.data")
+DoHeatmap(HIV_pp_mks, features = top5PerCluster$gene, slot = "scale.data")
 ## visualization of features
 
-fig1 <- DimPlot(adp_pp_mks, group.by = "time_point")
-fig2 <- FeaturePlot(adp_pp_mks, features = "Acta2", order = T)
-fig3 <- FeaturePlot(adp_pp_mks, features = "Cd36", order = T)
+fig1 <- DimPlot(HIV_pp_mks, group.by = "time_point")
+fig2 <- FeaturePlot(HIV_pp_mks, features = "Acta2", order = T)
+fig3 <- FeaturePlot(HIV_pp_mks, features = "Cd36", order = T)
 
 fig1 / (fig2 | fig3)
 
 
 ## is possible to join all cells as a seample and do a pseudobulk analisys
 
-pseudo_adp <- AggregateExpression(adp_pp_mks, assays = "SCT", return.seurat = T, group.by = c("orig.ident", "time_point", "condition", "condition_tp"))
+pseudo_HIV <- AggregateExpression(HIV_pp_mks, assays = "SCT", return.seurat = T, group.by = c("orig.ident", "time_point", "condition", "condition_tp"))
 
-head(pseudo_adp@assays$SCT$counts)
-pseudo_adp@meta.data
-glimpse(pseudo_adp)
+head(pseudo_HIV@assays$SCT$counts)
+pseudo_HIV@meta.data
+glimpse(pseudo_HIV)
 
 # just to clean up the look a little bit
-pseudo_adp <- RenameCells(pseudo_adp, new.names = gsub("_.*", "", pseudo_adp$orig.ident))
-pseudo_adp$orig.ident <- gsub("_.*", "", pseudo_adp$orig.ident)
-head(pseudo_adp@assays$RNA$counts)
-pseudo_adp@meta.data
+pseudo_HIV <- RenameCells(pseudo_HIV, new.names = gsub("_.*", "", pseudo_HIV$orig.ident))
+pseudo_HIV$orig.ident <- gsub("_.*", "", pseudo_HIV$orig.ident)
+head(pseudo_HIV@assays$RNA$counts)
+pseudo_HIV@meta.data
 
 ## performin bulk DE
 
-Idents(pseudo_adp) <- "time_point"
+Idents(pseudo_HIV) <- "time_point"
 
 ## DESeq2 if not istalled:  BiocManager::install("DESeq2")
-bulk_adp_de <- FindMarkers(pseudo_adp, ident.1 = "Day 0", ident.2 = "Day 6", test.use = "DESeq2")
-head(bulk_adp_de)
+bulk_HIV_de <- FindMarkers(pseudo_HIV, ident.1 = "Day 0", ident.2 = "Day 6", test.use = "DESeq2")
+head(bulk_HIV_de)
 
 # comparing how many differentially expressed genes between SC and bulk analisys comparing the conditions
 
 scDE.genes <- rownames(Day0_Day6_DE)[which(Day0_Day6_DE$p_val_adj < 0.05)]
-bulkDE.genes <- rownames(bulk_adp_de)[which(bulk_adp_de$p_val_adj < 0.05)]
+bulkDE.genes <- rownames(bulk_HIV_de)[which(bulk_HIV_de$p_val_adj < 0.05)]
 length(scDE.genes)
 length(bulkDE.genes)
 
@@ -414,83 +414,83 @@ head(intersect(scDE.genes, bulkDE.genes), 30)
 
 ## to chech spefic features
 
-bulk_adp_de[c("Acta2", "Cd36"), ]
+bulk_HIV_de[c("Acta2", "Cd36"), ]
 
 ## visualize the DE genes
 
-Idents(adp_pp) <- "SCT_snn_res.0.1"
-DotPlot(adp_pp, features = unique(top5PerCluster$gene), dot.scale = 3) + coord_flip()
+Idents(HIV_pp) <- "SCT_snn_res.0.1"
+DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3) + coord_flip()
 
 # violine as alternative visualization
 
-Idents(adp_pp) <- "time_point"
-VlnPlot(adp_pp, features = c("Acta2", "Cd36"), alpha = 0.1)
+Idents(HIV_pp) <- "time_point"
+VlnPlot(HIV_pp, features = c("Acta2", "Cd36"), alpha = 0.1)
 
 
 ## anotate the differential genes
 
 markers <- c("Mmp3", "Mki67", "Fabp4", "Scd1", "Ucp1", "Ppargc1a", "Elovl3", "Cidea")
-Idents(adp_pp) <- "SCT_snn_res.0.1"
-avgExp <- AverageExpression(adp_pp, markers, assay = "SCT")$SCT
+Idents(HIV_pp) <- "SCT_snn_res.0.1"
+avgExp <- AverageExpression(HIV_pp, markers, assay = "SCT")$SCT
 avgExp
-DimPlot(adp_pp, label = T)
-FeaturePlot(adp_pp, features = markers, ncol = 3, order = T)
+DimPlot(HIV_pp, label = T)
+FeaturePlot(HIV_pp, features = markers, ncol = 3, order = T)
 ## after find markers characteristic for a particular cluster we can annotate
 
-adipocyte <- vector(length = ncol(adp_pp))
-adipocyte[which(adp_pp$SCT_snn_res.0.1 %in% c(0, 5))] <- "Preadipocytes"
-adipocyte[which(adp_pp$SCT_snn_res.0.1 %in% c(2, 6))] <- "Proliferating cells"
-adipocyte[which(adp_pp$SCT_snn_res.0.1 %in% c(1, 3))] <- "Differentiating beige adipocytes"
-adipocyte[which(adp_pp$SCT_snn_res.0.1 %in% c(4))] <- "Differentiated beige adipocytes"
-adipocyte[which(adp_pp$SCT_snn_res.0.1 %in% c(7))] <- "Unclassified"
-adp_pp$adipocyte <- adipocyte
+adipocyte <- vector(length = ncol(HIV_pp))
+adipocyte[which(HIV_pp$SCT_snn_res.0.1 %in% c(0, 5))] <- "Preadipocytes"
+adipocyte[which(HIV_pp$SCT_snn_res.0.1 %in% c(2, 6))] <- "Proliferating cells"
+adipocyte[which(HIV_pp$SCT_snn_res.0.1 %in% c(1, 3))] <- "Differentiating beige adipocytes"
+adipocyte[which(HIV_pp$SCT_snn_res.0.1 %in% c(4))] <- "Differentiated beige adipocytes"
+adipocyte[which(HIV_pp$SCT_snn_res.0.1 %in% c(7))] <- "Unclassified"
+HIV_pp$adipocyte <- adipocyte
 
-f1 <- DimPlot(adp_pp, group.by = "SCT_snn_res.0.1", label = T) + NoLegend()
-f2 <- DimPlot(adp_pp, group.by = "time_point") + NoLegend()
-f3 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend()
+f1 <- DimPlot(HIV_pp, group.by = "SCT_snn_res.0.1", label = T) + NoLegend()
+f2 <- DimPlot(HIV_pp, group.by = "time_point") + NoLegend()
+f3 <- DimPlot(HIV_pp, group.by = "adipocyte", label = T) + NoLegend()
 (f1 / f2 | f3)
 ## SingleR annotation. this method annotate each cell in the dataset against a reference dataset
 library(celldex)
 
-adp.sce <- as.SingleCellExperiment(adp_pp, assay = "SCT") # This selects *only* the SCT assay
+HIV.sce <- as.SingleCellExperiment(HIV_pp, assay = "SCT") # This selects *only* the SCT assay
 mouseRNASeq <- celldex::MouseRNAseqData()
 head(mouseRNASeq)
 table(mouseRNASeq$label.main)
 table(mouseRNASeq$label.fine)
 
-annot <- SingleR::SingleR(test = adp.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.main)
+annot <- SingleR::SingleR(test = HIV.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.main)
 head(annot)
 
 # if a label is to weak during SingleR the cell is taged as NA. Now we add the labels determine to the metadata of the Seurat object
 
 table(annot$pruned.labels, useNA = "ifany") # useNA can be used turned on in the `table` function
 
-adp_pp$mouseRNASeq.main <- annot$pruned.labels
+HIV_pp$mouseRNASeq.main <- annot$pruned.labels
 
 ## let's visualize the final result
 
-annotFig1 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend()
-annotFig2 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main", label = T)
+annotFig1 <- DimPlot(HIV_pp, group.by = "adipocyte", label = T) + NoLegend()
+annotFig2 <- DimPlot(HIV_pp, group.by = "mouseRNASeq.main", label = T)
 
 annotFig1 | annotFig2
 
 ## annotation by cluster
 
-Idents(adp_pp) <- "SCT_snn_res.0.1" # Assign clusters as the identities
-avgExp <- AverageExpression(adp_pp, assays = "SCT")$SCT # Run AverageExpression on the SCT assay and return only SCT
+Idents(HIV_pp) <- "SCT_snn_res.0.1" # Assign clusters as the identities
+avgExp <- AverageExpression(HIV_pp, assays = "SCT")$SCT # Run AverageExpression on the SCT assay and return only SCT
 clustAnnot <- SingleR::SingleR(test = avgExp, ref = mouseRNASeq, labels = mouseRNASeq$label.main) # Run SingleR on the averaged expression matrix
 clustAnnot
 
 
 clustLabels <- as.vector(clustAnnot$pruned.labels) # retrieve only the cluster-derived annotations
 names(clustLabels) <- c(0:7) # assign the cluster numbers as the annotations
-clustLabels.vect <- clustLabels[match(adp_pp$SCT_snn_res.0.1, names(clustLabels))] # match the cluster identities per cell in the Seurat data to the cluster labels
-names(clustLabels.vect) <- colnames(adp_pp) # ensure that the cluster identities are assigned the cell names
-adp_pp$mouseRNASeq.main.clust <- clustLabels.vect # add the cluster annotations to the vector
+clustLabels.vect <- clustLabels[match(HIV_pp$SCT_snn_res.0.1, names(clustLabels))] # match the cluster identities per cell in the Seurat data to the cluster labels
+names(clustLabels.vect) <- colnames(HIV_pp) # ensure that the cluster identities are assigned the cell names
+HIV_pp$mouseRNASeq.main.clust <- clustLabels.vect # add the cluster annotations to the vector
 
-clustAnnotFig1 <- DimPlot(adp_pp, group.by = "SCT_snn_res.0.1", label = T) + NoLegend()
-clustAnnotFig2 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend()
-clustAnnotFig3 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main")
-clustAnnotFig4 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main.clust")
+clustAnnotFig1 <- DimPlot(HIV_pp, group.by = "SCT_snn_res.0.1", label = T) + NoLegend()
+clustAnnotFig2 <- DimPlot(HIV_pp, group.by = "adipocyte", label = T) + NoLegend()
+clustAnnotFig3 <- DimPlot(HIV_pp, group.by = "mouseRNASeq.main")
+clustAnnotFig4 <- DimPlot(HIV_pp, group.by = "mouseRNASeq.main.clust")
 
 (clustAnnotFig1 | clustAnnotFig2) / (clustAnnotFig3 | clustAnnotFig4)
