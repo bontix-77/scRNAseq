@@ -6,7 +6,7 @@ library(tidyverse)
 files <- list.files(path = "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/R project dowloaded from manual/GettingStarted_scRNASeq/data", recursive = T, pattern = "*.h5")
 
 files
-# Create a list of count matrices
+# Create a list of count matrices.
 
 
 h5_read <- lapply(paste0(
