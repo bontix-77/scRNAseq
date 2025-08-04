@@ -212,8 +212,8 @@ DefaultAssay(object = adp_filt) <- "SCT"
 
 adp_filt <- RunPCA(adp_filt, verbose = FALSE, assay = "SCT")
 library(harmony)
-adp_harmony <- RunHarmony(adp_filt,c("orig.ident","time_point", "condition", "condition_tp"))
-adp_filt <- adp_harmony
+adp_harmony <- RunHarmony(adp_filt,c("orig.ident","time_point", "condition"))
+#adp_filt <- adp_harmony
 
 # visualizethte first 9 PC
 
@@ -444,7 +444,7 @@ head(mouseRNASeq)
 table(mouseRNASeq$label.main)
 table(mouseRNASeq$label.fine)
 
-annot <- SingleR::SingleR(test = adp.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.main)
+annot <- SingleR::SingleR(test = adp.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.fine)
 head(annot)
 
 # if a label is to weak during SingleR the cell is taged as NA. Now we add the labels determine to the metadata of the Seurat object
@@ -470,7 +470,7 @@ clustAnnot
 
 
 clustLabels <- as.vector(clustAnnot$pruned.labels) # retrieve only the cluster-derived annotations
-names(clustLabels) <- c(0:5) # assign the cluster numbers as the annotations
+names(clustLabels) <- c(0:4) # assign the cluster numbers as the annotations
 clustLabels.vect <- clustLabels[match(adp_pp$SCT_snn_res.0.1, names(clustLabels))] # match the cluster identities per cell in the Seurat data to the cluster labels
 names(clustLabels.vect) <- colnames(adp_pp) # ensure that the cluster identities are assigned the cell names
 adp_pp$mouseRNASeq.main.clust <- clustLabels.vect # add the cluster annotations to the vector
@@ -480,4 +480,5 @@ clustAnnotFig2 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend(
 clustAnnotFig3 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main")
 clustAnnotFig4 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main.clust")
 
-(clustAnnotFig1 | clustAnnotFig2) / (clustAnnotFig3 | clustAnnotFig4)
+final_fig <- (clustAnnotFig1 | clustAnnotFig2) / (clustAnnotFig3 | clustAnnotFig4)
+save
