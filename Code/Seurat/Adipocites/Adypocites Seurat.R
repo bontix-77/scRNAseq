@@ -102,7 +102,7 @@ library(glmGamPoi) # for sctransform
 library(ggplot2)
 
 # read the object
-## adp <- readRDS("C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merged.rds")
+adp <- readRDS("C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merged.rds")
 
 
 glimpse(adp)
@@ -441,19 +441,19 @@ head(mouseRNASeq)
 table(mouseRNASeq$label.main)
 table(mouseRNASeq$label.fine)
 
-annot <- SingleR::SingleR(test = adp.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.main)
+annot <- SingleR::SingleR(test = adp.sce, ref = mouseRNASeq, labels = mouseRNASeq$label.fine) 
 head(annot)
 
 # if a label is to weak during SingleR the cell is taged as NA. Now we add the labels determine to the metadata of the Seurat object
 
 table(annot$pruned.labels, useNA = "ifany") # useNA can be used turned on in the `table` function
 
-adp_pp$mouseRNASeq.main <- annot$pruned.labels
+adp_pp$mouseRNASeq.fine <- annot$pruned.labels
 
 ## let's visualize the final result
 
 annotFig1 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend()
-annotFig2 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main", label = T)
+annotFig2 <- DimPlot(adp_pp, group.by = "mouseRNASeq.fine", label = T)
 
 annotFig1 | annotFig2
 
@@ -461,7 +461,7 @@ annotFig1 | annotFig2
 
 Idents(adp_pp) <- "SCT_snn_res.0.1" # Assign clusters as the identities
 avgExp <- AverageExpression(adp_pp, assays = "SCT")$SCT # Run AverageExpression on the SCT assay and return only SCT
-clustAnnot <- SingleR::SingleR(test = avgExp, ref = mouseRNASeq, labels = mouseRNASeq$label.main) # Run SingleR on the averaged expression matrix
+clustAnnot <- SingleR::SingleR(test = avgExp, ref = mouseRNASeq, labels = mouseRNASeq$label.fine) # Run SingleR on the averaged expression matrix
 clustAnnot
 
 
@@ -469,11 +469,14 @@ clustLabels <- as.vector(clustAnnot$pruned.labels) # retrieve only the cluster-d
 names(clustLabels) <- c(0:7) # assign the cluster numbers as the annotations
 clustLabels.vect <- clustLabels[match(adp_pp$SCT_snn_res.0.1, names(clustLabels))] # match the cluster identities per cell in the Seurat data to the cluster labels
 names(clustLabels.vect) <- colnames(adp_pp) # ensure that the cluster identities are assigned the cell names
-adp_pp$mouseRNASeq.main.clust <- clustLabels.vect # add the cluster annotations to the vector
+adp_pp$mouseRNASeq.fine.clust <- clustLabels.vect # add the cluster annotations to the vector
 
 clustAnnotFig1 <- DimPlot(adp_pp, group.by = "SCT_snn_res.0.1", label = T) + NoLegend()
 clustAnnotFig2 <- DimPlot(adp_pp, group.by = "adipocyte", label = T) + NoLegend()
-clustAnnotFig3 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main")
-clustAnnotFig4 <- DimPlot(adp_pp, group.by = "mouseRNASeq.main.clust")
+clustAnnotFig3 <- DimPlot(adp_pp, group.by = "mouseRNASeq.fine")
+clustAnnotFig4 <- DimPlot(adp_pp, group.by = "mouseRNASeq.fine.clust")
 
-(clustAnnotFig1 | clustAnnotFig2) / (clustAnnotFig3 | clustAnnotFig4)
+clust_4fig<-(clustAnnotFig1 | clustAnnotFig2) / (clustAnnotFig3 | clustAnnotFig4)
+
+final_compar<-(clustAnnotFig2| clustAnnotFig3) 
+ggsave(clust_4fig, filename = "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_final_4fig.png", width = 18, height = 13, dpi = 300)

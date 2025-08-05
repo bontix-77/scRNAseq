@@ -102,7 +102,7 @@ library(hdf5r) # for data import
 library(patchwork) # for plotting
 library(presto) # for differential expression
 library(glmGamPoi) # for sctransform
-library(ggplot2)
+
 
 # read the object
 ## adp <- readRDS("C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merged.rds")
@@ -205,7 +205,7 @@ saveRDS(adp_filt, "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 b
 ############ DefaultAssay(object = adp_filt)
 
 # Set default assay
-########### DefaultAssay(object = adp_filt) <- "RNA"
+########### DefaultAssay(object = adp_filt) <- "RNA" 
 
 DefaultAssay(object = adp_filt) <- "SCT"
 # run PCA
