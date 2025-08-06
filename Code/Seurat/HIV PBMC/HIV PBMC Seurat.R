@@ -4,7 +4,7 @@ library(tidyverse)
 
 setwd("C:/Users/Owner/Documents/scRNAseq/Data/GSM")
 
-# List of the .h5 files. h5 files are outpur of CellRanger, used to map raw reads in X10 Genomics Chromium systems.
+# List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
 dirs <- list.dirs()
 dirs_name <- basename(dirs[dirs !="./"])
 dirs_name <- dirs_name[-1]
@@ -13,14 +13,7 @@ dirs_name <- dirs_name[-1]
 paste( "C:/Users/Owner/Documents/scRNAseq/",dirs[2])
 
 reads <- lapply(paste0("C:/Users/Owner/Documents/scRNAseq/Data/GSM/",dirs_name,"/")
-  
-, Read10X)
-
-# Automated way to assign names; modify for your purposes
-# names(h5_read)<- sapply(files,
-#                        function(x){str_split_1(x,"_")[1]},
-#                        USE.NAMES = FALSE)
-
+  , Read10X)
 # Assign names manually
              names(reads) <- c("6817423", "6817424", "6817425", "6817426", "6817427", "6817428")
 #########################################################################
@@ -61,22 +54,8 @@ HIV <- merge(HIV[[1]],
 ##                                   project = file)
 ##  assign(file, seurat_obj)
 ## }
-
-
-# You can see the primary slots using:
-## glimpse(W10_filtered_feature_bc_matrix.h5)
-# to go back to the names layer
-## Layers(W10_filtered_feature_bc_matrix.h5)
-
-## W10_filtered_feature_bc_matrix.h5[["RNA"]]$counts |> head()
-# or
-## W10_filtered_feature_bc_matrix.h5@assays$RNA$counts  |> head()
-# or
-## LayerData(W10_filtered_feature_bc_matrix.h5, assay="RNA", layer='counts') |> head()
-
-
-# The metadata in the Seurat object is located in HIV@metadata and contains the
-# information associated with each cell.
+## The metadata in the Seurat object is located in HIV@metadata and contains the
+## information associated with each cell.
 ################################################################################
 
 

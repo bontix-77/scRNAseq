@@ -1,0 +1,22 @@
+#to install: pip install scrublet in terminal
+
+import scrublet as scr
+import scipy.io
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = 'Arial'
+plt.rc('font', size=14)
+plt.rcParams['pdf.fonttype'] = 42
+
+
+
+#read the matix file
+
+input_dir = 'filtered_gene_bc_matrices/GRCh38/'
+counts_matrix = scipy.io.mmread(input_dir + '/matrix.mtx').T.tocsc()
+genes = np.array(scr.load_genes(input_dir + 'genes.tsv', delimiter='\t', column=1))
+
+print('Counts matrix shape: {} rows, {} columns'.format(counts_matrix.shape[0], counts_matrix.shape[1]))
+print('Number of genes in gene list: {}'.format(len(genes)))
