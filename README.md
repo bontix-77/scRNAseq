@@ -8,6 +8,6 @@ This is my independent single-cell RNA-seq (scRNA-seq) analysis using the Seurat
 
 \-**Code** folder - containing all the algorith each as module in its own sub-folder.<br> -**Results** folder - containing a series of results and graphs.<br>
 
-## The analysis has ben peroformed on pubblic data sets found at GEO, dettails ara caontained in the relative README files found in the specif folders (in construction)
+## The analysis has ben peroformed on pubblic data sets found at GEO, dettails can be found in the relative README file in the specif project folders (in construction)
 
 Database used for the adipocite project can be found [here](https://bioinformatics.ccr.cancer.gov/docs/getting-started-with-scrna-seq/GettingStarted_scRNASeq.zip).
