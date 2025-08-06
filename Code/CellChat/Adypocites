@@ -1,4 +1,4 @@
-Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_SCT.rds")
+Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_sctran_clust_harmony.rds") # Load the dataset containing adipocytes")
 library(CellChat)# Load the CellChat library
 library(Seurat)
 #Data.cc <- GetAssayData(Data_set, assay = "SCT", layer = "data") #Data_set[["SCT"]]$data
@@ -6,7 +6,8 @@ library(Seurat)
 #meta <- data.frame(samples = labels, row.names = names(labels)) # create a dataframe of the cell labels
 
 Data_set$samples <- as.factor(Data_set$orig.ident)
-cellchat <- createCellChat(object = Data_set, group.by = "orig.ident",assay="SCT") # create a CellChat object
+Data_set$seurat_clusters <- factor( as.numeric(as.character(Data_set$seurat_clusters)) + 1)
+cellchat <- createCellChat(object = Data_set, group.by = "seurat_clusters",assay="SCT") # create a CellChat object
 
 CellChatDB <- CellChatDB.mouse # use CellChatDB.mouse if running on mouse data
 showDatabaseCategory(CellChatDB)
