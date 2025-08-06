@@ -1,0 +1,63 @@
+Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_SCT.rds")
+library(CellChat)# Load the CellChat library
+library(Seurat)
+#Data.cc <- GetAssayData(Data_set, assay = "SCT", layer = "data") #Data_set[["SCT"]]$data
+#labels <- Idents(Data_set)
+#meta <- data.frame(samples = labels, row.names = names(labels)) # create a dataframe of the cell labels
+
+Data_set$samples <- as.factor(Data_set$orig.ident)
+cellchat <- createCellChat(object = Data_set, group.by = "orig.ident",assay="SCT") # create a CellChat object
+
+CellChatDB <- CellChatDB.mouse # use CellChatDB.mouse if running on mouse data
+showDatabaseCategory(CellChatDB)
+
+# use a subset of CellChatDB for cell-cell communication analysis
+#CellChatDB.use <- subsetDB(CellChatDB, search = "Secreted Signaling", key = "annotation") # use Secreted Signaling
+
+# Only uses the Secreted Signaling from CellChatDB v1
+#  CellChatDB.use <- subsetDB(CellChatDB, search = list(c("Secreted Signaling"), c("CellChatDB v1")), key = c("annotation", "version"))
+
+# use all CellChatDB except for "Non-protein Signaling" for cell-cell communication analysis
+ CellChatDB.use <- subsetDB(CellChatDB)
+
+ # use all CellChatDB for cell-cell communication analysis
+# CellChatDB.use <- CellChatDB # simply use the default CellChatDB. We do not suggest to use it in this way because CellChatDB v2 includes "Non-protein Signaling" (i.e., metabolic and synaptic signaling). 
+
+# set the used database in the object
+cellchat@DB <- CellChatDB.use
+
+
+
+# subset the expression data of signaling genes for saving computation cost
+cellchat <- subsetData(cellchat) # This step is necessary even if using the whole database
+#future::plan("multisession", workers = 4) # do parallel
+cellchat <- identifyOverExpressedGenes(cellchat)
+cellchat <- identifyOverExpressedInteractions(cellchat)
+
+#> The number of highly variable ligand-receptor pairs used for signaling inference is 692
+
+
+cellchat <- computeCommunProb(cellchat, type = "triMean")
+cellchat <- filterCommunication(cellchat, min.cells = 10)
+df.net <- subsetCommunication(cellchat) #returns a data frame consisting of all the inferred cell-cell communications at the level of ligands/receptors. Set slot.name = "netP" to access the the inferred communications at the level of signaling pathways
+
+
+#df.net <- subsetCommunication(cellchat, sources.use = c(1,2), targets.use = c(4,5)) #gives the inferred cell-cell communications sending from cell groups 1 and 2 to cell groups 4 and 5.
+
+#df.net <- subsetCommunication(cellchat, signaling = c("WNT", "TGFb")) #gives the inferred cell-cell communications mediated by signaling WNT and TGFb.
+
+cellchat <- computeCommunProbPathway(cellchat)
+cellchat <- aggregateNet(cellchat)
+
+groupSize <- as.numeric(table(cellchat@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(cellchat@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Number of interactions")
+netVisual_circle(cellchat@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Interaction weights/strength")
+
+mat <- cellchat@net$weight
+par(mfrow = c(2,3), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = groupSize, weight.scale = T, edge.weight.max = max(mat), title.name = rownames(mat)[i])
+}
