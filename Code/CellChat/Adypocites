@@ -62,3 +62,4 @@ for (i in 1:nrow(mat)) {
   mat2[i, ] <- mat[i, ]
   netVisual_circle(mat2, vertex.weight = groupSize, weight.scale = T, edge.weight.max = max(mat), title.name = rownames(mat)[i])
 }
+
