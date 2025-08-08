@@ -1,13 +1,21 @@
-Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_sctran_clust_harmony.rds") # Load the dataset containing adipocytes")
 library(CellChat)# Load the CellChat library
 library(Seurat)
+Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_sctran_clust_harmony.rds") # Load the dataset containing adipocytes")
 #Data.cc <- GetAssayData(Data_set, assay = "SCT", layer = "data") #Data_set[["SCT"]]$data
 #labels <- Idents(Data_set)
 #meta <- data.frame(samples = labels, row.names = names(labels)) # create a dataframe of the cell labels
+# Subset the whole Seurat object in 4 subset defined by the treatment status an 2 time point using the condition_tp metadata 
+Idents(Data_set) <- "condition_tp"
+for (i in unique(Data_set$condition_tp)) {
+  sub_set <-   subset(Data_set, subset = condition_tp== i)
+  assign(i,sub_set)
 
-Data_set$samples <- as.factor(Data_set$orig.ident)
-Data_set$seurat_clusters <- factor( as.numeric(as.character(Data_set$seurat_clusters)) + 1)
-cellchat <- createCellChat(object = Data_set, group.by = "seurat_clusters",assay="SCT") # create a CellChat object
+}
+
+#performing the CellChat analysis on the DKO group at day 6.CellChat permits to compare more groups if a differential analysis is required.
+`DKO Day 6`$samples <- as.factor(`DKO Day 6`$orig.ident)
+`DKO Day 6`$seurat_clusters <- factor( as.numeric(as.character(`DKO Day 6`$seurat_clusters)) + 1)
+cellchat <- createCellChat(object = `DKO Day 6`, group.by = "seurat_clusters",assay="SCT") # create a CellChat object
 
 CellChatDB <- CellChatDB.mouse # use CellChatDB.mouse if running on mouse data
 showDatabaseCategory(CellChatDB)
@@ -62,4 +70,58 @@ for (i in 1:nrow(mat)) {
   mat2[i, ] <- mat[i, ]
   netVisual_circle(mat2, vertex.weight = groupSize, weight.scale = T, edge.weight.max = max(mat), title.name = rownames(mat)[i])
 }
+# there are evidenced for cell-cell communication between cluste 1 vs clusters 2 and 3.
 
+#At this point we can anlyze specific interacctions or pathways.
+pathways.show <- c("CXCL") 
+# Hierarchy plot
+# Here we define `vertex.receive` so that the left portion of the hierarchy plot shows signaling to fibroblast and the right portion shows signaling to immune cells 
+vertex.receiver = seq(1,4) # a numeric vector. 
+netVisual_aggregate(cellchat, signaling = pathways.show,  vertex.receiver = vertex.receiver)
+# Circle plot
+par(mfrow=c(1,1))
+netVisual_aggregate(cellchat, signaling = pathways.show, layout = "circle")
+# Chord diagram
+par(mfrow=c(1,1))
+netVisual_aggregate(cellchat, signaling = pathways.show, layout = "chord")
+# Heatmap
+par(mfrow=c(1,1))
+netVisual_heatmap(cellchat, signaling = pathways.show, color.heatmap = "Reds")
+
+
+# Chord diagram
+group.cellType <- c(rep("FIB", 4), rep("DC", 4), rep("TC", 4)) # grouping cell clusters into fibroblast, DC and TC cells
+names(group.cellType) <- levels(cellchat@idents)
+netVisual_chord_cell(cellchat, signaling = pathways.show, group = group.cellType, title.name = paste0(pathways.show, " signaling network","in DKO gropu at 6 days"))
+
+# Compute the contribution of each ligand-receptor pair to the overall signaling pathway and visualize cell-cell communication mediated by a single ligand-receptor pair
+
+netAnalysis_contribution(cellchat, signaling = pathways.show)
+
+
+We can also visualize the cell-cell communication mediated by a single ligand-receptor pair. We provide a function `extractEnrichedLR` to extract all the significant interactions (L-R pairs) and related signaling genes for a given signaling pathway.  
+
+pairLR.CXCL <- extractEnrichedLR(cellchat, signaling = pathways.show, geneLR.return = FALSE)
+LR.show <- pairLR.CXCL[1,] # show one ligand-receptor pair
+# Hierarchy plot
+vertex.receiver = seq(1,4) # a numeric vector
+netVisual_individual(cellchat, signaling = pathways.show,  pairLR.use = LR.show, vertex.receiver = vertex.receiver)
+# Circle plot
+netVisual_individual(cellchat, signaling = pathways.show, pairLR.use = LR.show, layout = "circle")
+# Chord diagram
+netVisual_individual(cellchat, signaling = pathways.show, pairLR.use = LR.show, layout = "chord",save=T)
+
+# Access all the signaling pathways showing significant communications
+pathways.show.all <- cellchat@netP$pathways
+
+# check the order of cell identity to set suitable vertex.receiver
+levels(cellchat@idents)
+vertex.rece = rep(TRUE, 5)      # all TRUE initially
+vertex.rece[1] = FALSE 
+for (i in 1:length(pathways.show.all)) {
+  # Visualize communication network associated with both signaling pathway and individual L-R pairs
+  netVisual(cellchat, signaling = pathways.show.all[i], vertex.receiver = vertex.rece, layout = "hierarchy")
+  # Compute and visualize the contribution of each ligand-receptor pair to the overall signaling pathway
+  gg <- netAnalysis_contribution(cellchat, signaling = pathways.show.all[i])
+  ggsave(filename=paste0(pathways.show.all[i], "_L-R_contribution.pdf"), plot=gg, width = 3, height = 2, units = 'in', dpi = 300)
+}
