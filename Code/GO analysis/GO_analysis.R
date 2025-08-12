@@ -23,7 +23,8 @@ adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_
      adp@active.assay <- "SCT"
      Idents(adp) <- "condition_tp"
      # Find markers for all clusters
-     all.markers <- FindAllMarkers(adp, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+     all.markers <- FindAllMarkers(adp, #only.pos = TRUE, 
+                               min.pct = 0.25, logfc.threshold = 0.25)
      # Find markers for cluster 1 compared to all other cells
      adp$condition_tp <- as.factor(adp$condition_tp)
      cluster1.markers <- FindMarkers(adp, ident.1 = "DKO Day 0",ident.2 = "DKO Day 6", min.pct = 0.25)
@@ -34,15 +35,16 @@ adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_
 
     
 
-     top100 <- all.markers %>% group_by(cluster) %>% dplyr::top_n(n = 100, wt = avg_log2FC)
-
+      top500<- all.markers %>% group_by(cluster) %>% dplyr::top_n(n = 100, wt = avg_log2FC)
     #Convert gene symbols to Entrez IDs using bitr from clusterProfiler. This requires specifying the organism database (e.g., org.Hs.eg.db for human). 
 
 
 
      # Example using top10 from above
-     gene.df <- bitr(top100$gene, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Mm.eg.db, drop = TRUE)
-
+     gene.df <- bitr(top500$gene, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Mm.eg.db, drop = TRUE)
+     all.genes <- rownames(adp@assays$SCT)
+     universe  <- bitr(all.genes,fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Mm.eg.db, drop = TRUE)
+    
 #5. Perform GO enrichment analysis: 
 
     #se enrichGO with the converted Entrez IDs, background genes (optional, but recommended), and the desired ontology (BP, CC, or MF). 
@@ -51,11 +53,12 @@ adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_
 
      enrichGO_results <- enrichGO(gene          = gene.df$ENTREZID,
                                   OrgDb         = org.Mm.eg.db,
-                                  ont           = "MF", # Or CC or MF or BP
+                                  ont           = "BP", # Or CC or MF or BP
                                   pAdjustMethod = "BH",
+                                  #keyType       = "ENTREZID",
                                   pvalueCutoff  = 0.01,
                                   qvalueCutoff  = 0.05,
-                                  universe      = rownames(adp), # Optional: background genes
+                                  universe      = universe$ENTREZID, # Optional: background genes
                                   readable      = TRUE)
 
 #6. Visualize the results:
