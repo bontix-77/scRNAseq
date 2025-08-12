@@ -6,3 +6,13 @@ Data
 .vscode/settings.json
 .RDataTmp1
 .RDataTmp
+.gitattributes
+adp_merge_filt_sctran_clust_harmony.rds
+pixi.*
+.pixi/
+test.yml
+.gitignore
+cellchat_identified.rds
+test.yml.save
+.gitignore
+.gitignore
