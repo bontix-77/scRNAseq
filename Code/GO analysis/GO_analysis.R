@@ -74,7 +74,8 @@ adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_
      # Enrichment map
      emapplot(enrichGO_results, showCategory = 20)
      # Cnet plot
-     cnetplot(enrichGO_results, categorySize="pvalue", foldChange=geneList)
+     rnd_genes <- universe$ENTREZID[sample(1:1000, 30,replace = FALSE)]
+     cnetplot(enrichGO_results, categorySize="pvalue", max.ovelaps=100,color.params = list(foldChange = rnd_genes))
 
 #Example using a pre-defined gene list:
 #If you have a list of genes you want to analyze, you can skip steps 3 and 4 (gene identification and conversion) and directly use the gene list in enrichGO.
