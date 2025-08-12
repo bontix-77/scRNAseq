@@ -1,6 +1,6 @@
 library(CellChat)# Load the CellChat library
 library(Seurat)
-Data_set <- readRDS( "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_sctran_clust_harmony.rds") # Load the dataset containing adipocytes")
+Data_set <- readRDS( "/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_sctran_clust_harmony.rds") # Load the dataset containing adipocytes")
 #Data.cc <- GetAssayData(Data_set, assay = "SCT", layer = "data") #Data_set[["SCT"]]$data
 #labels <- Idents(Data_set)
 #meta <- data.frame(samples = labels, row.names = names(labels)) # create a dataframe of the cell labels
@@ -11,6 +11,7 @@ for (i in unique(Data_set$condition_tp)) {
   assign(i,sub_set)
 
 }
+
 
 #performing the CellChat analysis on the DKO group at day 6.CellChat permits to compare more groups if a differential analysis is required.
 `DKO Day 6`$samples <- as.factor(`DKO Day 6`$orig.ident)
@@ -80,6 +81,7 @@ vertex.receiver = seq(1,4) # a numeric vector.
 netVisual_aggregate(cellchat, signaling = pathways.show,  vertex.receiver = vertex.receiver)
 # Circle plot
 par(mfrow=c(1,1))
+
 netVisual_aggregate(cellchat, signaling = pathways.show, layout = "circle")
 # Chord diagram
 par(mfrow=c(1,1))
@@ -99,7 +101,7 @@ netVisual_chord_cell(cellchat, signaling = pathways.show, group = group.cellType
 netAnalysis_contribution(cellchat, signaling = pathways.show)
 
 
-We can also visualize the cell-cell communication mediated by a single ligand-receptor pair. We provide a function `extractEnrichedLR` to extract all the significant interactions (L-R pairs) and related signaling genes for a given signaling pathway.  
+#We can also visualize the cell-cell communication mediated by a single ligand-receptor pair. We provide a function `extractEnrichedLR` to extract all the significant interactions (L-R pairs) and related signaling genes for a given signaling pathway.  
 
 pairLR.CXCL <- extractEnrichedLR(cellchat, signaling = pathways.show, geneLR.return = FALSE)
 LR.show <- pairLR.CXCL[1,] # show one ligand-receptor pair
@@ -115,13 +117,62 @@ netVisual_individual(cellchat, signaling = pathways.show, pairLR.use = LR.show, 
 pathways.show.all <- cellchat@netP$pathways
 
 # check the order of cell identity to set suitable vertex.receiver
-levels(cellchat@idents)
-vertex.rece = rep(TRUE, 5)      # all TRUE initially
-vertex.rece[1] = FALSE 
-for (i in 1:length(pathways.show.all)) {
+# the following code doesn't work. it return an error i coudn't figure out why.
+#levels(cellchat@idents)
+#vertex.rece = rep(TRUE, 5)      # all TRUE initially
+#vertex.rece[1] = FALSE 
+#for (i in 1:length(pathways.show.all)) {
   # Visualize communication network associated with both signaling pathway and individual L-R pairs
-  netVisual(cellchat, signaling = pathways.show.all[i], vertex.receiver = vertex.rece, layout = "hierarchy")
+#  netVisual(cellchat, signaling = pathways.show.all[i], vertex.receiver = vertex.rece, layout = "hierarchy")
   # Compute and visualize the contribution of each ligand-receptor pair to the overall signaling pathway
-  gg <- netAnalysis_contribution(cellchat, signaling = pathways.show.all[i])
-  ggsave(filename=paste0(pathways.show.all[i], "_L-R_contribution.pdf"), plot=gg, width = 3, height = 2, units = 'in', dpi = 300)
-}
+#  gg <- netAnalysis_contribution(cellchat, signaling = pathways.show.all[i])
+#  ggsave(filename=paste0(pathways.show.all[i], "_L-R_contribution.pdf"), plot=gg, width = 3, height = 2, units = 'in', dpi = 300)
+#}
+
+## Visualize cell-cell communication mediated by multiple ligand-receptors or signaling pathways
+CellChat can also show all the significant interactions mediated by L-R pairs and signaling pathways, and interactions provided by users from some cell groups to other cell groups using the function netVisual_bubble (option A) and netVisual_chord_gene (option B).
+
+### (A)  Bubble plot
+#We can also show all the significant interactions (L-R pairs) from some cell groups to other cell groups using `netVisual_bubble`.
+# (1) show all the significant interactions (L-R pairs) from some cell groups (defined by 'sources.use') to other cell groups (defined by 'targets.use')
+netVisual_bubble(cellchat, sources.use = 4, targets.use = c(5:11), remove.isolate = FALSE)
+# (2) show all the significant interactions (L-R pairs) associated with certain signaling pathways
+netVisual_bubble(cellchat, sources.use = 4, targets.use = c(5:11), signaling = c("CCL","CXCL"), remove.isolate = FALSE)
+# (3) show all the significant interactions (L-R pairs) based on user's input (defined by `pairLR.use`)
+pairLR.use <- extractEnrichedLR(cellchat, signaling = c("CCL","CXCL","FGF"))
+netVisual_bubble(cellchat, sources.use = c(3,4), targets.use = c(1,2), pairLR.use = pairLR.use, remove.isolate = TRUE)
+
+
+# set the order of interacting cell pairs on x-axis
+# (4) Default: first sort cell pairs based on the appearance of sources in levels(object@idents), and then based on the appearance of targets in levels(object@idents)
+# (5) sort cell pairs based on the targets.use defined by users
+#netVisual_bubble(cellchat, targets.use = c("LC","Inflam. DC","cDC2","CD40LG+ TC"), pairLR.use = pairLR.use, remove.isolate = TRUE, sort.by.target = T)
+# (6) sort cell pairs based on the sources.use defined by users
+#netVisual_bubble(cellchat, sources.use = c("FBN1+ FIB","APOE+ FIB","Inflam. FIB"), pairLR.use = pairLR.use, remove.isolate = TRUE, sort.by.source = T)
+# (7) sort cell pairs based on the sources.use and then targets.use defined by users
+#netVisual_bubble(cellchat, sources.use = c("FBN1+ FIB","APOE+ FIB","Inflam. FIB"), targets.use = c("LC","Inflam. DC","cDC2","CD40LG+ TC"), pairLR.use = pairLR.use, remove.isolate = TRUE, sort.by.source = T, sort.by.target = T)
+# (8) sort cell pairs based on the targets.use and then sources.use defined by users
+#netVisual_bubble(cellchat, sources.use = c("FBN1+ FIB","APOE+ FIB","Inflam. FIB"), targets.use = c("LC","Inflam. DC","cDC2","CD40LG+ TC"), pairLR.use = pairLR.use, remove.isolate = TRUE, sort.by.source = T, sort.by.target = T, sort.by.source.priority = FALSE)
+
+#Similar to Bubble plot, CellChat provides a function `netVisual_chord_gene` for drawing Chord diagram to
+
+# show all the significant interactions (L-R pairs) from some cell groups (defined by 'sources.use') to other cell groups (defined by 'targets.use')
+# show all the interactions sending from Inflam.FIB
+netVisual_chord_gene(cellchat, sources.use = 4, targets.use = c(5:11), lab.cex = 0.5,legend.pos.y = 30)
+# show all the interactions received by Inflam.DC
+netVisual_chord_gene(cellchat, sources.use = c(1,2,3), targets.use = c(4,5), legend.pos.x = 15)
+# show all the significant interactions (L-R pairs) associated with certain signaling pathways
+netVisual_chord_gene(cellchat, sources.use = c(1,2,3), targets.use = c(4,5), signaling = c("CCL","CXCL"),legend.pos.x = 8)
+# show all the significant signaling pathways from some cell groups (defined by 'sources.use') to other cell groups (defined by 'targets.use')
+netVisual_chord_gene(cellchat, sources.use = c(1,2,3,4), targets.use = c(5), slot.name = "netP", legend.pos.x = 10)CellChat can plot the gene expression distribution of signaling genes related to L-R pairs or signaling pathways using a Seurat wrapper function `plotGeneExpression` if the Seurat R package has been installed. This function provides three types of visualizztion, including "violin", "dot", "bar". Alternatively, users can extract the signaling genes related to the inferred L-R pairs or signaling pathway using `extractEnrichedLR`, and then plot gene expression using Seurat or other packages.
+
+#CellChat can plot the gene expression distribution of signaling genes related to L-R pairs or signaling 
+# pathways using a Seurat wrapper function `plotGeneExpression` if the Seurat R package has been installed.
+#  This function provides three types of visualizztion, including "violin", "dot", "bar". 
+# Alternatively, users can extract the signaling genes related to the inferred L-R pairs or signaling pathway
+#  using `extractEnrichedLR`, and then plot gene expression using Seurat or other packages.
+
+
+plotGeneExpression(cellchat, signaling = "CXCL", enriched.only = TRUE, type = "violin")
+
+plotGeneExpression(cellchat, signaling = "CXCL", enriched.only = FALSE)
