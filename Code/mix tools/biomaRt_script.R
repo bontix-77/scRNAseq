@@ -8,17 +8,29 @@ see <- getBM(attributes = c("ensembl_gene_id","entrezgene_id","external_gene_nam
 filters = "external_gene_name",
 values = "NFKB1  ",
 mart=mart)
+#example of a for loop to convert find genes symmbols starting from ensembl entries.
+prova <- matrix("",ncol = 2, nrow=5)
+prova[,1] <- c("NFKB1","ACTB","NFKB2","PPARG","PPARA")
+for (i in 1:length(prova[,1])){
+     gene <- prova[i,1]
+     out <- getBM(attributes = "ensembl_gene_id",
+     filters = "external_gene_name",
+     values =gene,
+     mart=mart)
+     prova[i,2] <- out$ensembl_gene_id
+}
+
+
+
+# to convert from Enseml ID to gene symbols
 
 prova <- matrix("",ncol = 2, nrow=5)
-prova[,1] <- "NFKB"
-prova[,2] <- sapply(prova[,1],function(x){
-
-mart  <- useMart("ENSEMBL_MART_ENSEMBL",dataset = "hsapiens_gene_ensembl")
-see <- getBM(attributes = c("ensembl_gene_id","entrezgene_id","external_gene_name"),
-filters = "external_gene_name",
-values = x,
-mart=mart)
-return (see[1])
-
-
-})
+prova[,1] <- c("ENSG00000109320" ,"ENSG00000075624" ,"ENSG00000077150", "ENSG00000132170" ,"ENSG00000186951")
+for (i in 1:length(prova[,1])){
+     gene <- prova[i,1]
+     out <- getBM(attributes = "external_gene_name",
+     filters = "ensembl_gene_id",
+     values =gene,
+     mart=mart)
+     prova[i,2] <- out$external_gene_name
+}
