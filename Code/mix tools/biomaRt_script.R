@@ -8,7 +8,7 @@ see <- getBM(attributes = c("ensembl_gene_id","entrezgene_id","external_gene_nam
 filters = "external_gene_name",
 values = "NFKB1  ",
 mart=mart)
-#example of a for loop to convert find genes symmbols starting from ensembl entries.
+#example of a for loop to convert from gene symbols to ensembl ID
 prova <- matrix("",ncol = 2, nrow=5)
 prova[,1] <- c("NFKB1","ACTB","NFKB2","PPARG","PPARA")
 for (i in 1:length(prova[,1])){
