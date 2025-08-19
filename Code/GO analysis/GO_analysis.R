@@ -1,8 +1,8 @@
 
-#Prep: if neccesary 
-#BiocManager::install("clusterProfiler")
-#BiocManager::install("corg.Hs.eg.er")  for mouse use: org.Mm.eg.db
+#Preparation: if neccesary run the following:
 #devtools::install_github("ctlab/fgsea")
+#BiocManager::install("clusterProfiler")
+#BiocManager::install("corg.Mm.eg.er")  for mouse use: org.Hs.eg.db
 #BiocManager::install("enrichplot")
 #1. Load necessary packages and data:
 
@@ -13,7 +13,7 @@ library(enrichplot) # For visualization
 
 #2. Load your Seurat object:
 
-# Assuming your Seurat object is named 'pbmc'
+# Assuming your Seurat object is named 'adp'
 adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_sctran_clust_harmony.rds")
 
 #3. Identify marker genes:
@@ -75,7 +75,7 @@ adp <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/adp_merge_filt_
      emapplot(enrichGO_results, showCategory = 20)
      # Cnet plot
      rnd_genes <- universe$ENTREZID[sample(1:1000, 30,replace = FALSE)]
-     cnetplot(enrichGO_results, categorySize="pvalue", max.ovelaps=100,color.params = list(foldChange = rnd_genes))
+     cnetplot(enrichGO_results, categorySize="pvalue", max.ovelaps=200,color.params = list(foldChange = rnd_genes))
 
 #Example using a pre-defined gene list:
 #If you have a list of genes you want to analyze, you can skip steps 3 and 4 (gene identification and conversion) and directly use the gene list in enrichGO.

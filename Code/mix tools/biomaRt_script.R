@@ -18,7 +18,7 @@ for (i in 1:length(prova[,1])){
      values =gene,
      mart=mart)
      prova[i,2] <- out$ensembl_gene_id
-}
+     }
 
 
 
@@ -33,4 +33,4 @@ for (i in 1:length(prova[,1])){
      values =gene,
      mart=mart)
      prova[i,2] <- out$external_gene_name
-}
+     }
