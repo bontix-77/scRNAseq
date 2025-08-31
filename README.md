@@ -5,7 +5,7 @@ It's a learning repository where I show apossible flow for the  processing, anal
 
 ## 📂 What’s Inside the repository
 
-\-**Code folder** - containing all the algorithm each as module in its own sub-folder. here there is also a sub-directory called "python" containing a couple of scripts to download the GSM files from GEO and for the gene ID conversion for example from Ensembl ID to gene symbol.
+\-**Code folder** - containing all the algorithm each as module in its own sub-folder. here there is also a sub-directory called "tools" containing a couple of scripts to download the GSM files from GEO and for the gene ID conversion for example from Ensembl ID to gene symbol.
 
 \-**Results folder** - containing a series of results and graphs. The final result document is a knit of a RMarkdown in .html, consequentely it needs to be dowloaded in order to visualize it.
 
