@@ -10,7 +10,7 @@ Data
 adp_merge_filt_sctran_clust_harmony.rds
 pixi.*
 .pixi/
-test.yml
+pixi_init.yml
 .gitignore
 cellchat_identified.rds
 test.yml.save
