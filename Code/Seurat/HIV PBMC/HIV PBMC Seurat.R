@@ -2,7 +2,7 @@ library(Seurat)
 library(tidyverse)
 
 
-setwd("C:/Users/Owner/Documents/scRNAseq/Data/GSM")
+setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM")
 
 # List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
 dirs <- list.dirs()
@@ -10,12 +10,12 @@ dirs_name <- basename(dirs[dirs !="./"])
 dirs_name <- dirs_name[-1]
 
 # Create a list of count matrices
-paste( "C:/Users/Owner/Documents/scRNAseq/",dirs[2])
+paste( "/home/alexander-bontempo/Desktop/HIV GSM/GSM/",dirs[2])
 
-reads <- lapply(paste0("C:/Users/Owner/Documents/scRNAseq/Data/GSM/",dirs_name,"/")
+reads <- lapply(paste0("/home/alexander-bontempo/Desktop/HIV GSM/GSM/",dirs_name,"/")
   , Read10X)
 # Assign names manually
-             names(reads) <- c("6817423", "6817424", "6817425", "6817426", "6817427", "6817428")
+names(reads) <- c("6817423", "6817424", "6817425", "6817426", "6817427", "6817428")
 #########################################################################
 # Single sample
 ##   W10 <- CreateSeuratObject(counts=W10, project="W10", min.cells = 3, min.features = 200)
@@ -23,13 +23,19 @@ reads <- lapply(paste0("C:/Users/Owner/Documents/scRNAseq/Data/GSM/",dirs_name,"
 ## W10
 #########################################################################
 
-# All samples
+# here i filter the cells with at least 200 features (genes) detected and genes detected in at least 3 cells
 
   
  HIV <-  mapply(CreateSeuratObject,
   counts = reads,
   project = names(reads),
   MoreArgs = list(min.cells = 3, min.features = 200)
+)
+#but since HIV expression in PLWH is very low lets remoove min cell filtering
+ HIV <-  mapply(CreateSeuratObject,
+  counts = reads,
+  project = names(reads),
+  MoreArgs = list( min.features = 200)
 )
 
 
@@ -73,7 +79,7 @@ head(HIV[[c("orig.ident", "nCount_RNA")]])[1:3, ]
 
 # to save the Seurat object
 
-saveRDS(HIV, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files/HIV_merged.rds")
+saveRDS(HIV, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merged.rds")
 
 
 library(tidyverse) # dplyr and ggplot2
@@ -96,32 +102,42 @@ glimpse(HIV)
 
 HIV[["percent.mt"]] <- PercentageFeatureSet(HIV, pattern = "^MT-")
 # set colors
-cnames <- setNames(c("green","blue","orange","yellow","black0"), levels(factor(HIV@meta.data$orig.ident)))
+cnames <- setNames(c("green","blue","orange","yellow","black0","red"), levels(factor(HIV@meta.data$orig.ident)))
 cnames
+#HIV <- NormalizeData(HIV)
 
 # plot total counts per sample
-VlnPlot(HIV, features = "nCount_RNA", layer = "counts", group.by = "orig.ident", raster = FALSE, alpha = 0.2) 
+VlnPlot(HIV, features = "nCount_RNA",  group.by = "orig.ident", raster = FALSE, alpha = 0.2) 
 # or using ggplot2
 HIV@meta.data %>%
-  ggplot(aes(color = orig.ident, x = nCount_RNA, fill = orig.ident)) +
+  ggplot(aes( color = orig.ident,x = nCount_RNA, fill = orig.ident)) +
   geom_density(alpha = 0.2) +
   theme_classic() +
   scale_x_log10() +
   geom_vline(xintercept = 650, color = "red", linetype = "dotted")
 
+# list all assays present
+Assays(HIV)
+# check what slots are in my RNA assay
+slotNames(HIV[["RNA"]])
+
+
+
 # determine number of features (genes)
 
-plot_featur <- VlnPlot(HIV, features = "nFeature_RNA", group.by = "orig.ident") 
- 
+plot_featur <- VlnPlot(HIV, features = "nFeature_RNA", group.by = "orig.ident") +
+  geom_hline(yintercept = 500, color = "red")
+show(plot_featur)
 
 # visualize % mitocondrial genes
 
-VlnPlot(HIV, features = "percent.mt", group.by = "orig.ident") +
+plot_mt <- VlnPlot(HIV, features = "percent.mt", group.by = "orig.ident") +
   geom_hline(yintercept = 10, color = "red")
+show(plot_mt)
 
 plot_count <- VlnPlot(HIV, features = "nCount_RNA", group.by = "orig.ident") +
   geom_hline(yintercept = 10, color = "red")
-plot_featur|plot_count
+plot_featur|plot_mt
 
 # scatter the point by number of features and mitocondrial genes
 
@@ -150,7 +166,8 @@ F_24 <- HIV@meta.data |>
   pull(Cell)
 F_25 <- HIV@meta.data |>
   filter(orig.ident=="6817425",
-         percent.mt < 10
+         percent.mt < 10,
+         nFeature_RNA > 350
   ) |>
   tibble::rownames_to_column("Cell") |>
   pull(Cell)
@@ -172,6 +189,7 @@ F_27 <- HIV@meta.data |>
 F_28 <- HIV@meta.data |>
   filter(orig.ident=="6817428",
          nFeature_RNA > 900,
+         nFeature_RNA < 15000,
          percent.mt < 10
   ) |>
   tibble::rownames_to_column("Cell") |>
@@ -183,7 +201,7 @@ HIV_filt <- subset(HIV, cells = keep)
 FeatureScatter(HIV_filt, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by = "orig.ident", log = TRUE)
 # save file after filtering
 
-saveRDS(HIV_filt, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files/intermediate files/HIV_merge_filt.rds")
+saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt.rds")
 
 
 ##############################################################
@@ -192,7 +210,10 @@ saveRDS(HIV_filt, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/interm
 
 
 # run sctransform
-HIV_filt <- SCTransform(HIV_filt, vars.to.regress = "percent.mt", verbose = FALSE)
+#SCTransform usaually keep just 3000 features to increase variable.features.rv.th = 1.0 means to keep all the features. 
+#0.9 means to keep 90% of the features based on variance. 
+#alternively you can set variable.features.n to a specific number of features to keep.
+HIV_filt <- SCTransform(HIV_filt, vars.to.regress = "percent.mt", variable.features.rv.th = 0.9,verbose = FALSE)
 
 # Check default assay
 ############ DefaultAssay(object = HIV_filt)
@@ -221,7 +242,7 @@ HIV_filt <- FindClusters(HIV_filt, resolution = 0.1)
 
 # UMAP for the viasualization of the clusters
 
-HIV_filt <- RunUMAP(HIV_filt, dims = 1:15)
+HIV_filt <- RunUMAP(HIV_filt, dims = 1:10)
 DimPlot(HIV_filt,
   reduction = "pca", group.by = c("orig.ident", "seurat_clusters"),
   alpha = 0.2, ncol = 2
@@ -232,7 +253,7 @@ DimPlot(HIV_filt,
 )
 # save the HIV filtered file
 
-saveRDS(HIV_filt, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files//HIV_merge_filt_sctran_clust0.1.rds")
+saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_sctran_clust0.1.rds")
 
 # prepare the SCT data for the search of markers among clusters
 HIV_filt <- PrepSCTFindMarkers(HIV_filt, verbose = T)
@@ -277,7 +298,7 @@ VlnPlot(HIV_filt, features = contam)
 # visualize in the cluster the cel type corresponding to the  feature= parameter above (this case contam)
 FeaturePlot(HIV_filt, features = contam)
 
-saveRDS(HIV_filt_markers, "C:/Users/Owner/Documents/scRNAseq/Code/Seurat/HIV PBMC/intermediate files/HIV_merge_filt_markers.rds")
+saveRDS(HIV_filt_markers, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_markers.rds")
 
 ##############################################
 ##    Differential Expression analisys      ##
@@ -306,9 +327,9 @@ table(Idents(HIV_filt))
 
 # Viewing the code, JoinLayers was called to link all the data sets together. This is
 # a new feature of Seurat5, and is required for analyzing data after integration and batch correction, in this case fue all the samples (D10,D16 , etc.)
-plot(density(sample(JoinLayers(HIV_filt@assays$RNA)$count["Gapdh", ], 2500)), cex = 0, lty = 1, main = "Density of Gapdh in 2500 random cells")
+plot(density(sample(JoinLayers(HIV_filt@assays$RNA)$counts["GAPDH", ], 2500)), cex = 0, lty = 1, main = "Density of Gapdh in 2500 random cells")
 
-hist(sample(JoinLayers(HIV@assays$RNA)$count["Gapdh", ], 2500), breaks = 52, main = "Histogram of Gapdh in 2500 random cells", ylab = "Frequency", xlab = "Gene counts")
+hist(sample(JoinLayers(HIV@assays$RNA)$counts["GAPDH", ], 2500), breaks = 52, main = "Histogram of Gapdh in 2500 random cells", ylab = "Frequency", xlab = "Gene counts")
 
 ###############################################################################
 ##        how estract expression matrixes                                    ##
@@ -319,19 +340,19 @@ hist(sample(JoinLayers(HIV@assays$RNA)$count["Gapdh", ], 2500), breaks = 52, mai
 ###############################################################################
 
 
-HIV_pp <- HIV_filt
+#HIV_pp <- HIV_filt
 
 Idents(HIV_pp) <- "SCT"
 HIV_pp_mks <- PrepSCTFindMarkers(HIV_pp)
-Idents(HIV_pp_mks) <- "time_point"
-table(Idents(HIV_pp_mks))
+#Idents(HIV_pp_mks) <- "time_point"
+#table(Idents(HIV_pp_mks))
 
 ## to find different expression betwe a label and the others in a metadata idents (if between two specific labels "idents.2=" can be used to specify.)
-Day0_Day6_DE <- FindMarkers(HIV_pp_mks, ident.1 = "Day 0", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
+#Day0_Day6_DE <- FindMarkers(HIV_pp_mks, ident.1 = "Day 0", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
 
 
 Idents(HIV_pp_mks) <- "SCT_snn_res.0.1"
-DefaultAssay(HIV_pp_mks) <- "SCT"
+#DefaultAssay(HIV_pp_mks) <- "SCT"
 
 ## find all markers between clusters
 
@@ -351,13 +372,24 @@ top5PerCluster
 DoHeatmap(HIV_pp_mks, features = top5PerCluster$gene, slot = "scale.data")
 ## visualization of features
 
-fig1 <- DimPlot(HIV_pp_mks, group.by = "time_point")
-fig2 <- FeaturePlot(HIV_pp_mks, features = "Acta2", order = T)
-fig3 <- FeaturePlot(HIV_pp_mks, features = "Cd36", order = T)
+#fig1 <- DimPlot(HIV_pp_mks, group.by = "time_point")
 
+# to find a feature with a specific pattern
+grep("CD3", rownames(HIV_filt), value = TRUE)
+fig1 <- FeaturePlot(HIV_pp_mks, features = "CD3D", order = T)
+fig2 <- FeaturePlot(HIV_pp_mks, features = "CD4", order = T)
+fig3 <- FeaturePlot(HIV_pp_mks, features = "CD8A", order = T)
+fig2|fig3
 fig1 / (fig2 | fig3)
+# CD14 monocites marker
+fig4 <- FeaturePlot(HIV_pp_mks, features = "CD14", order = T)
+fig4
+fig6 <- FeaturePlot(HIV_pp_mks, features = "CXCR4", order = T)
+fig6
+fig5 <- FeaturePlot(HIV_pp_mks, features = "CCR5", order = T)
+fig5
 
-
+fig5|fig6
 ## is possible to join all cells as a seample and do a pseudobulk analisys
 
 pseudo_HIV <- AggregateExpression(HIV_pp_mks, assays = "SCT", return.seurat = T, group.by = c("orig.ident", "time_point", "condition", "condition_tp"))
