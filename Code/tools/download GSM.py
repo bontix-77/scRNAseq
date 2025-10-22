@@ -4,7 +4,7 @@ from ftplib import FTP  # For FTP file transfers
 
 
 # Set the working directory
-os.chdir("C:/Users/Owner/Documents/scRNAseq")  # Change to the directory where you want to save the files
+os.chdir("/home/alexander-bontempo/Desktop/HIV GSM/GSM")  # Change to the directory where you want to save the files
 
 from ftplib import FTP
 import os
@@ -30,10 +30,11 @@ def FTP_GSM_Down(gsm_id, tag,ext, local_dir):
 
 
 
-gsm_id = [("GSM6817423","_A"),("GSM6817424","_B"),("GSM6817425","_C"),("GSM6817426","_D"),("GSM6817427","_E"),("GSM6817428","_F")] #GSM6817428","GSM6817429"]#],"GSM6817430_H","GSM6817431_I","GSM6817432_J"]
+#gsm_id = [("GSM6817423","_A"),("GSM6817424","_B"),("GSM6817425","_C"),("GSM6817426","_D"),("GSM6817427","_E"),("GSM6817428","_F")] #GSM6817428","GSM6817429"]#],"GSM6817430_H","GSM6817431_I","GSM6817432_J"]
+gsm_id= [("GSM6817430","_H"),("GSM6817431","_I"),("GSM6817432","_J"),("GSM6817433","_K"),("GSM6817434","_L"),("GSM6817435","_M"),("GSM6817436","_N")]
 extensions = [".barcodes.tsv.gz", ".features.tsv.gz", ".matrix.mtx.gz"]
 
-local_dir = "C:/Users/Owner/Documents/scRNAseq/Data/GSM"
+local_dir = "/home/alexander-bontempo/Desktop/HIV GSM/GSM/"
 
 for id,tag in gsm_id:
     for ext in extensions:
@@ -44,7 +45,7 @@ import re
 
 files = []
 
-folder_path = "C:/Users/Owner/Documents/scRNAseq/Data/GSM/"
+folder_path = "/home/alexander-bontempo/Desktop/HIV GSM/GSM"
 files=[f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
 print(files)
 
@@ -53,9 +54,6 @@ for file in files:
     print("############"+file)
     if not os.path.isdir(folder_path+code[0]):
        os.makedirs(folder_path+code[0])
-     
-
-
     if re.search(r'matrix', file): 
         os.rename(os.path.join(folder_path, file), os.path.join(folder_path, "matrix.mtx.gz"),)
         move_file = os.path.join(folder_path, "matrix.mtx.gz")
