@@ -5,18 +5,18 @@ https://scanpy.readthedocs.io/en/latest/tutorials/index.htmlhttps://scanpy.readt
 '''
 
 import scanpy as sc
-import louvain
+#import louvain    #library can't install: missing dependencices i can't solve
 
 adata = sc.read_h5ad("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5ad")
 
 ######## change gene names
 # Load gene namessc.pl.dotplot(
-    adata,
-    marker_genes,
-    groupby="leiden_res_0.02",
-    standard_scale="var",
-    use_raw=False
-)
+#    adata,
+#    marker_genes,
+#    groupby="leiden_res_0.02",
+#    standard_scale="var",
+#    use_raw=False
+#)
 with open("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/gene_names.txt") as f:
     gene_names = [line.strip() for line in f]
 
