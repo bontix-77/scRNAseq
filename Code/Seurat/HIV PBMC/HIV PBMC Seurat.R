@@ -14,7 +14,7 @@ library(Seurat)
 #      [[2]] is the name/tag of each cell   
 # x is the gene expression 
 #     in the exemple above the gen 34 in the cell 1 has expression 1. looking into Dimnames[[1]] i can find the name of the gene 34
-setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM1")
+setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM")
 
 # List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
 dirs <- list.dirs()
@@ -245,6 +245,23 @@ HIV_filt <- SCTransform(HIV_filt, vars.to.regress = "percent.mt", verbose = FALS
 
 # Set default assay
 ########### DefaultAssay(object = HIV_filt) <- "RNA"
+#########################################################################################
+######################## save seurat object to h5ad to transfer to scanpy###############
+library(SeuratDisk)                                                                     #
+# during the SeuratData i have a problem as the gene names are lost so i save the vector in a file 
+# Get feature names from SCT assay (or RNA)
+gene_names <- rownames(HIV_filt@assays$SCT@counts)  # or SCT@counts if using SCTransform
+
+# Save to a text file
+writeLines(gene_names, "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/gene_names.txt")
+
+# Convert Seurat object (.rds) to h5Seurat
+SaveH5Seurat(HIV_filt, filename = "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat")
+
+# Convert .h5Seurat to .h5ad
+Convert("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat", dest = "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/h5ad")
+#########################################################################################
+###########################################################################################
 
 
 # run PCA
@@ -287,7 +304,7 @@ figumap_orig <- DimPlot(HIV_filt,
 figumap_orig|figumap_clusters
 # save the HIV filtered file
 
-saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_sctran_clust0.1.rds")
+#saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_sctran_clust0.1.rds")
 
 # prepare the SCT data for the search of markers among clusters
 HIV_filt <- PrepSCTFindMarkers(HIV_filt, verbose = T)
@@ -321,7 +338,7 @@ VlnPlot(HIV_filt, features = platelets)
 # visualize in the cluster the cel type corresponding to the  feature= parameter above (this case contam)
 FeaturePlot(HIV_filt, features = platelets)
 
-saveRDS(HIV_filt_markers, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_markers.rds")
+#saveRDS(HIV_filt_markers, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_markers.rds")
 
 ##############################################
 ##    Differential Expression analisys      ##
@@ -335,7 +352,7 @@ library(MAST) # for differential expression; Bioconductor
 
 mem.maxVSize(vsize = 15000)
 glimpse(HIV_filt)
-table(HIV_filt$condition_tp)
+#table(HIV_filt$condition_tp)
 Idents(HIV_filt) <- "SCT_snn_res.0.13"
 table(Idents(HIV_filt))
 ######################################################################################
@@ -411,7 +428,7 @@ grep("HIV", rownames(HIV_pp_mks), value = TRUE,ignore.case = TRUE)
 
 #changinf the assay and looking in the RNA reading before SCTransform:
 
-DefaultAssay(HIV_pp_mks) <- "RNA"
+DefaultAssay(HIV_pp_mks) <- "SCT"
 grep("HIV", rownames(HIV_pp_mks), value = TRUE,ignore.case = TRUE)
 
 sum(FetchData(HIV_pp_mks, vars = "HIV", assay = "RNA")>0)
@@ -551,6 +568,7 @@ CD4|CD8
 f1 <- DimPlot(HIV_pp_mks, group.by = "SCT_snn_res.0.13", label = T) + NoLegend()
 #f2 <- DimPlot(HIV_pp, group.by = "time_point") + NoLegend()
 f3 <- DimPlot(HIV_pp_mks, group.by = "cell_type", label = T) + NoLegend()
+f3
 ( f1 | f3)
 ## SingleR annotation. this method annotate each cell in the dataset against a reference dataset
 library(celldex)
