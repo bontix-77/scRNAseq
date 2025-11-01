@@ -68,7 +68,7 @@ names_array = adata.uns['rank_genes_groups']['names']
 
 
 #check top markers
-sc.pl.rank_genes_groups(adata, n_genes=10, sharey=False, gene_symbols=adata.var_names)
+sc.pl.rank_genes_groups(adata, n_genes=10, sharey=False)
 
 # Top 5 genes for each cluster
 adata.uns['rank_genes_groups']['names']
@@ -99,7 +99,7 @@ sc.pl.umap(
 #cluster markers
 sc.tl.rank_genes_groups(adata, groupby='leiden_res_1', method='wilcoxon')
 
-sc.pl.rank_genes_groups_dotplot(adata, groupby="leiden_res_1", standard_scale="var", n_genes=5)
+sc.pl.rank_genes_groups_dotplot(adata, groupby="leiden_res_1", standard_scale="var", n_genes=5,use_raw=False)
 ############ cell type#######################3
 # to look if a gene is present
 
