@@ -293,7 +293,7 @@ figumap_clusters <- DimPlot(HIV_filt,
   reduction = "umap", group.by =  "seurat_clusters",
   alpha = 0.2, ncol = 1,
   label=T
-
+  
 )+ NoLegend()
 figumap_orig <- DimPlot(HIV_filt,
   reduction = "umap", group.by = "orig.ident" ,
