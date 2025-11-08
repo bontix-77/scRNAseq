@@ -17,16 +17,16 @@ Code/
     ├── r-scripts/
     │   ├── read_h5.R          # Read & merge 10x data
     │   └── cell_filter.R      # Cell filtering module
-    ├── data/                  # Example input directories (GSM folders)
-    └── results/               # Output RDS files
+    ├── README
+    └── results/               # visualizations and images
 
 
 ### Processes
 
-| Process | Description | Output |
-|----------|--------------|---------|
-| **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | `HIV_merged.rds` |
-| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `HIV_filtered.rds` |
+|        Process      |                                       Description                                           |         Output             |
+|---------------------|---------------------------------------------------------------------------------------------|----------------------------|
+| **RUN_readh5**      | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object    |         no images          |
+| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content)                  |  `5 .png analytics immages |
 
 Additional modules (e.g. QC plots, clustering, and annotation) will be added later.
 
