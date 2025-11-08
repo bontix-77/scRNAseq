@@ -4,11 +4,11 @@ args <- commandArgs(trailingOnly=TRUE)
 
 
 folders <- strsplit(args[1], " ")[[1]]
+base_dir <- args[2]
+if (!grepl("/$", base_dir)) base_dir <- paste0(base_dir, "/")
 
-if (!grepl("/$", args[2])) args[2] <- paste0(args[2], "/")
-setwd(args[2])
 
-reads <- lapply(folders, Read10X)
+reads <- lapply(folders, function(x) Read10X(file.path(base_dir, x)))
 names(reads) <- folders
 #writeLines(names(reads), con="results.txt")
 
@@ -30,7 +30,7 @@ HIV <-  mapply(CreateSeuratObject,
 rm(reads)
 HIV <- merge(HIV[[1]],
   y = HIV[2:length(HIV)],
-  HIV.cell.ids = names(HIV), 
+  add.cell.ids = names(HIV), 
   project = "HIV PBMC on patient under ART"
 )
 

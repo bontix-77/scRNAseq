@@ -57,7 +57,7 @@ names(reads) <- c("6817430", "6817431", "6817432", "6817433", "6817434", "681743
 rm(reads)
 HIV <- merge(HIV[[1]],
   y = HIV[2:length(HIV)],
-  add.cell.ids = names(HIV), 
+  HIV.cell.ids = names(HIV), 
   project = "HIV PBMC on patient under ART"
 )
 
