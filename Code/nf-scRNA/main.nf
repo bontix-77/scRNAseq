@@ -40,8 +40,8 @@ process RUN_readh5 {
 
     script:
     """
-    mkdir -p ${params.resultDir}
-    Rscript ${params.scriptFile}/read_h5.R "${folders}" ${base_dir}> "HIV_merged.rds"
+  
+    Rscript ${params.scriptFile}/read_h5.R "${folders}" ${base_dir}
     """
     
  }
