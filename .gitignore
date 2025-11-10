@@ -6,7 +6,7 @@ Data
 .vscode/settings.json
 .RDataTmp1
 .RDataTmp
-.gitattributes
+
 adp_merge_filt_sctran_clust_harmony.rds
 pixi.*
 .pixi/
