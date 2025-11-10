@@ -26,8 +26,6 @@ adata.raw.var_names = gene_names
 # Optional: replace var_names too
 adata.var_names = gene_names
 
-# Now you can map rank_genes_groups properly
-import numpy as np
 
 ########################################################################
 # Find highly variable genes (recommended before PCA)
@@ -56,7 +54,7 @@ sc.pl.umap(adata, color='leiden')
 
 adata.obs['leiden'].value_counts()
 
-import numpy as np
+
 #cluster markers
 sc.tl.rank_genes_groups(adata, groupby='leiden', method='t-test')
 # Get raw array

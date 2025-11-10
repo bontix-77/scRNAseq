@@ -26,7 +26,7 @@ Code/
 |        Process      |                                       Description                                           |         Output             |
 |---------------------|---------------------------------------------------------------------------------------------|----------------------------|
 | **RUN_readh5**      | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object    |         no images          |
-| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content)                  |  `5 .png analytics immages |
+| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content)                  | `5 .png analytics immages` |
 
 Additional modules (e.g. QC plots, clustering, and annotation) will be added later.
 
@@ -49,6 +49,10 @@ Current modules:
 ✅ RUN_readh5 — merge multiple 10x datasets
 
 ✅ RUN_cell_filter — apply QC-based cell filtering
+
+✅ RUN_SCTransform — normalization and scaling using negative binomial 
+
+✅ RUN_seuratDisk — save Seurat object in h5Seurat file than convert to .h5ad to be transfered to a scanpy script
 
 🔜 RUN_plot_QC, RUN_cluster, RUN_annotation (coming soon)
 
