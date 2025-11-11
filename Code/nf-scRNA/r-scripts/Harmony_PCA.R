@@ -21,7 +21,8 @@ HIV_SCT <- RunPCA(HIV_SCT, verbose = FALSE, assay = "SCT")
 if (args[2]=="yes"){
 library(harmony)
 HIV_SCT<- RunHarmony(HIV_SCT, c("orig.ident"))
-}
+print ("harmony selected")
+} 
 
 
 
@@ -41,5 +42,5 @@ elbow <- ElbowPlot(HIV_SCT, ndims = 40)
 png("elbowplot.png",width=1200,height=900,res=150)
 print(elbow)
 dev.off()
-
+print("control print")
 saveRDS(HIV_SCT,"HIV_HarmonyPCA.rds")

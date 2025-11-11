@@ -80,12 +80,13 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 ## 🧰 Requirements
 
 | Component | Version | Purpose |
-|---------------------------------|---------------|-------------------------|
+|-------------------------------|-----------------|------------------------|
 | **Nextflow** | ≥ 23.04 | Pipeline orchestration |
 | **R** | ≥ 4.2 | Core analysis environment |
 | **Seurat** | ≥ 5.0 | Data handling and normalization |
 | **SeuratDisk** | ≥ 1.1 | Conversion to `.h5Seurat` and `.h5ad` |
 | **SoupX**, **dplyr**, **ggplot2**, **patchwork** | – | QC and visualization |
+| *(Optional)* **Harmony** | \- | batch effect harmonization |
 | *(Optional)* **Scanpy**, **Anndata** | – | Downstream analysis in Python |
 
 ------------------------------------------------------------------------
@@ -118,13 +119,14 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 ## 📊 Outputs
 
-| Folder         | Description       |
-|----------------|-------------------|
-| `merged_h5/`   | no visuals        |
-| `cell_filter/` | 5 resuming .png   |
-| `SCTransform/` | no visuals        |
-| `seuratDisk/`  | no visuals        |
-| seurat_PCA/    | 2 results .png    |
+| Folder         | Description     |
+|----------------|-----------------|
+| `merged_h5/`   | no visuals      |
+| `cell_filter/` | 5 resuming .png |
+| `SCTransform/` | no visuals      |
+| `seuratDisk/`  | no visuals      |
+| seurat_PCA/    | 2 results .png  |
+|                |                 |
 
 ------------------------------------------------------------------------
 
