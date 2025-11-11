@@ -59,7 +59,7 @@ workflow {
     // with PCA in Seurat. Otherwise (for 'scanpy' or 'parallel'), convert the
     // Seurat object to h5Seurat/h5ad using SeuratDisk and proceed toward Scanpy.
     if (mode == 'seurat') {
-         RUN_Seurat_PCA(RUN_SCTransform.out.SCTransformed_rds)
+         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
     }
     else {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
