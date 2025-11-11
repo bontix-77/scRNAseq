@@ -237,6 +237,7 @@ process RUN_Seurat_PCA_UMAP{
         path "*.rds", emit: PCA_UMAP_seurat
         path "elbowplot.png"
         path "DimHeatmap.png"
+        path "*.png"
         path "UMAP_DimPlot.png"
         script:
         """
