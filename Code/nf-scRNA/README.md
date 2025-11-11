@@ -20,7 +20,7 @@ Code/
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      └── seurat_PCA_UMAP.R  # Aplicacion de PCA y UMAP. Opcional se aplica batch effect              │                               harmonization 
+        │      └── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                    │                               harmonization.
         ├── README 
         └── results/ # visualizations and images
 ```
