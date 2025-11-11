@@ -208,7 +208,7 @@ process RUN_seuratDisk {
     path SCTransform
 
     // OUTPUTS:
-    // - Any TXT: often helpful for diagnostics or exporting feature names
+    // - GeneNames.txt : necesary for reconstuting the AnnData DB in scanpy
     // - `data.h5Seurat`: intermediate
     // - `scanpy.h5ad`: final product for Python ecosystem
     output:
@@ -234,7 +234,7 @@ process RUN_Seurat_PCA{
         path SCTransform
       
         output:
-        path "*.rds", emit: PCA_seurat
+        path "*.rds", emit: PCA_UMAP_seurat
         path "elbowplot.png"
         path "DimHeatmap.png"
         path "UMAP_DimPlot.png"
