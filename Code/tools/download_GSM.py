@@ -1,13 +1,9 @@
 import os  # Provides functions for interacting with the operating system
-import io  # Provides tools for working with streams (used for in-memory text streams)
 from ftplib import FTP  # For FTP file transfers
 
 
 # Set the working directory
 os.chdir("/home/alexander-bontempo/Desktop/HIV GSM/GSM")  # Change to the directory where you want to save the files
-
-from ftplib import FTP
-import os
 
 def FTP_GSM_Down(gsm_id, tag,ext, local_dir):
     ftp_host = "ftp.ncbi.nlm.nih.gov"
