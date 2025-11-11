@@ -228,7 +228,7 @@ process RUN_seuratDisk {
     Rscript ${params.scriptFile}/RDS_to_h5ad.R "${SCTransform}"
     """
 }
-process RUN_Seurat_PCA{
+process RUN_Seurat_PCA_UMAP{
         publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
         input:
         path SCTransform

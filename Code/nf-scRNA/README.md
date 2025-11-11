@@ -49,15 +49,17 @@ Code/
 
 🚧 Work in progress Current modules:
 
-✅ RUN_readh5 — merge multiple 10x datasets
+✅ RUN_readh5 - merge multiple 10x datasets
 
-✅ RUN_cell_filter — apply QC-based cell filtering
+✅ RUN_cell_filter - apply QC-based cell filtering
 
-✅ RUN_SCTransform — normalization and scaling using negative binomial
+✅ RUN_SCTransform - normalization and scaling using negative binomial
 
-✅ RUN_seuratDisk — save Seurat object in h5Seurat file than convert to .h5ad to be transfered to a scanpy script
+✅ RUN_seuratDisk - save Seurat object in h5Seurat file than convert to .h5ad to be transfered to a scanpy script
 
-🔜 RUN_plot_QC, RUN_cluster, RUN_annotation (coming soon)
+✅ RUN_Seurat_PCA_UMAP - perform the PCA, optional batch correction (harmony and UMAP dimensionality reduction.)
+
+🔜  RUN_cluster, RUN_annotation etc. (coming soon)
 
 ## 🧪 Running the Pipeline
 
