@@ -8,11 +8,12 @@ Data
 .RDataTmp
 
 adp_merge_filt_sctran_clust_harmony.rds
-pixi.*
+*pixi.*
 .pixi/
 pixi_init.yml
 .gitignore
 cellchat_identified.rds
 test.yml.save
 GEX_markers_for_cell_annotation.html
+
 
