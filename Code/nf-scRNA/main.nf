@@ -1,8 +1,9 @@
+#!/usr/bin/env nextflow
 //note: redundant comments and explanation have been added since the porpose of this is to be instructional.
 
 
 
-#!/usr/bin/env nextflow
+
 // ───────────────────────────────────────────────────────────────────────────────
 // Shebang: lets this file be executed directly if it has execute permissions.
 // Nextflow will interpret everything below according to its DSL (domain-specific language).
@@ -58,7 +59,7 @@ workflow {
     // with PCA in Seurat. Otherwise (for 'scanpy' or 'parallel'), convert the
     // Seurat object to h5Seurat/h5ad using SeuratDisk and proceed toward Scanpy.
     if (mode == 'seurat') {
-        RUN_Seurat_PCA(RUN_SCTransform.out.SCTransformed_rds)
+         RUN_Seurat_PCA(RUN_SCTransform.out.SCTransformed_rds)
     }
     else {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
@@ -227,7 +228,22 @@ process RUN_seuratDisk {
     Rscript ${params.scriptFile}/RDS_to_h5ad.R "${SCTransform}"
     """
 }
+process RUN_Seurat_PCA{
+        publishDir "${params.resultDir}/seurat_PCA", mode: 'copy', overwrite: true
+        input:
+        path SCTransform
+      
+        output:
+        path "*.rds", emit: PCA_seurat
+        path "elbowplot.png"
+        path "DimHeatmap.png"
 
+        script:
+        """
+        Rscript ${params.scriptFile}/Harmony_PCA.R "${SCTransform}" "${params.harmony}"
+        """
+        
+}
 // ───────────────────────────────────────────────────────────────────────────────
 // ADDITIONAL NOTES & COMMON PITFALLS (purely explanatory, no code change):
 // • Channels vs. values: Inside `workflow {}` we pass channels or values to processes.

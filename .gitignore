@@ -14,4 +14,5 @@ pixi_init.yml
 .gitignore
 cellchat_identified.rds
 test.yml.save
+GEX_markers_for_cell_annotation.html
 
