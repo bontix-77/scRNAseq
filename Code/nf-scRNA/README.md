@@ -16,11 +16,11 @@ Code/
         ├── main.nf # Nextflow main workflow 
         ├── nextflow.config # Config parameters (paths, results) 
         ├── r-scripts/  
-        │      ├── read_h5.R # Read & merge 10x data  
-        │      ├── cell_filter.R # Filter the cell based on countings and mitocondrial RNAs
-        │      ├── RDS_to_scanpy.R # convert the seurat object to a scanpy object .h5ad
-        │      ├── SCTransform.R # Seurat normalization using negative binomila distribution
-        │      └── cell_filter.R # Cell filtering module  
+        │      ├── read_h5.R          # Read & merge 10x data  
+        │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
+        │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
+        │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
+        │      └── seurat_PCA_UMAP.R  # Aplicacion de PCA y UMAP. Opcional se aplica batch effect              │                               harmonization 
         ├── README 
         └── results/ # visualizations and images
 ```
@@ -28,11 +28,11 @@ Code/
 ### Processes
 
 | Process | Description | Output |
-|------------------|-------------------------------------|------------------|
+|------------------|------------------------------------|------------------|
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
 | **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `5 .png analytics immages` |
-| RUN_SCTransform | Normalize the count | no images |
-| RUN_seuratDisk | Convert Seurat object .rds in a scampy object .h5ad |  |
+| **RUN_SCTransform** | Normalize the count | no images |
+| **RUN_seuratDisk** | Convert Seurat object .rds in a scampy object .h5ad |  |
 
 ------------------------------------------------------------------------
 

@@ -9,7 +9,7 @@ HIV_SCT <- readRDS(path)
 
 
 ################################################################
-HIV_SCT <- readRDS('/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/work/e1/73c3b5d7a7582cfd2a9fbac16c7fe1/HIV_SCTransform.rds')
+#HIV_SCT <- readRDS('/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/work/e1/73c3b5d7a7582cfd2a9fbac16c7fe1/HIV_SCTransform.rds')
 
 
 
@@ -44,3 +44,17 @@ print(elbow)
 dev.off()
 print("control print")
 saveRDS(HIV_SCT,"HIV_HarmonyPCA.rds")
+
+reduction_type <- if ("harmony" %in% names(HIV_SCT@reductions)) {"harmony"} else {"pca"}
+
+
+HIV_SCT <-HIV_SCT %>% RunUMAP( reduction = reduction_type, dims=1:20)
+png("UMAP_DimPlot.png", width=1200,height = 900,res=150)
+DimPlot(HIV_SCT,
+        reduction = reduction_type, group.by = c("orig.ident", "seurat_clusters"),
+        alpha = 0.2, ncol = 2
+)
+dev.off()
+# save the final RDS file 
+
+saveRDS(adp_filt, "C:/Users/Owner/Documents/github/Seurat test script/seurat 2 basic script/outputs/adp_merge_filt_sctran_clust_harmony.rds")

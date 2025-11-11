@@ -229,7 +229,7 @@ process RUN_seuratDisk {
     """
 }
 process RUN_Seurat_PCA{
-        publishDir "${params.resultDir}/seurat_PCA", mode: 'copy', overwrite: true
+        publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
         input:
         path SCTransform
       
@@ -237,10 +237,10 @@ process RUN_Seurat_PCA{
         path "*.rds", emit: PCA_seurat
         path "elbowplot.png"
         path "DimHeatmap.png"
-
+        path "UMAP_DimPlot.png"
         script:
         """
-        Rscript ${params.scriptFile}/Harmony_PCA.R "${SCTransform}" "${params.harmony}"
+        Rscript ${params.scriptFile}/Harmony_PCA_UMAP.R "${SCTransform}" "${params.harmony}"
         """
         
 }
