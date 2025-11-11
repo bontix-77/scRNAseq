@@ -33,7 +33,7 @@ workflow {
     def mode = params.analysis.toString().toLowerCase()
 
     // Validate the mode against allowed values. If invalid, abort with a helpful message.
-    assert ['seurat', 'scanpy','parallel'].contains(mode) : "Invalid analysis mode: ${mode}. Choose 'seurat'. 'scanpy' or 'parallel params: --analysis"
+    assert ['seurat', 'scanpy', 'parallel'].contains(mode) : "Invalid analysis mode: ${mode}. Choose 'seurat'. 'scanpy' or 'parallel params: --analysis"
 
     //rscript= file("${params.scriptFile}/test.R")
     // (Commented out) Example of how you might have bound a script path to a file handle.
@@ -59,7 +59,7 @@ workflow {
     // with PCA in Seurat. Otherwise (for 'scanpy' or 'parallel'), convert the
     // Seurat object to h5Seurat/h5ad using SeuratDisk and proceed toward Scanpy.
     if (mode == 'seurat') {
-         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
     }
     else {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
@@ -75,14 +75,9 @@ process RUN_PRINT_R {
     // publishDir: copies outputs to a user-defined results folder (idempotent with overwrite).
     publishDir params.resultDir, mode: 'copy', overwrite: true
 
-    // INPUTS:
-    // - `path folders`: a value representing a path or list of paths. Here it's the
-    //   `collect()`'ed list of directories emitted by folder_ch.
     input:
     path folders
 
-    // SCRIPT:
-    // Writes a line with the resolved input to a text file for later inspection.
     script:
     """
 
@@ -103,23 +98,13 @@ process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/merged_h5", mode: 'copy', overwrite: true
 
-    // INPUTS:
-    // - `path folders`: list of directories to process
-    // - `val base_dir`: plain value (string) with the input directory root
     input:
     path folders
     val base_dir
 
-    // OUTPUTS:
-    // - A single RDS file containing the merged Seurat object.
     output:
     path "HIV_merged.rds", emit: merged_rds
 
-    // SCRIPT:
-    // Invoke the R script with positional arguments:
-    //   1) the list (or Nextflow-resolved) of folders
-    //   2) the base directory
-    // The script must create HIV_merged.rds in the working directory for Nextflow to collect it.
     script:
     """
   
@@ -138,21 +123,13 @@ process RUN_cell_filter {
     // Organize outputs into a dedicated subdirectory for clarity.
     publishDir "${params.resultDir}/cell_filter", mode: 'copy', overwrite: true
 
-    // INPUTS:
-    // - `path rds_file`: the merged Seurat object from RUN_readh5
     input:
     path rds_file
 
-    // OUTPUTS:
-    // - `HIV_filtered.rds`: the filtered Seurat object
-    // - `*.png`: any QC plots the R script generates (e.g., violin plots, scatter plots)
     output:
     path "HIV_filtered.rds", emit: filtered_rds
     path "*.png"
 
-    // SCRIPT:
-    // Runs the filtering R script, which should read the input RDS and write both
-    // the filtered RDS and any PNG plots to the current work directory.
     script:
     """
     Rscript ${params.scriptFile}/cell_filter.R "${rds_file}"
@@ -170,18 +147,12 @@ process RUN_SCTransform {
     // Keep outputs grouped under SCTrasnform for traceability with prior runs.
     publishDir "${params.resultDir}/SCTrasnform", mode: 'copy', overwrite: true
 
-    // INPUTS:
-    // - `path SCTransform`: the filtered RDS to be transformed
     input:
     path SCTransform
 
-    // OUTPUTS:
-    // - `HIV_SCTransform.rds`: the transformed Seurat object for subsequent analysis.
     output:
     path "HIV_SCTransform.rds", emit: SCTransformed_rds
 
-    // SCRIPT:
-    // Call the R script that performs SCTransform and writes the expected output filename.
     script:
     """
     Rscript ${params.scriptFile}/SCTransform.R "${SCTransform}"
@@ -202,76 +173,34 @@ process RUN_seuratDisk {
     // Publish all conversion outputs into a dedicated seuratDisk subfolder.
     publishDir "${params.resultDir}/seuratDisk", mode: 'copy', overwrite: true
 
-    // INPUTS:
-    // - `path SCTransform`: the SCTransformed RDS produced earlier
     input:
     path SCTransform
 
-    // OUTPUTS:
-    // - GeneNames.txt : necesary for reconstuting the AnnData DB in scanpy
-    // - `data.h5Seurat`: intermediate
-    // - `scanpy.h5ad`: final product for Python ecosystem
     output:
     path "*.txt", emit: gene_names
     path "data.h5Seurat"
     path "scanpy.h5ad", emit: h5Seurat_file
 
-    // SCRIPT:
-    // Execute the R conversion script. It should:
-    // 1) Read the supplied RDS
-    // 2) Save an h5Seurat file
-    // 3) Convert to h5ad (AnnData)
-    // 4) Optionally write any TXT side outputs
-    // The filenames must match the patterns declared above so Nextflow can capture them.
     script:
     """
     Rscript ${params.scriptFile}/RDS_to_h5ad.R "${SCTransform}"
     """
 }
-process RUN_Seurat_PCA_UMAP{
-        publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
-        input:
-        path SCTransform
-      
-        output:
-        path "*.rds", emit: PCA_UMAP_seurat
-        path "elbowplot.png"
-        path "DimHeatmap.png"
-        path "*.png"
-        path "UMAP_DimPlot.png"
-        script:
-        """
+process RUN_Seurat_PCA_UMAP {
+    publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
+
+    input:
+    path SCTransform
+
+    output:
+    path "*.rds", emit: PCA_UMAP_seurat
+    path "elbowplot.png"
+    path "DimHeatmap.png"
+    path "*.png"
+    path "UMAP_DimPlot.png"
+
+    script:
+    """
         Rscript ${params.scriptFile}/Harmony_PCA_UMAP.R "${SCTransform}" "${params.harmony}"
         """
-        
 }
-// ───────────────────────────────────────────────────────────────────────────────
-// ADDITIONAL NOTES & COMMON PITFALLS (purely explanatory, no code change):
-// • Channels vs. values: Inside `workflow {}` we pass channels or values to processes.
-//   `.collect()` collapses channel emissions into a single list value; ensure your R
-//   scripts can accept and parse such list representations when quoted.
-//
-// • Working directories: Each process runs in its own isolated work dir. Your R scripts
-//   should write outputs to the current working directory (i.e., `.`) so Nextflow can
-//   match them against the `output:` patterns.
-//
-// • publishDir behavior: With `mode: 'copy'` and `overwrite: true`, reruns will refresh
-//   artifacts in the result folders, which is handy during development.
-//
-// • Parameterization: `params.inputDir`, `params.resultDir`, and `params.scriptFile`
-//   must be defined at runtime (e.g., via `nextflow run main.nf --inputDir data --resultDir results --scriptFile scripts`).
-//
-// • Mode branching: The `if (mode == 'seurat') { ... } else { ... }` block routes the
-//   transformed object either to a PCA step (not included in this snippet but referenced)
-//   or to the SeuratDisk conversion step for Scanpy workflows.
-//
-// • Reproducibility: Consider pinning R package versions (via renv, Mamba/Conda, or containers)
-//   so that SCTransform and SeuratDisk behavior is consistent across systems.
-//
-// • Tracing & debugging: Running with `-with-report -with-timeline -with-dag` is often helpful
-//   to visualize execution graphs and performance characteristics.
-//
-// • Parallel mode: The assertion allows 'parallel', which branches into the same conversion
-//   path as 'scanpy' in this snippet. The exact behavior for 'parallel' likely lives in other
-//   parts of your project or is a placeholder for future extension.
-// ───────────────────────────────────────────────────────────────────────────────
