@@ -1,8 +1,10 @@
 library(harmony)
 library(Seurat)
 library(uwot)
+library(dplyr)
 args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
+
 HIV_SCT <- readRDS(path)
 
 
@@ -45,11 +47,11 @@ reduction_type <- if ("harmony" %in% names(HIV_SCT@reductions)) {
   "pca"
 }
 
-
 # performing the neighbors and clusters
+resolution  <-  as.numeric(args[3])
 HIV_SCT <- HIV_SCT %>%
   FindNeighbors(reduction = reduction_type) %>%
-  FindClusters(resolution = 0.1)
+  FindClusters(resolution = resolution)
 
 png(paste0(reduction_type, ".png"), width = 1200, height = 900, res = 150)
 DimPlot(
@@ -61,7 +63,7 @@ DimPlot(
 )
 dev.off()
 # save the final RDS file
-
+print(paste0("argomento3=",args[3]))
 HIV_SCT <- HIV_SCT %>% RunUMAP(reduction = reduction_type, dims = 1:20)
 png("UMAP_DimPlot.png", width = 1200, height = 900, res = 150)
 DimPlot(
@@ -74,4 +76,4 @@ DimPlot(
 dev.off()
 # save the final RDS file
 
-saveRDS(HIV_SCT, "HIV_filt_PCA.rds")
+# saveRDS(HIV_SCT, "HIV_filt_PCA.rds")

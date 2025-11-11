@@ -108,7 +108,7 @@ process RUN_readh5 {
     script:
     """
   
-    Rscript ${params.scriptFile}/read_h5.R "${folders}" ${base_dir}
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir}
     """
 }
 
@@ -132,7 +132,7 @@ process RUN_cell_filter {
 
     script:
     """
-    Rscript ${params.scriptFile}/cell_filter.R "${rds_file}"
+    Rscript "${params.scriptFile}/cell_filter.R" "${rds_file}"
     """
 }
 
@@ -155,7 +155,7 @@ process RUN_SCTransform {
 
     script:
     """
-    Rscript ${params.scriptFile}/SCTransform.R "${SCTransform}"
+    Rscript "${params.scriptFile}/SCTransform.R" "${SCTransform}"
     """
 }
 
@@ -183,7 +183,7 @@ process RUN_seuratDisk {
 
     script:
     """
-    Rscript ${params.scriptFile}/RDS_to_h5ad.R "${SCTransform}"
+    Rscript "${params.scriptFile}/RDS_to_h5ad.R" "${SCTransform}"
     """
 }
 process RUN_Seurat_PCA_UMAP {
@@ -201,6 +201,6 @@ process RUN_Seurat_PCA_UMAP {
 
     script:
     """
-        Rscript ${params.scriptFile}/Harmony_PCA_UMAP.R "${SCTransform}" "${params.harmony}"
+        Rscript "${params.scriptFile}/Harmony_PCA_UMAP.R" "${SCTransform}" "${params.harmony}" "${params.resolution}"
         """
 }
