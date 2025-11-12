@@ -1,4 +1,3 @@
-Got it — you want a README that captures the **entire repository** as a project, not just the Nextflow pipeline. Here’s a version that reflects the broader structure — R scripts, pipeline logic, modular design, and intent.
 
 ------------------------------------------------------------------------
 
