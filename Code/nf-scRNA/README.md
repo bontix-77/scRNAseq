@@ -20,7 +20,10 @@ Code/
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      └── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                    │                               harmonization.
+        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │      │                        harmonization.
+        │      ├── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
+        │      │                        annotation to be finalized.
+        │      └── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │                               harmonization.
         ├── README 
         └── results/ # visualizations and images
 ```
@@ -32,7 +35,9 @@ Code/
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
 | **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `5 .png analytics immages` |
 | **RUN_SCTransform** | Normalize the count | no images |
-| **RUN_seuratDisk** | Convert Seurat object .rds in a scampy object .h5ad |  |
+| **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad |  list of the genes |
+| **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
+| **RUN_Seurat_markers** |  calculate cluster and markers associated. contain cell annotation |  1 .png and 1 .cvs |
 
 ------------------------------------------------------------------------
 
@@ -41,25 +46,29 @@ Code/
 -   **Nextflow ≥ 23.10**
 -   **R ≥ 4.3**
 -   R packages:
-    -   `Seurat`, `tidyverse`, `ggplot2`, `Matrix`
+    -   `Seurat`, `tidyverse`, `ggplot2`, `Matrix, presto,`
 
 ------------------------------------------------------------------------
 
-📜 Status
+### 📜 Status
 
-🚧 Work in progress Current modules:
+🚧 Work in progress!!!
 
-✅ RUN_readh5 - merge multiple 10x datasets
+[**Current modules:**]{.underline}
+
+✅ RUN_readh5 - reads and merges multiple 10x datasets
 
 ✅ RUN_cell_filter - apply QC-based cell filtering
 
 ✅ RUN_SCTransform - normalization and scaling using negative binomial
 
-✅ RUN_seuratDisk - save Seurat object in h5Seurat file than convert to .h5ad to be transfered to a scanpy script
+✅ RUN_seuratDisk - saves Seurat object in h5Seurat file than convert it to .h5ad to be transferred to a scanpy script
 
 ✅ RUN_Seurat_PCA_UMAP - perform the PCA, optional batch correction (harmony and UMAP dimensionality reduction.)
 
-🔜  RUN_cluster, RUN_annotation etc. (coming soon)
+✅ RUN_Seurat_markers - calculate cluster and markers associated. It also host cell annotation (to be completed)
+
+🔜 RUN_cluster, RUN_annotation etc. (coming soon)
 
 ## 🧪 Running the Pipeline
 
