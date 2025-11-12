@@ -1,4 +1,3 @@
-
 ------------------------------------------------------------------------
 
 # scRNAseq: A Modular Single-Cell RNA-seq Analysis Framework
@@ -23,23 +22,32 @@ scRNAseq/
 ├── Code/
 │   ├── nf-scRNA/             # Nextflow workflow and process definitions
 │   │   ├── main.nf           # Main workflow (Seurat/Scanpy modes)
-│   │   ├── modules/          # Reusable process blocks (optional)
-│   │   └── configs/          # Parameter files and environment setup
+│   │   ├── r-scripts/          # Reusable process blocks (optional)
+│   │   │     ├── read_h5.R         # Import and merge 10x datasets
+│   │   │     ├── cell_filter.R     # QC and cell-level filtering
+│   │   │     ├── SCTransform.R     # Normalization using Seurat SCTransform
+│   │   │     ├── RDS_to_h5ad.R     # Conversion Seurat → h5Seurat → h5ad
+│   │   │     ├──seurat_markers.R
+│   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
+│   │   │                                 (in nextflow.config harmony parameter)
+│   │   ├── results/                # contains images and other deliverables
+│   │   └── nextflow.config         # Parameter files and environment setup
 │   │
-│   ├── R/                    # R analysis scripts
-│   │   ├── read_h5.R         # Import and merge 10x datasets
-│   │   ├── cell_filter.R     # QC and cell-level filtering
-│   │   ├── SCTransform.R     # Normalization using Seurat SCTransform
-│   │   ├── RDS_to_h5ad.R     # Conversion Seurat → h5Seurat → h5ad
-│   │   └── Harmony_PCA.R     # Perform PCA with or whitout harmony (in nextflow.config harmony parameter)
+│   ├── CellChat/                   # For cellular comunication analysis\
+│   ├── GO analysis                 # gene ontology script
+│   ├── Scrublet                    # dubplets removal
+│   ├── SoupX                       # removal of environmental RNA
+│   ├── tools/
+│   │   ├── biomaRt_script.R        # to change between gene IDs
+│   │   └── download_GSM.py         # snipet to automatize GSM downloading from GEO repositories
 │   │
-│   ├── Python/               # Optional utility scripts
-│   │   └── scanpy_tools.py   # Interface functions for downstream analysis
+│   ├── seurat/               # contains the HIV seurat pipe used for nf-scRNA and a analysis of adipocytes
+│   │   ├── Adipocytes
+│   │   └── HIV PBMC  
 │   │
 │   └── Docs/                 # Notebooks and explanations
 │       └── workflow_diagram.html / .png
 │
-├── Data/                     # Example input data (placeholders or mock)
 ├── Results/                  # Output structure (auto-created)
 └── README.md                 # This file
 ```
@@ -79,7 +87,7 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 ## 🧰 Requirements
 
 | Component | Version | Purpose |
-|-------------------------------|-----------------|------------------------|
+|------------------------------|------------------|------------------------|
 | **Nextflow** | ≥ 23.04 | Pipeline orchestration |
 | **R** | ≥ 4.2 | Core analysis environment |
 | **Seurat** | ≥ 5.0 | Data handling and normalization |
