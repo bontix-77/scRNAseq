@@ -76,4 +76,4 @@ DimPlot(
 dev.off()
 # save the final RDS file
 
-# saveRDS(HIV_SCT, "HIV_filt_PCA.rds")
+saveRDS(HIV_SCT, "HIV_filt_PCA.rds")

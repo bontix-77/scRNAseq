@@ -1,9 +1,6 @@
 #!/usr/bin/env nextflow
 //note: redundant comments and explanation have been added since the porpose of this is to be instructional.
 
-
-
-
 // ───────────────────────────────────────────────────────────────────────────────
 // Shebang: lets this file be executed directly if it has execute permissions.
 // Nextflow will interpret everything below according to its DSL (domain-specific language).
@@ -60,6 +57,7 @@ workflow {
     // Seurat object to h5Seurat/h5ad using SeuratDisk and proceed toward Scanpy.
     if (mode == 'seurat') {
         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
     }
     else {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
@@ -80,8 +78,7 @@ process RUN_PRINT_R {
 
     script:
     """
-
-echo "Processing file: ${folders}" > print_log.txt
+    echo "Processing file: ${folders}" > print_log.txt
     """
 }
 
@@ -198,9 +195,26 @@ process RUN_Seurat_PCA_UMAP {
     path "DimHeatmap.png"
     path "*.png"
     path "UMAP_DimPlot.png"
+    
 
     script:
     """
-        Rscript "${params.scriptFile}/Harmony_PCA_UMAP.R" "${SCTransform}" "${params.harmony}" "${params.resolution}"
-        """
+    Rscript "${params.scriptFile}/Harmony_PCA_UMAP.R" "${SCTransform}" "${params.harmony}" "${params.resolution}"
+    """
+}
+process RUN_Seurat_markers {
+    publishDir "${params.resultDir}/seurat_Markers", mode: 'copy', overwrite: true
+
+    input:
+    path PCA_UMAP
+
+    output:
+    path "Top20_markers.csv"
+    path "Clusters.png"
+    path "*.rds", emit: markers_cluster
+    
+    script:
+    """
+    Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
+    """
 }
