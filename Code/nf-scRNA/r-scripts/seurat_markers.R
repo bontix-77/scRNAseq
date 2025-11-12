@@ -85,7 +85,7 @@ pDC <- c("CST3", "CLEC4C", "CXCR3", "IL3RA", "GZMB", "CD4")
 Plasmoblasts <- c("JCHAIN", "CD27", "MKI67", "IGHD", "IGHG1")
 #hematopoietic stem cells
 HSC <- c("PPBP", "ITGA2B")
-#REd cells
+#Red cells
 RBC <- c("HBB", "HBA1", "HBA2")
 
 VlnPlot(HIV_PCA_cluster, features = Plasmoblasts)
