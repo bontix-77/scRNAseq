@@ -63,4 +63,5 @@ Code/
 
 ## 🧪 Running the Pipeline
 
-\`\`\`bash git clone https://github.com/bontix-77/scRNAseq.git cd scRNAseq/Code/nf-scRNA nextflow run main.nf
+\`\`\`bash 
+git clone / https://github.com/bontix-77/scRNAseq.git cd scRNAseq/Code/nf-scRNA nextflow run main.nf
