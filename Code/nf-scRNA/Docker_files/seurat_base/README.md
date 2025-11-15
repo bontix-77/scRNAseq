@@ -138,10 +138,6 @@ process {
 
 Repository
 
-Full Dockerfile and build logs are available here:
-
-https://github.com/bontix-77/scRNAseq/tree/main/Code/nf-scRNA/Docker_files/seurat_base
-
 Maintainer
 
 Alexander Bontempo Email: bontix77\@yahoo.it
