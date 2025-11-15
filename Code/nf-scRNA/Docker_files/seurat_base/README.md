@@ -119,20 +119,20 @@ Usage
 Pull the image directly:
 
 ``` bash
-docker pull bontix77/sc_rna
+docker pull bontix77/sc_rna:v1.0
 ```
 
 Run it interactively:
 
 ``` bash
-docker run -it bontix77/sc_rna R
+docker run -it bontix77/sc_rna:v1.0 R
 ```
 
 Use it in Nextflow:
 
 ``` groovy
 process {
-    container = 'bontix77/sc_rna:latest'
+    container = 'bontix77/sc_rna:v1.0'
 }
 ```
 
