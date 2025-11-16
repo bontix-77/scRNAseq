@@ -93,7 +93,7 @@ process RUN_PRINT_R {
 // ───────────────────────────────────────────────────────────────────────────────
 process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
-    publishDir "${params.resultDir}/merged_h5", mode: 'copy', overwrite: true
+    publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
 
     input:
     path folders
@@ -199,7 +199,7 @@ process RUN_Seurat_PCA_UMAP {
 
     script:
     """
-    Rscript "${params.scriptFile}/Harmony_PCA_UMAP.R" "${SCTransform}" "${params.harmony}" "${params.resolution}"
+    Rscript "${params.scriptFile}/seurat_PCA_UMAP.R" "${SCTransform}" "${params.harmony}" "${params.resolution}"
     """
 }
 process RUN_Seurat_markers {
