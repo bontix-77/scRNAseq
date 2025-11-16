@@ -44,7 +44,7 @@ Code/
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
 | **RUN_Seurat_markers** | calculate cluster and markers associated. contain cell annotation | 1 .png and 1 .cvs |
 
-``` marmaid
+``` mermaid
 flowchart TB
   subgraph " "
     subgraph params
