@@ -1,6 +1,5 @@
 
-
-library(tidyverse) # dplyr and ggplot2
+library(dplyr) # dplyr and ggplot2
 library(Seurat) # Seurat toolkit
 library(hdf5r) # for data import
 library(patchwork) # for plotting

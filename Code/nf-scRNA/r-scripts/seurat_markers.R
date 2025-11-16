@@ -8,7 +8,7 @@ args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
 HIV_PCA_cluster<- readRDS(path)
 
-HIV_PCA_cluster <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/work/3c/b2db263f999da2c26c2d99201d2011/HIV_filt_PCA.rds")
+# HIV_PCA_cluster <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/work/3c/b2db263f999da2c26c2d99201d2011/HIV_filt_PCA.rds")
 
 HIV_PCA_cluster <- PrepSCTFindMarkers(HIV_PCA_cluster, verbose = T)
 
