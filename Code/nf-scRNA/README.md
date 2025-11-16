@@ -46,7 +46,7 @@ Code/
 
 ``` mermaid
 flowchart TB
-  subgraph " "
+  subgraph ""
     subgraph params
       v2["analysis"]
       v0["inputDir"]
@@ -54,12 +54,12 @@ flowchart TB
     v4([RUN_readh5])
     v5([RUN_cell_filter])
     v6([RUN_SCTransform])
-    v7{ }
-    subgraph s1[" "]
+    v7{"Seurat or scanpy"}
+    subgraph s1["Seurat"]
       v8([RUN_Seurat_PCA_UMAP])
       v9([RUN_Seurat_markers])
     end
-    subgraph s2[" "]
+    subgraph s2["scanpy"]
       v10([RUN_seuratDisk])
     end
     v0 --> v4
