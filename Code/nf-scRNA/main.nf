@@ -46,7 +46,7 @@ workflow {
 
     // Filter cells based on quality metrics or other criteria. This consumes the
     // merged RDS produced by the prior step.
-    RUN_cell_filter(RUN_readh5.out.merged_rds)
+    RUN_cell_filter( RUN_readh5.out.merged_rds)
 
     // Apply Seurat's SCTransform normalization. Consumes the filtered RDS and produces
     // a transformed object for downstream analysis or conversion.
@@ -104,7 +104,6 @@ process RUN_readh5 {
 
     script:
     """
-  
     Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir}
     """
 }
@@ -121,6 +120,7 @@ process RUN_cell_filter {
     publishDir "${params.resultDir}/cell_filter", mode: 'copy', overwrite: true
 
     input:
+   
     path rds_file
 
     output:
