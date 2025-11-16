@@ -15,6 +15,11 @@ Code/
    └── nf-scRNA/ 
         ├── main.nf # Nextflow main workflow 
         ├── nextflow.config # Config parameters (paths, results) 
+        ├── Docker_files
+        │   ├──seurat_base
+        │      ├── build.log          # complete log of the docker build 
+        │      ├── dockerfile         # docker file source for the image
+        │      ├── packages_list.csv  # list and details of the packages included in the image
         ├── r-scripts/  
         │      ├── read_h5.R          # Read & merge 10x data  
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
