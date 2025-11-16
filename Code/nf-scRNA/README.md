@@ -20,13 +20,13 @@ Code/
         │      ├── build.log          # complete log of the docker build 
         │      ├── dockerfile         # docker file source for the image
         │      ├── packages_list.csv  # list and details of the packages included in the image
+        │      └── README
         ├── r-scripts/  
         │      ├── read_h5.R          # Read & merge 10x data  
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │        
-        │      │                        annotation to be finalized.
+        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                           │      │                        annotation to be finalized. │  
         │      └── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
         │                                
         ├── README 
@@ -36,13 +36,43 @@ Code/
 ### Processes
 
 | Process | Description | Output |
-|-------------------|-----------------------------------|-------------------|
+|-------------------|----------------------------------|-------------------|
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
 | **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `5 .png analytics immages` |
 | **RUN_SCTransform** | Normalize the count | no images |
 | **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad | list of the genes |
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
 | **RUN_Seurat_markers** | calculate cluster and markers associated. contain cell annotation | 1 .png and 1 .cvs |
+
+``` marmaid
+flowchart TB
+  subgraph " "
+    subgraph params
+      v2["analysis"]
+      v0["inputDir"]
+    end
+    v4([RUN_readh5])
+    v5([RUN_cell_filter])
+    v6([RUN_SCTransform])
+    v7{ }
+    subgraph s1[" "]
+      v8([RUN_Seurat_PCA_UMAP])
+      v9([RUN_Seurat_markers])
+    end
+    subgraph s2[" "]
+      v10([RUN_seuratDisk])
+    end
+    v0 --> v4
+    v4 --> v5
+    v5 --> v6
+    v2 --> v7
+    v6 --> v8
+    v8 --> v9
+    v6 --> v10
+    v7 --> s1
+    v7 --> s2
+  end
+```
 
 ------------------------------------------------------------------------
 
