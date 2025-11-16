@@ -20,10 +20,10 @@ Code/
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │      │                        harmonization.
-        │      ├── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
+        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │        
         │      │                        annotation to be finalized.
-        │      └── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                         │                               harmonization.
+        │      └── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
+        │                                
         ├── README 
         └── results/ # visualizations and images
 ```
@@ -31,13 +31,13 @@ Code/
 ### Processes
 
 | Process | Description | Output |
-|------------------|------------------------------------|------------------|
+|-------------------|-----------------------------------|-------------------|
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
 | **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `5 .png analytics immages` |
 | **RUN_SCTransform** | Normalize the count | no images |
-| **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad |  list of the genes |
+| **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad | list of the genes |
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
-| **RUN_Seurat_markers** |  calculate cluster and markers associated. contain cell annotation |  1 .png and 1 .cvs |
+| **RUN_Seurat_markers** | calculate cluster and markers associated. contain cell annotation | 1 .png and 1 .cvs |
 
 ------------------------------------------------------------------------
 
@@ -72,5 +72,4 @@ Code/
 
 ## 🧪 Running the Pipeline
 
-\`\`\`bash 
-git clone / https://github.com/bontix-77/scRNAseq.git cd scRNAseq/Code/nf-scRNA nextflow run main.nf
+\`\`\`bash git clone / https://github.com/bontix-77/scRNAseq.git cd scRNAseq/Code/nf-scRNA nextflow run main.nf
