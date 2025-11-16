@@ -1,0 +1,1 @@
+Thi main.nf and nextflow.config are meant to be used to run the pipeline not with docker container.
