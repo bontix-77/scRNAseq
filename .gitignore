@@ -19,3 +19,4 @@ GEX_markers_for_cell_annotation.html
 
 Code/nf-scRNA/Docker_files/seurat_base/seurat_v.5.3.1_base.tar
 Code/nf-scRNA/Docker_files/seurat_base/seurat_v.5.3.1_base.tar.gz
+Code/nf-scRNA/GSE220790_sample_metadata_update.txt.gz

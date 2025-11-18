@@ -1,0 +1,15 @@
+Accession	Field[Alias]
+GSM6817423	detectable_1
+GSM6817424	undetectable_1
+GSM6817425	detectable_2
+GSM6817426	undetectable_2
+GSM6817427	undetectable_3
+GSM6817428	detectable_3
+GSM6817429	detectable_4
+GSM6817430	undetectable_4
+GSM6817431	undetectable_5
+GSM6817432	undetectable_6
+GSM6817433	detectable_5
+GSM6817434	undetectable_7
+GSM6817435	undetectable_8
+GSM6817436	detectable_6
