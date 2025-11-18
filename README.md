@@ -22,6 +22,16 @@ scRNAseq/
 ├── Code/
 │   ├── nf-scRNA/             # Nextflow workflow and process definitions
 │   │   ├── main.nf           # Main workflow (Seurat/Scanpy modes)
+│   │   ├──nexflow.config     # paramaters for the main.nf nexflow pipeline 
+│   │   ├── Docker_files
+│   │   │    └── seurat_base           # folder containing all documents for the sc_rna:v1.0 docker image
+│   │   │        ├── building.log         # complet log of the image building step
+│   │   │        ├── dockerfile           # source dockerfile
+│   │   │        ├── packages_list.csv    # complete list of the packages included in the image
+│   │   │        └── README.md            # documentation
+│   │   │
+│   │   │
+│   │   │
 │   │   ├── r-scripts/          # Reusable process blocks (optional)
 │   │   │     ├── read_h5.R         # Import and merge 10x datasets
 │   │   │     ├── cell_filter.R     # QC and cell-level filtering
