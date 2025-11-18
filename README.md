@@ -22,9 +22,9 @@ scRNAseq/
 ├── Code/
 │   ├── nf-scRNA/             # Nextflow workflow and process definitions
 │   │   ├── main.nf           # Main workflow (Seurat/Scanpy modes)
-│   │   ├──nexflow.config     # paramaters for the main.nf nexflow pipeline 
-│   │   ├── Docker_files
-│   │   │    └── seurat_base           # folder containing all documents for the sc_rna:v1.0 docker image
+│   │   ├── nexflow.config    Parameter files and environment setup
+│   │   ├── Docker_files/
+│   │   │    └── seurat_base/           # folder containing all documents for the sc_rna:v1.0 docker image
 │   │   │        ├── building.log         # complet log of the image building step
 │   │   │        ├── dockerfile           # source dockerfile
 │   │   │        ├── packages_list.csv    # complete list of the packages included in the image
@@ -37,16 +37,15 @@ scRNAseq/
 │   │   │     ├── cell_filter.R     # QC and cell-level filtering
 │   │   │     ├── SCTransform.R     # Normalization using Seurat SCTransform
 │   │   │     ├── RDS_to_h5ad.R     # Conversion Seurat → h5Seurat → h5ad
-│   │   │     ├──seurat_markers.R
+│   │   │     ├── seurat_markers.R
 │   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
 │   │   │                                 (in nextflow.config harmony parameter)
-│   │   ├── results/                # contains images and other deliverables
-│   │   └── nextflow.config         # Parameter files and environment setup
-│   │
+│   │   └──  results/                # contains images and other deliverables
+│   │   
 │   ├── CellChat/                   # For cellular comunication analysis\
-│   ├── GO analysis                 # gene ontology script
-│   ├── Scrublet                    # dubplets removal
-│   ├── SoupX                       # removal of environmental RNA
+│   ├── GO analysis/                 # gene ontology script
+│   ├── Scrublet/                    # dubplets removal
+│   ├── SoupX/                       # removal of environmental RNA
 │   ├── tools/
 │   │   ├── biomaRt_script.R        # to change between gene IDs
 │   │   └── download_GSM.py         # snipet to automatize GSM downloading from GEO repositories
