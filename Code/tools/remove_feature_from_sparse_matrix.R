@@ -1,57 +1,9 @@
 library(Matrix)
 hiv <- HIV_filt
-
-rimuovere <- c(
-  "TRBV1",
-  "TRBV2",
-  "TRBV3-1",
-  "TRBV4-1",
-  "TRBV5-1",
-  "TRBV6-1",
-  "TRBV4-2",
-  "TRBV6-2",
-  "TRBV7-2",
-  "TRBV6-4",
-  "TRBV7-3",
-  "TRBV5-3",
-  "TRBV9",
-  "TRBV10-1",
-  "TRBV11-1",
-  "TRBV10-2",
-  "TRBV11-2",
-  "TRBV6-5",
-  "TRBV7-4",
-  "TRBV5-4",
-  "TRBV6-6",
-  "TRBV5-5",
-  "TRBV7-6",
-  "TRBV5-6",
-  "TRBV7-7",
-  "TRBV5-7",
-  "TRBV7-9",
-  "TRBV13",
-  "TRBV10-3",
-  "TRBV11-3",
-  "TRBV12-3",
-  "TRBV12-4",
-  "TRBV12-5",
-  "TRBV14",
-  "TRBV15",
-  "TRBV18",
-  "TRBV19",
-  "TRBV20-1",
-  "TRBV21-1",
-  "TRBV23-1",
-  "TRBV24-1",
-  "TRBV25-1",
-  "TRBV27",
-  "TRBV28",
-  "TRBV29-1",
-  "TRBC1",
-  "TRBC2",
-  "TRBV30",
+marker_T <- c()
+Alfa <- c(
   "TRAV1-1",
-  "TRAV1-2",
+  #"TRAV1-2",
   "TRAV2",
   "TRAV3",
   "TRAV4",
@@ -94,10 +46,6 @@ rimuovere <- c(
   "TRAV39",
   "TRAV40",
   "TRAV41",
-  "TRAC",
-  "TRBV16",
-  "TRBV7-5",
-  "TRBV6-8",
   "TRAJ61",
   "TRAJ60",
   "TRAJ59",
@@ -158,6 +106,69 @@ rimuovere <- c(
   "TRAJ3",
   "TRAJ2",
   "TRAJ1",
+  "TRAC",
+  "TRAV7",
+  "TRAV9-1",
+  "TRAV11",
+  "TRAV15",
+  "TRAV8-7",
+  "TRAV28",
+  "TRAV31",
+  "TRAV32",
+  "TRAV33",
+  "TRAV37")
+Beta <- c(
+  "TRBV1",
+  "TRBV2",
+  "TRBV3-1",
+  "TRBV4-1",
+  "TRBV5-1",
+  "TRBV6-1",
+  "TRBV4-2",
+  "TRBV6-2",
+  "TRBV7-2",
+  "TRBV6-4",
+  "TRBV7-3",
+  "TRBV5-3",
+  "TRBV9",
+  "TRBV10-1",
+  "TRBV11-1",
+  "TRBV10-2",
+  "TRBV11-2",
+  "TRBV6-5",
+  "TRBV7-4",
+  "TRBV5-4",
+  "TRBV6-6",
+  "TRBV5-5",
+  "TRBV7-6",
+  "TRBV5-6",
+  "TRBV7-7",
+  "TRBV5-7",
+  "TRBV7-9",
+  "TRBV13",
+  "TRBV10-3",
+  "TRBV11-3",
+  "TRBV12-3",
+  "TRBV12-4",
+  "TRBV12-5",
+  "TRBV14",
+  "TRBV15",
+  "TRBV18",
+  "TRBV19",
+  "TRBV20-1",
+  "TRBV21-1",
+  "TRBV23-1",
+  "TRBV24-1",
+  "TRBV25-1",
+  "TRBV27",
+  "TRBV28",
+  "TRBV29-1",
+  "TRBC1",
+  "TRBC2",
+  "TRBV30",
+  "TRBV16",
+  "TRBV7-5",
+  "TRBV6-8",
   "TRBV7-1",
   "TRBV8-1",
   "TRBV5-2",
@@ -178,16 +189,6 @@ rimuovere <- c(
   "TRBV25OR9-2",
   "TRBV26OR9-2",
   "TRBV29OR9-2",
-  "TRAV7",
-  "TRAV9-1",
-  "TRAV11",
-  "TRAV15",
-  "TRAV8-7",
-  "TRAV28",
-  "TRAV31",
-  "TRAV32",
-  "TRAV33",
-  "TRAV37",
   "TRBJ1-1",
   "TRBJ1-2",
   "TRBJ1-3",
@@ -201,16 +202,54 @@ rimuovere <- c(
   "TRBJ2-4",
   "TRBJ2-5",
   "TRBJ2-6",
-  "TRBJ2-7"
+  "TRBJ2-7")
+  Gamma <- c(
+  "TRGC2",
+  "TRGJ2",
+  "TRGJP2",
+  "TRGC1",
+  "TRGJ1",
+  "TRGJP",
+  "TRGJP1",
+  "TRGV11",
+  "TRGVB",
+  "TRGV10",
+  #"TRGV9",
+  "TRGVA",
+  "TRGV8",
+  "TRGV7",
+  "TRGV6",
+  "TRG-AS1",
+  "TRGV5P",
+  "TRGV5",
+  "TRGV4",
+  "TRGV3",
+  "TRGV2",
+  "TRGV1")
+Delta <- c(
+  "TRDV1",
+  "TRDV2",
+  "TRDV3",
+  "TRDD1",
+  "TRDD2",
+  "TRDD3",
+  "TRDJ1",
+  "TRDJ2",
+  "TRDJ3",
+  #  "TRDC",
+  "TRDJ4"
+ 
 )
+
+grep("TRD", reads$`6817423`@Dimnames[[1]], value = T)
 
 library(Seurat)
 library(Matrix)
 
 group_genes_and_collapse <- function(
   mtx,
-  remove ,
-  new_feature_name = "TCR"
+  remove,
+  new_feature_name
 ) {
   # prendo la matrice dal Seurat object
   # mtx <- GetAssayData(seu)#, assay = assay, slot = slot_use)
@@ -229,7 +268,7 @@ group_genes_and_collapse <- function(
   new_row <- Matrix(
     grouped_counts,
     nrow = 1,
-    sparse=T,
+    sparse = T,
     dimnames = list(new_feature_name, colnames(mtx))
   )
 
@@ -261,16 +300,26 @@ group_genes_and_collapse <- function(
   return(mtx_new)
 }
 
+TCR <- list(`TCR-A`=Alfa,`TCR-B`=Beta,`TCR-D`=Delta,`TCR-G`=Gamma)
+
+reads1 <- list()
+
 for (i in names(reads)) {
-  reads1[[i]] <- group_genes_and_collapse(
-    mtx = reads[[i]],
-    remove = rimuovere,
-    new_feature_name = "TCR"
-  )
+  mtx_i <- reads[[i]]   # parto dalla matrice originale
+  
+  for (g in names(TCR)) {
+    mtx_i <- group_genes_and_collapse(
+      mtx = mtx_i,
+      remove = TCR[[g]],
+      new_feature_name = g
+    )
+  }
+  
+  reads1[[i]] <- mtx_i  # salvo la versione finale collassata
 }
 
 
 s <- mtx_new
 s <- s[-5, ]
 
-reads1 <- copy(reads)
+# reads1 <- copy(reads)
