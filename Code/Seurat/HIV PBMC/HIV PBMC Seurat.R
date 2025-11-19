@@ -287,7 +287,7 @@ HIV_filt <- SCTransform(HIV_filt, vars.to.regress = "percent.mt", verbose = FALS
 library(SeuratDisk)                                                                     #
 # during the SeuratData i have a problem as the gene names are lost so i save the vector in a file 
 # Get feature names from SCT assay (or RNA)
-gene_names <- rownames(HIV_filt@assays$SCT@counts)  # or SCT@counts if using SCTransform
+gene_names <- rownames(HIV_filt@assays$SCT@scale.data)  # or SCT@counts if using SCTransform
 
 # Save to a text file
 writeLines(gene_names, "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/gene_names.txt")
@@ -296,7 +296,7 @@ writeLines(gene_names, "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/gene_names
 SaveH5Seurat(HIV_filt, filename = "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat")
 
 # Convert .h5Seurat to .h5ad
-Convert("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat", dest = "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/h5ad")
+Convert("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat", dest = "/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5ad")
 #########################################################################################
 ###########################################################################################
 
@@ -388,23 +388,23 @@ CD4_naiveT <- c("CD3E","CD4","CCR7","IL7R","TCF7","PTPRC","CD27")
 #negative markers PTPRC
 CD4_Tcm <- c("CD3E","CD4","CD27","SELL","CCR7","PTPRC")
 #negative markers CD27, CCR7, PTPRC, SELL, TCF7
-CD4_Tem <- c("CD3","CD4","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
+CD4_Tem <- c("CD3E","CD4","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
 CD4_Trm <- c("CD3E","CD4","CD69","ITGAE")
-CD4_Tscm <- c("CD3E", "CD4", "CD27", "SELL", "PTRPC", "IL2RB", "FAS")
+CD4_Tscm <- c("CD3E", "CD4", "CD27", "SELL", "PTPRC", "IL2RB", "FAS")
 
 CD8_niveT  <- c("CD3E","CD8A","CCR7","TCF7","PTPRC","CD27")
 # negative marker PTPRC
 CD8_Tcm <- c("CD3E","CD8A","CD27","SELL","CCR7","PTPRC")
 #negative markers CD27, CCR7, PTPRC, SELL, TCF7
-CD8_Tem <- c("CD3","CD8A","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
+CD8_Tem <- c("CD3E","CD8A","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
 CD8_Trm <- c("CD3E","CD8A","CD69","ITGAE")
-CD8_Tscm <- c("CD3E", "CD8A", "CD27", "SELL", "PTRPC", "IL2RB", "FAS")
+CD8_Tscm <- c("CD3E", "CD8A", "CD27", "SELL", "PTPRC", "IL2RB", "FAS")
 #mucosal-associated invariant T
 MAIT <- c("CD3E", "TRAV1-2", "IL7R", "GZMK", "CCR6")
 
-Vγ9Vδ2T	 <- c("CD3E", "TRGV9", "TRDV2", "GZMA", "CCL5", "TRDC")
+Vγ9Vδ2T	 <- c("CD3E", "TCR","TRGV9", "TRDV2", "GZMA", "CCL5", "TRDC")
 #negative markers TRGV9, TRDV2
-gdT <- c("CD3E", "TRGC1","TRGC2", "TRDC",	"TRGV9", "TRDV2")
+gdT <- c("CD3E", "TCR","TRGC1","TRGC2", "TRDC",	"TRGV9", "TRDV2")
 
 Treg <- c("CD3E", "FOXP3", "IL2RA")
 T_prolif <- c("CD3E","MKI67")
@@ -422,6 +422,7 @@ RBC <- c("HBB", "HBA1", "HBA2")
 cd8 <- VlnPlot(HIV_filt, features = "CD8A")
 cd4 <- VlnPlot(HIV_filt, features = "CD4")
 cd4/cd8
+
 # visualize in the cluster the cel type corresponding to the  feature= parameter above (this case contam)
 FeaturePlot(HIV_filt, features = "CD4")
 

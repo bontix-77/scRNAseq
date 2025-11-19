@@ -5,6 +5,7 @@ https://scanpy.readthedocs.io/en/latest/tutorials/index.htmlhttps://scanpy.readt
 '''
 
 import scanpy as sc
+import numpy as np
 #import louvain    #library can't install: missing dependencices i can't solve
 
 adata = sc.read_h5ad("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5ad")
@@ -21,10 +22,10 @@ with open("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/gene_names.txt") as f:
     gene_names = [line.strip() for line in f]
 
 # Replace raw.var_names
-adata.raw.var_names = gene_names
+    # adata.raw.var_names = gene_names
 
 # Optional: replace var_names too
-adata.var_names = gene_names
+    adata.var_names = gene_names
 
 
 ########################################################################
@@ -44,24 +45,74 @@ sc.tl.louvain(adata, resolution=0.5)
 
 
 # Leiden clustering
-sc.tl.leiden(adata, resolution=0.5)
+sc.tl.leiden(adata, resolution=1.2)
 # 7️⃣ Compute UMAP embedding
 sc.tl.umap(adata)
 # Plot UMAP
 sc.pl.umap(adata, color='leiden')
 
 
-
+#how many cells per cluster?
 adata.obs['leiden'].value_counts()
 
 
 #cluster markers
 sc.tl.rank_genes_groups(adata, groupby='leiden', method='t-test')
-# Get raw array
-names_array = adata.uns['rank_genes_groups']['names']
+'''
+for some reason adata.uns['rank_genes_groups']['names']
+doesn't contain gene name but the adata.raw.var['_index'].
+To convert the indexes to gene name i had to recreate a rec assigning dtype (one for cluster).
+
+'''
+names_raw=adata.uns['rank_genes_groups']['names']
+
+
+names_array=[]
+
+for i,v in enumerate(names_raw):  
+    partial=[]
+    for j in range(len(v)):
+        if names_raw[i][j].isdigit():
+            partial.append(adata.raw.var['_index'].iloc[int(names_raw[i][j]),])
+        else:
+            partial.append(names_raw[i][j])
+    names_array.append(partial)    
 
 
 
+# 1. i took the group names from anothe dtype in the rank_genes_groups array
+group_names = adata.uns['rank_genes_groups']['scores'].dtype.names
+print("group_names:", group_names)
+
+# 2. list to numpy array
+names_np = np.array(names_array)
+print("names_array shape:", names_np.shape)
+print("n groups in dtype:", len(group_names))
+
+# 3. build column based on shape
+if names_np.ndim == 1:
+  
+    raise ValueError("names_array ha una sola dimensione, mi aspetto 2D (genes x groups o groups x genes)")
+
+if names_np.shape[1] == len(group_names):
+    
+    cols = [names_np[:, i] for i in range(names_np.shape[1])]
+elif names_np.shape[0] == len(group_names):
+   
+    cols = [names_np[i, :] for i in range(names_np.shape[0])]
+else:
+    raise ValueError(
+        f"Shape di names_array {names_np.shape} non compatibile con numero gruppi {len(group_names)}"
+    )
+
+# 4. create the rec usin cols as arrays and group names
+names_rec = np.rec.fromarrays(cols, names=group_names)
+
+print(type(names_rec), names_rec.shape, names_rec.dtype)
+
+# 5. change to adata
+adata.uns['rank_genes_groups']['names'] = names_rec
+# ############################################
 
 
 
@@ -83,21 +134,21 @@ adata.var_names[:10]
 
 
 ########## grid UMAP#####################
-for res in [0.02, 0.5, 2.0]:
+for res in [0.02, 0.5, 1.4]:
     sc.tl.leiden(adata, key_added=f"leiden_res_{res:4.2f}", resolution=res, flavor="igraph")
 
 
 sc.pl.umap(
     adata,
-    color=["leiden_res_0.02", "leiden_res_0.50", "leiden_res_2.00"],
+    color=["leiden_res_0.02", "leiden_res_0.50", "leiden_res_1.40"],
     legend_loc="on data",
 )
 
 
 #cluster markers
-sc.tl.rank_genes_groups(adata, groupby='leiden_res_1', method='wilcoxon')
+sc.tl.rank_genes_groups(adata, groupby='leiden_res_1.40', method='wilcoxon')
 
-sc.pl.rank_genes_groups_dotplot(adata, groupby="leiden_res_1", standard_scale="var", n_genes=5,use_raw=False)
+sc.pl.rank_genes_groups_dotplot(adata, groupby="leiden_res_1.40", standard_scale="var", n_genes=5,use_raw=False)
 ############ cell type#######################3
 # to look if a gene is present
 
@@ -144,7 +195,7 @@ marker_genes = {
 sc.pl.dotplot(
     adata,
     marker_genes,
-    groupby="leiden_res_1",
+    groupby="leiden_res_1.40",
     standard_scale="var",
     use_raw=False
 )
