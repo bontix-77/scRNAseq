@@ -14,7 +14,7 @@ library(Seurat)
 #      [[2]] is the name/tag of each cell   
 # x is the gene expression 
 #     in the exemple above the gen 34 in the cell 1 has expression 1. looking into Dimnames[[1]] i can find the name of the gene 34
-setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM")
+setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM1")
 
 # List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
 dirs <- list.dirs()
@@ -28,7 +28,7 @@ reads <- lapply(paste0("/home/alexander-bontempo/Desktop/HIV GSM/GSM1/",dirs_nam
   , Read10X)
 # Assign names manually GEO serie GSE220790
 #names(reads) <- c("6817423", "6817424", "6817425", "6817426", "6817427", "6817428")
-names(reads) <- c("6817430", "6817431", "6817432", "6817433", "6817434", "6817435","6817436")
+names(reads) <- c("6817423", "6817431", "6817432", "6817433", "6817434", "6817435","6817436")
 #########################################################################
 # Single sample
 ##   W10 <- CreateSeuratObject(counts=W10, project="W10", min.cells = 3, min.features = 200)
@@ -45,16 +45,26 @@ names(reads) <- c("6817430", "6817431", "6817432", "6817433", "6817434", "681743
   #MoreArgs = list(min.cells = 20, min.features = 200)
 #)
 #but since HIV expression in PLWH is very low lets remoove min cell filtering
- HIV <-  mapply(CreateSeuratObject,
-  counts = reads,
+ 
+HIV <-  mapply(CreateSeuratObject,
+  counts = reads1,
   project = names(reads),
   MoreArgs = list( min.cells = 2,min.features = 200)
 )
 
-
-
 # remove the original sparse matrices
 rm(reads)
+
+# assign metadata group
+HIV$`6817423`$group <- "detectable"
+HIV$`6817431`$group <- "undetectable"
+HIV$`6817432`$group <- "undetectable"
+HIV$`6817433`$group <- "detectable"
+HIV$`6817434`$group <- "undetectable"
+HIV$`6817435`$group <- "undetectable"
+HIV$`6817436`$group <- "detectable"
+
+
 HIV <- merge(HIV[[1]],
   y = HIV[2:length(HIV)],
   add.cell.ids = names(HIV), 
@@ -122,9 +132,17 @@ cnames
 
 # plot total counts per sample
 VlnPlot(HIV, features = "nCount_RNA",  group.by = "orig.ident", raster = FALSE, alpha = 0.2) 
+VlnPlot(HIV, features = "nCount_RNA",  group.by = "group", raster = FALSE, alpha = 0.2) 
 # or using ggplot2
 HIV@meta.data %>%
   ggplot(aes( color = orig.ident,x = nCount_RNA, fill = orig.ident)) +
+  geom_density(alpha = 0.2) +
+  theme_classic() +
+  scale_x_log10() +
+  geom_vline(xintercept = 650, color = "red", linetype = "dotted")
+
+HIV@meta.data %>%
+  ggplot(aes( color = group,x = nCount_RNA, fill = group)) +
   geom_density(alpha = 0.2) +
   theme_classic() +
   scale_x_log10() +
@@ -139,19 +157,25 @@ slotNames(HIV[["RNA"]])
 
 # determine number of features (genes)
 
-plot_featur <- VlnPlot(HIV, features = "nFeature_RNA", group.by = "orig.ident") +
-  geom_hline(yintercept = 500, color = "red")
-show(plot_featur)
-
+plot_featur_i<- VlnPlot(HIV, features = "nFeature_RNA", group.by = "orig.ident") +
+  geom_hline(yintercept = 600, color = "red")
+show(plot_featur_i)
+plot_featur_g <- VlnPlot(HIV, features = "nFeature_RNA", group.by = "group") +
+  geom_hline(yintercept = 600, color = "red")
+show(plot_featur_g)
 # visualize % mitocondrial genes
 
-plot_mt <- VlnPlot(HIV, features = "percent.mt", group.by = "orig.ident") +
+plot_mt_i <- VlnPlot(HIV, features = "percent.mt", group.by = "orig.ident") +
   geom_hline(yintercept = 10, color = "red")
-show(plot_mt)
+show(plot_mt_i)
+plot_mt_g <- VlnPlot(HIV, features = "percent.mt", group.by = "group") +
+  geom_hline(yintercept = 10, color = "red")
+
+
 
 plot_count <- VlnPlot(HIV, features = "nCount_RNA", group.by = "orig.ident") +
   geom_hline(yintercept = 10, color = "red")
-plot_featur|plot_mt
+(plot_featur_i/plot_mt_i)|(plot_featur_g/plot_mt_g)
 
 # scatter the point by number of features and mitocondrial genes
 
@@ -164,69 +188,82 @@ FeatureScatter(HIV, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by
 # filter
 # Set one set of parameters for Day 0 samples;
 # keep the rownames (Cell barcodes)
-F_30 <- HIV@meta.data |>
-  filter(orig.ident=="6817430",
-     nFeature_RNA > 500,
-     nFeature_RNA < 4000,
+# F_30 <- HIV@meta.data |>
+#   filter(orig.ident=="6817430",
+#      nFeature_RNA > 500,
+#      nFeature_RNA < 4000,
+#     percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_31 <- HIV@meta.data |>
+#   filter(orig.ident=="6817431",
+#          nFeature_RNA > 500,
+#          percent.mt < 10,
+#          nFeature_RNA < 4000
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_32 <- HIV@meta.data |>
+#   filter(orig.ident=="6817432",
+#          percent.mt < 10,
+#          nFeature_RNA > 500,
+#         nFeature_RNA < 4000
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+
+# F_33 <- HIV@meta.data |>
+#   filter(orig.ident=="6817433",
+#          nFeature_RNA > 500,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_34 <- HIV@meta.data |>
+#   filter(orig.ident=="6817434",
+#          nFeature_RNA > 700,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_35 <- HIV@meta.data |>
+#   filter(orig.ident=="6817435",
+#          nFeature_RNA > 500,
+#          nFeature_RNA < 4000,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_36 <- HIV@meta.data |>
+#   filter(orig.ident=="6817436",
+#          nFeature_RNA > 500,
+#          nFeature_RNA < 4000,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+
+# keep <- c(F_30,F_31,F_32,F_33,F_34,F_35,F_36)
+
+to_keep <- HIV@meta.data |>
+  filter(nFeature_RNA > 600,
+     nFeature_RNA < 2500,
     percent.mt < 10
   ) |>
   tibble::rownames_to_column("Cell") |>
   pull(Cell)
-F_31 <- HIV@meta.data |>
-  filter(orig.ident=="6817431",
-         nFeature_RNA > 500,
-         percent.mt < 10,
-         nFeature_RNA < 4000
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_32 <- HIV@meta.data |>
-  filter(orig.ident=="6817432",
-         percent.mt < 10,
-         nFeature_RNA > 500,
-        nFeature_RNA < 4000
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
 
-F_33 <- HIV@meta.data |>
-  filter(orig.ident=="6817433",
-         nFeature_RNA > 500,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_34 <- HIV@meta.data |>
-  filter(orig.ident=="6817434",
-         nFeature_RNA > 700,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_35 <- HIV@meta.data |>
-  filter(orig.ident=="6817435",
-         nFeature_RNA > 500,
-         nFeature_RNA < 4000,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_36 <- HIV@meta.data |>
-  filter(orig.ident=="6817436",
-         nFeature_RNA > 500,
-         nFeature_RNA < 4000,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
 
-keep <- c(F_30,F_31,F_32,F_33,F_34,F_35,F_36)
 # use different parameters; established above
-HIV_filt <- subset(HIV, cells = keep)
+HIV_filt <- subset(HIV, cells = to_keep)
 FeatureScatter(HIV_filt, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by = "orig.ident", log = TRUE)
+FeatureScatter(HIV_filt, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by = "group", log = TRUE)
+
+
 # save file after filtering
 
-##saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt.rds")
+saveRDS(HIV_filt, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt.rds")
 
 
 ##############################################################
@@ -268,33 +305,35 @@ Convert("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5Seurat", dest = "/
 
 HIV_filt <- RunPCA(HIV_filt, verbose = FALSE, assay = "SCT")
 
+
+library(harmony)
+
+HIV_filt <- RunHarmony(HIV_filt,"orig.ident")
 # visualizethte first 9 PC
-
-
 DimHeatmap(HIV_filt, dims = 1:9, cells = 500, balanced = TRUE, ncol = 3)
 # perform the elbow analisys
-ElbowPlot(HIV_filt, ndims = 40)
+ElbowPlot(HIV_filt, reduction = "harmony",ndims = 40)
 
 # performing the neighbors analisys to prepara for the clusterin
-HIV_filt <- FindNeighbors(HIV_filt, dims = 1:7)
+HIV_filt <- FindNeighbors(HIV_filt,reduction="harmony", dims = 1:30)
 
 # calculate the clusterin (suggessted redolution 0.4-1.2)
 
-HIV_filt <- FindClusters(HIV_filt, resolution = 0.13)
+HIV_filt <- FindClusters(HIV_filt, reduction = "harmony",resolution = 0.8)
 
 # UMAP for the viasualization of the clusters
-HIV_filt <- RunUMAP(HIV_filt, dims = 1:10)
+HIV_filt <- RunUMAP(HIV_filt, dims = 1:20,reduction = "harmony")
 DimPlot(HIV_filt,
-  reduction = "pca", group.by = c("orig.ident", "seurat_clusters"),
+  reduction = "harmony", group.by = c("orig.ident", "SCT_snn_res.0.8","group"),
   alpha = 0.2, ncol = 2,
   label=F
 )
 figumap_clusters <- DimPlot(HIV_filt,
-  reduction = "umap", group.by =  "seurat_clusters",
+  reduction = "umap", group.by =  "SCT_snn_res.0.8",
   alpha = 0.2, ncol = 1,
-  label=T
+  label=F
   
-)+ NoLegend()
+)#+ NoLegend()
 figumap_orig <- DimPlot(HIV_filt,
   reduction = "umap", group.by = "orig.ident" ,
   alpha = 0.2, ncol = 1,
@@ -315,7 +354,7 @@ HIV_filt <- PrepSCTFindMarkers(HIV_filt, verbose = T)
 # devtools::install_github('immunogenomics/presto')
 library(presto)
 # find all markers
-HIV_filt_markers <- FindAllMarkers(HIV_filt, only.pos = TRUE)
+HIV_filt_markers <- FindAllMarkers(HIV_filt, only.pos = F)
 # ordering the results
 HIV_filt_markers <- HIV_filt_markers %>%
   arrange(cluster, desc(avg_log2FC), p_val_adj)
@@ -332,13 +371,74 @@ top20 <- HIV_filt_markers %>%
   ungroup()
 DoHeatmap(HIV_filt, features = top20$gene) + NoLegend()
 
-platelets  <- c("PPBP","CAVIN2","TUBB1","GNG11","SMIM24")   
-VlnPlot(HIV_filt, features = platelets)
+platelets <- c("Ptprc", "Plp1", "Pecam1")
 
+Naive_B <- c("CD19","IGHD")
+
+Memory_B<- c("CD19","CD27","IGHG1","MS4A1")
+
+CD14_monocytes <- c("CD14","S100A8","CD4")
+
+CD16_monocytes  <- c("FCGR3A","CD4")
+
+NK <- c("GZMA","GZMB","GNLY","NKG7","FCGR3A","CD8A")
+#negative markers TRDC, GZMK and GATA3
+CD56brightNK <- c("NCAM1", "TRDC","GZMK","GATA3") 
+CD4_naiveT <- c("CD3E","CD4","CCR7","IL7R","TCF7","PTPRC","CD27")
+#negative markers PTPRC
+CD4_Tcm <- c("CD3E","CD4","CD27","SELL","CCR7","PTPRC")
+#negative markers CD27, CCR7, PTPRC, SELL, TCF7
+CD4_Tem <- c("CD3","CD4","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
+CD4_Trm <- c("CD3E","CD4","CD69","ITGAE")
+CD4_Tscm <- c("CD3E", "CD4", "CD27", "SELL", "PTRPC", "IL2RB", "FAS")
+
+CD8_niveT  <- c("CD3E","CD8A","CCR7","TCF7","PTPRC","CD27")
+# negative marker PTPRC
+CD8_Tcm <- c("CD3E","CD8A","CD27","SELL","CCR7","PTPRC")
+#negative markers CD27, CCR7, PTPRC, SELL, TCF7
+CD8_Tem <- c("CD3","CD8A","CD27", "CCR7", "PTPRC", "SELL", "TCF7")
+CD8_Trm <- c("CD3E","CD8A","CD69","ITGAE")
+CD8_Tscm <- c("CD3E", "CD8A", "CD27", "SELL", "PTRPC", "IL2RB", "FAS")
+#mucosal-associated invariant T
+MAIT <- c("CD3E", "TRAV1-2", "IL7R", "GZMK", "CCR6")
+
+Vγ9Vδ2T	 <- c("CD3E", "TRGV9", "TRDV2", "GZMA", "CCL5", "TRDC")
+#negative markers TRGV9, TRDV2
+gdT <- c("CD3E", "TRGC1","TRGC2", "TRDC",	"TRGV9", "TRDV2")
+
+Treg <- c("CD3E", "FOXP3", "IL2RA")
+T_prolif <- c("CD3E","MKI67")
+
+mDC <- c("CST3","CD1C", "HLA-DRA", "CD4")
+
+pDC <- c("CST3", "CLEC4C", "CXCR3", "IL3RA", "GZMB", "CD4")
+Plasmoblasts <- c("JCHAIN", "CD27", "MKI67", "IGHD", "IGHG1")
+#hematopoietic stem cells
+HSC <- c("PPBP", "ITGA2B")
+#Red cells
+RBC <- c("HBB", "HBA1", "HBA2")
+
+
+cd8 <- VlnPlot(HIV_filt, features = "CD8A")
+cd4 <- VlnPlot(HIV_filt, features = "CD4")
+cd4/cd8
 # visualize in the cluster the cel type corresponding to the  feature= parameter above (this case contam)
-FeaturePlot(HIV_filt, features = platelets)
+FeaturePlot(HIV_filt, features = "CD4")
 
 #saveRDS(HIV_filt_markers, "/home/alexander-bontempo/Desktop/HIV GSM/RDS/HIV_merge_filt_markers.rds")
+
+
+## to find different expression between a label and the others in a metadata idents (if between two specific labels "idents.2=" can be used to specify.)
+Idents(HIV_filt) <- "group"
+# here if you want to look differential expression between specific clusters
+to_keep <- HIV_filt@meta.data|>
+  filter(seurat_clusters%in%c(2,3)
+  ) |>
+  tibble::rownames_to_column("Cell") |>
+  pull(Cell)
+HIV_subset <- subset(HIV_filt, cells = to_keep)
+
+det_vs_unde <- FindMarkers(HIV_subset, ident.1 = "undetectable",ident.2="detectable", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
 
 ##############################################
 ##    Differential Expression analisys      ##
