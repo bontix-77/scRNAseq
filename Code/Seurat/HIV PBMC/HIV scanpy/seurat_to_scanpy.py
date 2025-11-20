@@ -4,7 +4,6 @@ https://scanpy.readthedocs.io/en/latest/tutorials/index.htmlhttps://scanpy.readt
 """
 
 import scanpy as sc
-import numpy as np
 # import louvain    #library can't install: missing dependencices i can't solve
 
 adata = sc.read_h5ad("/home/alexander-bontempo/Desktop/HIV GSM/h5ad/data.h5ad")
@@ -194,11 +193,64 @@ marker_genes = {
     "pDC": ["GZMB", "IL3RA", "COBLL1", "TCF4"],
 }
 
+marker_genes_extend = {
+    "platelets" : ["PTPRC", "PECAM1"], #, "Plp1"   no present in DF
+
+    "Naive_B" : ["CD19", "IGHD"],
+
+    "Memory_B" : ["CD19", "CD27", "IGHG1", "MS4A1"],
+
+    "CD14_monocytes" : ["CD14", "S100A8", "CD4"],
+
+    "CD16_monocytes" : ["FCGR3A", "CD4"],
+
+    "NK" : ["GZMA", "GZMB", "GNLY", "NKG7", "FCGR3A", "CD8A"],
+
+    "CD56bright_NK" : ["NCAM1", "TCR-D", "GZMK", "GATA3"],
+
+    "CD4_naive_T" : ["CD3E", "CD4", "CCR7", "IL7R", "TCF7", "PTPRC", "CD27"],
+
+    "CD4_Tcm" : ["CD3E", "CD4", "CD27", "SELL", "CCR7", "PTPRC"],
+
+    "CD4_Tem" : ["CD3E", "CD4", "CD27", "CCR7", "PTPRC", "SELL", "TCF7"],
+
+    "CD4_Trm" : ["CD3E", "CD4", "CD69", "ITGAE"],
+
+    "CD4_Tscm" : ["CD3E", "CD4", "CD27", "SELL", "PTPRC", "IL2RB", "FAS"],
+
+    "CD8_naive_T" : ["CD3E", "CD8A", "CCR7", "TCF7", "PTPRC", "CD27"],
+
+    "CD8_Tcm" : ["CD3E", "CD8A", "CD27", "SELL", "CCR7", "PTPRC"],
+
+    "CD8_Tem" : ["CD3E", "CD8A", "CD27", "CCR7", "PTPRC", "SELL", "TCF7"],
+
+    "CD8_Trm" : ["CD3E", "CD8A", "CD69", "ITGAE"],
+
+    "CD8_Tscm" : ["CD3E", "CD8A", "CD27", "SELL", "PTPRC", "IL2RB", "FAS"],
+
+    "MAIT" : ["CD3E", "TRAV1-2", "IL7R", "GZMK", "CCR6"],
+
+    "Vγ9Vδ2_T" : ["CD3E",  "TCR-G", "TCR-D", "GZMA", "CCL5", "TRDC"],
+
+    "gd_T" : ["CD3E", "TCR-G",  "TRDC", "TCR-D"],
+
+    "Treg" : ["CD3E", "FOXP3", "IL2RA"],
+
+    "T_proliferating" : ["CD3E", "MKI67"],
+
+    "mDC" : ["CST3", "CD1C", "HLA-DRA", "CD4"],
+
+    "pDC" : ["CST3", "CLEC4C", "CXCR3", "IL3RA", "GZMB", "CD4"],
+
+    "Plasmablasts" : ["JCHAIN", "CD27", "MKI67", "IGHD", "IGHG1"],
+
+    "HSC" : ["PPBP", "ITGA2B"],
+
+    "RBC" : ["HBB", "HBA1", "HBA2"]
+}
 
 sc.pl.dotplot(
-    adata, marker_genes, groupby="leiden_res_1.40", standard_scale="var", use_raw=False
-)
-
+    adata, marker_genes_extend, groupby="leiden_res_1.40", standard_scale="var", use_raw=True)
 
 adata.obs["cell_type_lvl1"] = adata.obs["leiden_res_1"].map(
     {
@@ -221,3 +273,4 @@ sc.tl.rank_genes_groups(adata, groupby="leiden_res_1", method="wilcoxon")
 sc.pl.rank_genes_groups_dotplot(
     adata, groupby="leiden_res_1", standard_scale="var", n_genes=5, use_raw=False
 )
+
