@@ -13,3 +13,15 @@ GSM6817433	detectable_5
 GSM6817434	undetectable_7
 GSM6817435	undetectable_8
 GSM6817436	detectable_6
+
+
+
+HIV$`6817423`$group <- "detectable"
+
+ HIV$`6817431`$group <- "undetectable"
+  HIV$`6817432`$group <- "undetectable"
+ HIV$`6817433`$group <- "detectable"
+ HIV$`6817434`$group <- "undetectable"
+ HIV$`6817435`$group <- "undetectable"
+ HIV$`6817436`$group <- "detectable"
+ HIV$`6817436` <- NULL <- "detectable"
