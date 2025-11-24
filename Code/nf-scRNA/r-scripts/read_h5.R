@@ -31,13 +31,13 @@ HIV <- mapply(
 
 rm(reads)
 # assign metadata group
-HIV$`6817423`$group <- "detectable"
-HIV$`6817431`$group <- "undetectable"
-HIV$`6817432`$group <- "undetectable"
-HIV$`6817433`$group <- "detectable"
-HIV$`6817434`$group <- "undetectable"
-HIV$`6817435`$group <- "undetectable"
-HIV$`6817436`$group <- "detectable"
+HIV$`GSM6817423`$group <- "detectable"
+HIV$`GSM6817431`$group <- "undetectable"
+HIV$`GSM6817432`$group <- "undetectable"
+HIV$`GSM6817433`$group <- "detectable"
+HIV$`GSM6817434`$group <- "undetectable"
+HIV$`GSM6817435`$group <- "undetectable"
+HIV$`GSM6817436`$group <- "detectable"
 
 HIV <- merge(
   HIV[[1]],

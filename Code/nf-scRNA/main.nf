@@ -63,25 +63,6 @@ workflow {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
     }
 }
-
-// ───────────────────────────────────────────────────────────────────────────────
-// PROCESS: RUN_PRINT_R
-// Purpose: Simple debugging/visibility step to print which folders are being processed.
-// Publishes a small log file to the results directory for traceability.
-// ───────────────────────────────────────────────────────────────────────────────
-process RUN_PRINT_R {
-    // publishDir: copies outputs to a user-defined results folder (idempotent with overwrite).
-    publishDir params.resultDir, mode: 'copy', overwrite: true
-
-    input:
-    path folders
-
-    script:
-    """
-    echo "Processing file: ${folders}" > print_log.txt
-    """
-}
-
 // ───────────────────────────────────────────────────────────────────────────────
 // PROCESS: RUN_readh5
 // Purpose: Run an R script that reads raw 10x/other HDF5s contained in the given
@@ -94,7 +75,7 @@ process RUN_PRINT_R {
 process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
-
+    container 'bontix77/sc_rna:v1.0'
     input:
     path folders
     val base_dir
@@ -118,7 +99,7 @@ process RUN_readh5 {
 process RUN_cell_filter {
     // Organize outputs into a dedicated subdirectory for clarity.
     publishDir "${params.resultDir}/cell_filter", mode: 'copy', overwrite: true
-
+    container 'bontix77/sc_rna:v1.0'
     input:
    
     path rds_file
@@ -143,7 +124,7 @@ process RUN_cell_filter {
 process RUN_SCTransform {
     // Keep outputs grouped under SCTrasnform for traceability with prior runs.
     publishDir "${params.resultDir}/SCTrasnform", mode: 'copy', overwrite: true
-
+    container 'bontix77/sc_rna:v1.0'
     input:
     path SCTransform
 
@@ -218,3 +199,16 @@ process RUN_Seurat_markers {
     Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
     """
 }
+// RUN_seurat_cellTypes {
+
+// publishDir "${params.resultDir}/seurat_Markers", mode: 'copy', overwrite: true
+
+// input:
+
+// output:
+
+// script:
+
+
+
+// }
