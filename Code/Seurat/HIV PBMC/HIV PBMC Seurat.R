@@ -47,7 +47,7 @@ names(reads) <- c("6817423", "6817431", "6817432", "6817433", "6817434", "681743
 #but since HIV expression in PLWH is very low lets remoove min cell filtering
  
 HIV <-  mapply(CreateSeuratObject,
-  counts = reads1,
+  counts = reads,
   project = names(reads),
   MoreArgs = list( min.cells = 2,min.features = 200)
 )
@@ -319,7 +319,7 @@ HIV_filt <- FindNeighbors(HIV_filt,reduction="harmony", dims = 1:30)
 
 # calculate the clusterin (suggessted redolution 0.4-1.2)
 
-HIV_filt <- FindClusters(HIV_filt, reduction = "harmony",resolution = 0.8)
+HIV_filt <- FindClusters(HIV_filt, reduction = "harmony",resolution = 0.4)
 
 # UMAP for the viasualization of the clusters
 HIV_filt <- RunUMAP(HIV_filt, dims = 1:20,reduction = "harmony")
@@ -492,7 +492,7 @@ HIV_pp_mks <- PrepSCTFindMarkers(HIV_pp)
 #Day0_Day6_DE <- FindMarkers(HIV_pp_mks, ident.1 = "Day 0", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
 
 
-Idents(HIV_pp_mks) <- "SCT_snn_res.0.13"
+Idents(HIV_pp_mks) <- "SCT_snn_res.0.8"
 #DefaultAssay(HIV_pp_mks) <- "SCT"
 
 ## find all markers between clusters
@@ -635,13 +635,13 @@ FeaturePlot(HIV_pp_mks, features = markers, ncol = 3, order = T)
 ## visualization of features
 
 cells <- vector(length = ncol(HIV_pp_mks))
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(0))] <- "T cells naive"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(1))] <- "T cells activated"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(2))] <- "citotoxic T CD8 and NK cells"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(3))] <- "monocytes/mieloid"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(4))] <- "B cells"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(5))] <- "plasma cells"
-cells[which(HIV_pp_mks$SCT_snn_res.0.13 %in% c(6))] <- "megakaryocytes/platelets"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(0))] <- "T cells naive"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(1))] <- "T cells activated"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(2))] <- "citotoxic T CD8 and NK cells"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(3))] <- "monocytes/mieloid"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(4))] <- "B cells"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(5))] <- "plasma cells"
+cells[which(HIV_pp_mks$SCT_snn_res.0.8 %in% c(6))] <- "megakaryocytes/platelets"
 
 HIV_pp_mks$cell_type <- cells
 
@@ -666,7 +666,7 @@ CD8 <- DimPlot(CD8_positive, group.by = "SCT_snn_res.0.13", label = T) + NoLegen
 
 CD4|CD8
 
-f1 <- DimPlot(HIV_pp_mks, group.by = "SCT_snn_res.0.13", label = T) + NoLegend()
+f1 <- DimPlot(HIV_pp_mks, group.by = "SCT_snn_res.0.8", label = T) + NoLegend()
 #f2 <- DimPlot(HIV_pp, group.by = "time_point") + NoLegend()
 f3 <- DimPlot(HIV_pp_mks, group.by = "cell_type", label = T) + NoLegend()
 f3
