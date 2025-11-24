@@ -28,10 +28,11 @@ workflow {
 
     // Read an analysis mode from params, normalize to lowercase for robust matching.
     def mode = params.analysis.toString().toLowerCase()
-
+     
     // Validate the mode against allowed values. If invalid, abort with a helpful message.
     assert ['seurat', 'scanpy', 'parallel'].contains(mode) : "Invalid analysis mode: ${mode}. Choose 'seurat'. 'scanpy' or 'parallel params: --analysis"
-
+    // Read from params cellType_manual to include manual cell type annotation (stillin development)
+    def man_annotation = params.cellType_manual.toString().toLowerCase()
     //rscript= file("${params.scriptFile}/test.R")
     // (Commented out) Example of how you might have bound a script path to a file handle.
 
@@ -46,7 +47,7 @@ workflow {
 
     // Filter cells based on quality metrics or other criteria. This consumes the
     // merged RDS produced by the prior step.
-    RUN_cell_filter( RUN_readh5.out.merged_rds)
+    RUN_cell_filter(RUN_readh5.out.merged_rds)
 
     // Apply Seurat's SCTransform normalization. Consumes the filtered RDS and produces
     // a transformed object for downstream analysis or conversion.
@@ -58,6 +59,10 @@ workflow {
     if (mode == 'seurat') {
         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
         RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
+        if (man_annotation == "yes"){
+              RUN_Seurat_cellTypes_manual(RUN_Seurat_markers.out.markers_cluster)
+        }
+        RUN_Seurat_cellType_automatic(RUN_Seurat_markers.out.markers_cluster)
     }
     else {
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
@@ -76,6 +81,7 @@ process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
     container 'bontix77/sc_rna:v1.0'
+
     input:
     path folders
     val base_dir
@@ -100,8 +106,9 @@ process RUN_cell_filter {
     // Organize outputs into a dedicated subdirectory for clarity.
     publishDir "${params.resultDir}/cell_filter", mode: 'copy', overwrite: true
     container 'bontix77/sc_rna:v1.0'
+
     input:
-   
+
     path rds_file
 
     output:
@@ -125,6 +132,7 @@ process RUN_SCTransform {
     // Keep outputs grouped under SCTrasnform for traceability with prior runs.
     publishDir "${params.resultDir}/SCTrasnform", mode: 'copy', overwrite: true
     container 'bontix77/sc_rna:v1.0'
+
     input:
     path SCTransform
 
@@ -150,6 +158,7 @@ process RUN_SCTransform {
 process RUN_seuratDisk {
     // Publish all conversion outputs into a dedicated seuratDisk subfolder.
     publishDir "${params.resultDir}/seuratDisk", mode: 'copy', overwrite: true
+    container 'bontix77/sc_rna:v1.0'
 
     input:
     path SCTransform
@@ -166,6 +175,7 @@ process RUN_seuratDisk {
 }
 process RUN_Seurat_PCA_UMAP {
     publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
+    container 'bontix77/sc_rna:v1.0'
 
     input:
     path SCTransform
@@ -176,7 +186,6 @@ process RUN_Seurat_PCA_UMAP {
     path "DimHeatmap.png"
     path "*.png"
     path "UMAP_DimPlot.png"
-    
 
     script:
     """
@@ -185,6 +194,7 @@ process RUN_Seurat_PCA_UMAP {
 }
 process RUN_Seurat_markers {
     publishDir "${params.resultDir}/seurat_Markers", mode: 'copy', overwrite: true
+    container 'bontix77/sc_rna:v1.0'
 
     input:
     path PCA_UMAP
@@ -193,22 +203,46 @@ process RUN_Seurat_markers {
     path "Top20_markers.csv"
     path "Clusters.png"
     path "*.rds", emit: markers_cluster
-    
+
     script:
     """
     Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
     """
 }
-// RUN_seurat_cellTypes {
+process RUN_Seurat_cellTypes_manual {
 
-// publishDir "${params.resultDir}/seurat_Markers", mode: 'copy', overwrite: true
+    publishDir "${params.resultDir}/seurat_cellType", mode: 'copy', overwrite: true
+    container 'bontix77/sc_rna:v1.0'
 
-// input:
+    input:
+    path CellType
 
-// output:
+    output:
+    path "CellType.png"
+    path "*.rds"
 
-// script:
+    script:
 
+    """
+    Rscript "${params.scriptFile}/seurat_cellTypes.R" "${CellType}"
+    """
+}
 
+process RUN_Seurat_cellType_automatic {
 
-// }
+    publishDir "${params.resultDir}/seurat_cellType", mode: 'copy', overwrite: true
+    container 'bontix77/sc_rna:v1.0'
+
+    input:
+    path CellType
+
+    output:
+    path "CellType.png"
+    path "*.rds"
+
+    script:
+
+    """
+    Rscript "${params.scriptFile}/seurat_celldex.R" "${CellType}"
+    """
+}
