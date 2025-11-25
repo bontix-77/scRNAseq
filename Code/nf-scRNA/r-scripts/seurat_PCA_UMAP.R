@@ -51,7 +51,7 @@ reduction_type <- if ("harmony" %in% names(HIV_SCT@reductions)) {
 resolution  <-  as.numeric(args[3])
 HIV_SCT <- HIV_SCT %>%
   FindNeighbors(reduction = reduction_type) %>%
-  FindClusters(resolution = resolution)
+  FindClusters(resolution = resolution) #resolution value is set in the nextflow.config file
 
 png(paste0(reduction_type, ".png"), width = 1200, height = 900, res = 150)
 DimPlot(

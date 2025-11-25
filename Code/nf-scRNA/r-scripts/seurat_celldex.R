@@ -44,7 +44,8 @@ clustAnnot
 
 
 clustLabels <- as.vector(clustAnnot$pruned.labels) # retrieve only the cluster-derived annotations
-names(clustLabels) <- c(0:13) # assign the cluster numbers as the annotations
+number_clusters  <- length(levels(HIV_pp_mks@meta.data$seurat_clusters))-1
+names(clustLabels) <- c(0:number_clusters) # assign the cluster numbers as the annotations
 clustLabels.vect <- clustLabels[match(HIV_pp_mks$seurat_clusters, names(clustLabels))] # match the cluster identities per cell in the Seurat data to the cluster labels
 names(clustLabels.vect) <- colnames(HIV_pp_mks) # ensure that the cluster identities are assigned the cell names
 HIV_pp_mks$humanRNA.fine.clust <- clustLabels.vect # add the cluster annotations to the vector
