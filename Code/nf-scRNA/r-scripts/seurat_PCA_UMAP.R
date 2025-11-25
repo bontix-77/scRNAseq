@@ -64,7 +64,7 @@ DimPlot(
 dev.off()
 # save the final RDS file
 print(paste0("argomento3=",args[3]))
-HIV_SCT <- HIV_SCT %>% RunUMAP(reduction = reduction_type, dims = 1:20)
+HIV_SCT <- HIV_SCT %>% RunUMAP(reduction = reduction_type, dims = 1:30)
 png("UMAP_DimPlot.png", width = 1200, height = 900, res = 150)
 DimPlot(
   HIV_SCT,
