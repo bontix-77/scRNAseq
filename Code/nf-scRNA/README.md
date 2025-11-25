@@ -50,6 +50,7 @@ Code/
 | **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad | list of the genes |
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
 | **RUN_Seurat_markers** | calculate cluster and markers associated. contain cell annotation | 1 .png and 1 .cvs |
+| **RUN_seurat_celType** | determine clusters cell type using celldex and SingleR. | 2 .png images |
 
 ``` mermaid
 flowchart TB
@@ -65,6 +66,7 @@ flowchart TB
     subgraph s1["Seurat"]
       v8([RUN_Seurat_PCA_UMAP])
       v9([RUN_Seurat_markers])
+      v11([RUN_seurat_cellType])
     end
     subgraph s2["scanpy"]
       v10([RUN_seuratDisk])
@@ -78,6 +80,7 @@ flowchart TB
     v6 --> v10
     v7 --> s1
     v7 --> s2
+    v9 --> v11
   end
 ```
 
@@ -88,7 +91,8 @@ flowchart TB
 -   **Nextflow ≥ 23.10**
 -   **R ≥ 4.3**
 -   R packages:
-    -   `Seurat`, `tidyverse`, `ggplot2`, `Matrix, presto,`
+    -   `Seurat`, `tidyverse`, `ggplot2`, `Matrix`, `presto`,`celldex` , `SingleR`, `Azimuth` , `seuratObject`
+-   **for the Seurat docker image is available** at docker hub bontix77/sc_rna:v1.1
 
 ------------------------------------------------------------------------
 
@@ -110,7 +114,9 @@ flowchart TB
 
 ✅ RUN_Seurat_markers - calculate cluster and markers associated. It also host cell annotation (to be completed)
 
-🔜 RUN_cluster, RUN_annotation etc. (coming soon)
+✅ RUN_seurat_cellType - perform cluster annotation using celldex
+
+🔜 more scanpy analysis coming soon
 
 ## 🧪 Running the Pipeline
 
