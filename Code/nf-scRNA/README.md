@@ -16,19 +16,22 @@ Code/
         ├── main.nf # Nextflow main workflow 
         ├── nextflow.config # Config parameters (paths, results) 
         ├── Docker_files/
-        │   └──seurat_base
-        │      ├── build.log          # complete log of the docker build 
-        │      ├── dockerfile         # docker file source for the image
-        │      ├── packages_list.csv  # list and details of the packages included in the image
-        │      └── README
+        │   ├── Seurat_base/        # folder containing all documents for the sc_rna:v1.0 docker image
+        │   │   ├── building.log         # complet log of the image building step
+        │   │   ├── dockerfile           # source dockerfile
+        │   │   ├── packages_list.csv    # complete list of the packages included in the image
+        │   │   └── README.md            # documentation
+        │   └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with seurat fix/v.5.3.1 celldex and
+        │        └── dockerfile        SingleR
+        │         
         ├── r-scripts/  
         │      ├── read_h5.R          # Read & merge 10x data  
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                           │      │                        annotation to be finalized. │  
+        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                                       │      │                        annotation to be finalized.   
         │      └── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
-        ├── HIV canpy/
+        ├── HIV scanpy/
         │       ├── seurat_to_scanpy.py # script to produce clusters and markers after seuratDisk
         │       └──results/           # contains some sample images
         │                                
