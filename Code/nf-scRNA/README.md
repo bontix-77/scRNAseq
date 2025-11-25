@@ -29,7 +29,8 @@ Code/
         │      ├── cell_filter.R      # Filter the cell based on countings and mitocondrial RNAs
         │      ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
-        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                           │      │                        annotation to be finalized.   
+        │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect
+ │      │                               annotation to be finalized.   
         │      └── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
         ├── HIV scanpy/
         │       ├── seurat_to_scanpy.py # script to produce clusters and markers after seuratDisk
