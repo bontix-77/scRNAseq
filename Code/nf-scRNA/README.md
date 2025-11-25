@@ -1,10 +1,21 @@
 # nf-scRNA: Nextflow Pipeline for 10x scRNA-seq Processing (In Progress)
 
-This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data.\
-At this stage, the workflow includes two functional processes:
+![](Code/nf-scRNA/results/seurat_PCA_UMAP/harmony.png)This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. At this stage, the workflow includes the following functional processes:
 
-1.  **Reading and merging** multiple 10x Chromium output folders into a unified Seurat object.\
+1.  **Reading and merging** multiple 10x Chromium output folders into a unified Seurat object.
 2.  **Filtering** low-quality cells based on customizable thresholds.
+3.  **SCTransformation** for the normalization using Negative Binomial distribution.
+4.  **PCA and following UMAP** dimension reduction first with PCA then feed into UMAP (harmony batch effect calculation is included).
+5.  **Cell markers extrapolation** Markers for every cluster are calculated.
+6.  **Cell type annotation** Clusters are cell annotated using celldex. Manual annotatio is under development
+
+in alternative after SCTransform the pipeline can be switched to **scanpy**
+
+**see nextflow.config** for details on available options.
+
+| PCA Dimensions | Cell Types | scanpy UMAP |
+|-----------------------|:-----------------------:|:-----------------------:|
+| ![](Code/nf-scRNA/results/seurat_PCA_UMAP/DimHeatmap.png) | ![](Code/nf-scRNA/results/seurat_cellType/CellType_final.png) | ![](Code/nf-scRNA/HIV_scanpy/Results/UMAP_grid.png) |
 
 ------------------------------------------------------------------------
 
