@@ -17,7 +17,7 @@ in alternative after SCTransform the pipeline can be switched to **scanpy**
  ## Docker image available at hub bontix77/s_rna:v1.1
 ---------------------------------------------------------
 | PCA Dimensions | Cell Types | scanpy UMAP |
-|-----------------------|:-----------------------:|:-----------------------:|
+|:-----------------------:|:-----------------------:|:-----------------------:|
 | ![](results/seurat_PCA_UMAP/DimHeatmap.png) | ![](results/seurat_cellType/CellType_final.png) | ![](HIV_scanpy/Results/UMAP_res_1.4.png) |
 
 ------------------------------------------------------------------------
