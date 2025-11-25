@@ -15,7 +15,7 @@ in alternative after SCTransform the pipeline can be switched to **scanpy**
 
 | PCA Dimensions | Cell Types | scanpy UMAP |
 |-----------------------|:-----------------------:|:-----------------------:|
-| ![](Code/nf-scRNA/results/seurat_PCA_UMAP/DimHeatmap.png) | ![](Code/nf-scRNA/results/seurat_cellType/CellType_final.png) | ![](Code/nf-scRNA/HIV_scanpy/Results/UMAP_grid.png) |
+| ![](results/seurat_PCA_UMAP/DimHeatmap.png) | ![](results/seurat_cellType/CellType_final.png) | ![](HIV_scanpy/Results/UMAP_res_1.4.png) |
 
 ------------------------------------------------------------------------
 
