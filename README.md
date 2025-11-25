@@ -46,9 +46,13 @@ scRNAseq/
 │   │   │     ├── seurat_markers.R
 │   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
 │   │   │                                 (in nextflow.config harmony parameter)
+│   │   ├── HIV scanpy/
+│   │   │       ├── seurat_to_scanpy.py # script to produce clusters and cell markers after seuratDisk
+│   │   │       └── results/            # contains some sample images
+│   │   │                                
 │   │   └──  results/                # contains images and other deliverables
 │   │   
-│   ├── CellChat/                   # For cellular comunication analysis\
+│   ├── CellChat/                    # For cellular comunication analysis\
 │   ├── GO analysis/                 # gene ontology script
 │   ├── Scrublet/                    # dubplets removal
 │   ├── SoupX/                       # removal of environmental RNA

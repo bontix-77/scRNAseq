@@ -15,8 +15,8 @@ Code/
    └── nf-scRNA/ 
         ├── main.nf # Nextflow main workflow 
         ├── nextflow.config # Config parameters (paths, results) 
-        ├── Docker_files
-        │   ├──seurat_base
+        ├── Docker_files/
+        │   └──seurat_base
         │      ├── build.log          # complete log of the docker build 
         │      ├── dockerfile         # docker file source for the image
         │      ├── packages_list.csv  # list and details of the packages included in the image
@@ -28,6 +28,9 @@ Code/
         │      ├── SCTransform.R      # Seurat normalization using negative binomila distribution
         │      ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. Opcional batch effect                           │      │                        annotation to be finalized. │  
         │      └── seurat_markers.R   # calculate clusters and the 20 top makers per cluster. Host cell  
+        ├── HIV canpy/
+        │       ├── seurat_to_scanpy.py # script to produce clusters and markers after seuratDisk
+        │       └──results/           # contains some sample images
         │                                
         ├── README 
         └── results/ # visualizations and images
