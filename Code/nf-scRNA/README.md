@@ -53,6 +53,8 @@ Code/
 | **RUN_seurat_celType** | determine clusters cell type using celldex and SingleR. | 2 .png images |
 
 ``` mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+
 flowchart TB
   subgraph " "
     subgraph params
@@ -78,8 +80,8 @@ flowchart TB
     v6 --> v8
     v8 --> v9
     v6 --> v10
-    v7 --> s1
-    v7 --> s2
+    v7 --> v8
+    v7 --> v10
     v9 --> v11
   end
 ```
