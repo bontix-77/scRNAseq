@@ -91,7 +91,7 @@ process RUN_readh5 {
 
     script:
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir}
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}"
     """
 }
 

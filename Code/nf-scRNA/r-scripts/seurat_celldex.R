@@ -27,7 +27,7 @@ print('complete here before ------------------------------')
 ## let's visualize the final result
 
 # annotFig1 <- DimPlot(HIV_pp_mks, group.by = "cell_type", label = T) + NoLegend()
-annotFig2 <- DimPlot(HIV_pp_mks, group.by = "humanRNASeq.fine", label = T)
+annotFig2 <- DimPlot(HIV_pp_mks, group.by = "humanRNASeq.fine", label = T, repel = TRUE, label.size = 2)
 print('complete here after ------------------------------')
 
 png("CellType_celldex.png",width = 1200,height = 900,res=150)
@@ -49,10 +49,10 @@ clustLabels.vect <- clustLabels[match(HIV_pp_mks$seurat_clusters, names(clustLab
 names(clustLabels.vect) <- colnames(HIV_pp_mks) # ensure that the cluster identities are assigned the cell names
 HIV_pp_mks$humanRNA.fine.clust <- clustLabels.vect # add the cluster annotations to the vector
 
-clustAnnotFig1 <- DimPlot(HIV_pp_mks, group.by = "seurat_clusters", label = T,repel= T, label.size=4) + NoLegend()
+clustAnnotFig1 <- DimPlot(HIV_pp_mks, group.by = "seurat_clusters", label = T,repel= T, label.size=2) + NoLegend()
 # clustAnnotFig2 <- DimPlot(HIV_pp_mks, group.by = "cell_type", label = T) + NoLegend()
-clustAnnotFig3 <- DimPlot(HIV_pp_mks, group.by = "humanRNASeq.fine",label= T,repel= T, label.size=4) + NoLegend()
-clustAnnotFig4 <- DimPlot(HIV_pp_mks, group.by = "humanRNA.fine.clust", label = T,repel= T, label.size=4)
+clustAnnotFig3 <- DimPlot(HIV_pp_mks, group.by = "humanRNASeq.fine",label= T,repel= T, label.size=2) + NoLegend()
+clustAnnotFig4 <- DimPlot(HIV_pp_mks, group.by = "humanRNA.fine.clust", label = T,repel= T, label.size=2)
 png("CellType_final.png",width = 1200,height = 900,res=150)
 print(clustAnnotFig1/( clustAnnotFig3| clustAnnotFig4))
 dev.off()
