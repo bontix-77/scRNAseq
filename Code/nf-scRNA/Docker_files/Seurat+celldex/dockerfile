@@ -1,0 +1,8 @@
+FROM bontix77/sc_rna:v1.0
+
+LABEL maintainer="Alexander Bontempo <bontix77@yahoo.it> - Github: bontix77"
+LABEL description="Base Docker image for Seurat_v.5.3.1-based with fix + celldex + SingleR"
+RUN R -e "install.packages('devtools')"
+RUN R -e "remotes::install_github('satijalab/seurat', ref='fix/v.5.3.1')"
+
+RUN R -q -e  "BiocManager::install('celldex') ; BiocManager::install('SingleR')"
