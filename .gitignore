@@ -23,3 +23,5 @@ Code/nf-scRNA/GSE220790_sample_metadata_update.txt.gz
 Code/nf-scRNA/nf-test
 nf-test
 Code/nf-scRNA/GSE220790_sample_metadata_update.txt
+Code/nf-scRNA/Docker_files/Seurat_base/seurat_v.5.3.1_base.tar.gz
+Code/nf-scRNA/Docker_files/Seurat_base/seurat_v.5.3.1_base.tar
