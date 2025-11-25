@@ -10,7 +10,7 @@
 
 This repository provides a **complete and modular single-cell RNA-seq (scRNA-seq) analysis framework**, built to handle every step from raw data to biological interpretation. It combines **R-based analysis** (Seurat, SCTransform, QC, visualization) with **Nextflow orchestration** for reproducibility and scalability.
 
-The project’s goal is to serve both as a **research-ready workflow** and a **learning platform** for integrating R, Python, and workflow languages in real scRNA-seq pipelines.
+The project’s goal is to serve both as a **research-ready workflow** and a **learning platform** for integrating R, Python, and workflow languages in real scRNA-seq pipelines. The pipeline permits also to pull the T cell receptor diverisy into 4 main groups (alfa, beta, delta and gama) to prevent miss identification of the T cell as discussed here :https://doi.org/10.1016/j.immuno.2025.100063. The option can be acces switch parameter in the nextflow.config file.
 
 |  |  |  |
 |------------------------|------------------------|------------------------|
