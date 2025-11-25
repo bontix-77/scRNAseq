@@ -12,6 +12,10 @@ This repository provides a **complete and modular single-cell RNA-seq (scRNA-seq
 
 The project’s goal is to serve both as a **research-ready workflow** and a **learning platform** for integrating R, Python, and workflow languages in real scRNA-seq pipelines.
 
+|  |  |  |
+|------------------------|------------------------|------------------------|
+| ![](Code/nf-scRNA/results/cell_filter/nCount2_RNA_per_sample.png) | ![](Code/nf-scRNA/results/seurat_cellType/CellType_final.png) | ![](Code/nf-scRNA/results/seurat_PCA_UMAP/DimHeatmap.png) |
+
 ------------------------------------------------------------------------
 
 ## 🧬 Structure
@@ -24,19 +28,21 @@ scRNAseq/
 │   │   ├── main.nf           # Main workflow (Seurat/Scanpy modes)
 │   │   ├── nexflow.config    Parameter files and environment setup
 │   │   ├── Docker_files/
-│   │   │    └── seurat_base/           # folder containing all documents for the sc_rna:v1.0 docker image
-│   │   │        ├── building.log         # complet log of the image building step
-│   │   │        ├── dockerfile           # source dockerfile
-│   │   │        ├── packages_list.csv    # complete list of the packages included in the image
-│   │   │        └── README.md            # documentation
-│   │   │
-│   │   │
+│   │   │    ├── Seurat_base/        # folder containing all documents for the sc_rna:v1.0 docker image
+│   │   │    │   ├── building.log         # complet log of the image building step
+│   │   │    │   ├── dockerfile           # source dockerfile
+│   │   │    │   ├── packages_list.csv    # complete list of the packages included in the image
+│   │   │    │   └── README.md            # documentation
+│   │   │    └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with seurat fix/v.5.3.1 celldex and
+│   │   │        └── dockerfile        SingleR
+│   │   │         
 │   │   │
 │   │   ├── r-scripts/          # Reusable process blocks (optional)
 │   │   │     ├── read_h5.R         # Import and merge 10x datasets
 │   │   │     ├── cell_filter.R     # QC and cell-level filtering
 │   │   │     ├── SCTransform.R     # Normalization using Seurat SCTransform
 │   │   │     ├── RDS_to_h5ad.R     # Conversion Seurat → h5Seurat → h5ad
+│   │   │     ├── seurat_celldex.R  # Autmatic cell annotation using celldex and SingleR packages
 │   │   │     ├── seurat_markers.R
 │   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
 │   │   │                                 (in nextflow.config harmony parameter)
@@ -75,11 +81,13 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 3.  **Normalization** (`SCTransform.R`) Performs variance stabilization using Seurat’s SCTransform.
 
-4.  **Dimensional reduction and clustering** (optional) PCA/UMAP/Leiden analysis in Seurat or Scanpy.
+4.  **Dimensional reduction and clustering** PCA/UMAP/Leiden analysis in Seurat using (`seurat_PACA_UMAP.R`)or Scanpy (`RDS_to_h5ad.R`).
 
-5.  **Cross-platform export** (`RDS_to_h5ad.R`) Converts `.rds` objects into `.h5Seurat` and `.h5ad` formats for Python.
+5.  **Cell type annotation** automated using (`seurat_celldex.R`) or manual
 
-6.  **Parallel execution** (`main.nf`) Nextflow handles process dependencies, caching, and reproducibility.
+6.  **Cross-platform export** (`RDS_to_h5ad.R`) Converts `.rds` objects into `.h5Seurat` and `.h5ad` formats for Python.
+
+7.  **Parallel execution** (`main.nf`) Nextflow handles process dependencies, caching, and reproducibility.
 
 ------------------------------------------------------------------------
 
@@ -96,11 +104,13 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 ## 🧰 Requirements
 
 | Component | Version | Purpose |
-|------------------------------|------------------|------------------------|
+|-----------------------------|-------------------|------------------------|
 | **Nextflow** | ≥ 23.04 | Pipeline orchestration |
 | **R** | ≥ 4.2 | Core analysis environment |
 | **Seurat** | ≥ 5.0 | Data handling and normalization |
 | **SeuratDisk** | ≥ 1.1 | Conversion to `.h5Seurat` and `.h5ad` |
+| **celldex** | \- | Markers to annotate cell type |
+| **SingleR** | \- |  |
 | **SoupX**, **dplyr**, **ggplot2**, **patchwork** | – | QC and visualization |
 | *(Optional)* **Harmony** | \- | batch effect harmonization |
 | *(Optional)* **Scanpy**, **Anndata** | – | Downstream analysis in Python |
@@ -135,14 +145,14 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 ## 📊 Outputs
 
-| Folder         | Description     |
-|----------------|-----------------|
-| `merged_h5/`   | no visuals      |
-| `cell_filter/` | 5 resuming .png |
-| `SCTransform/` | no visuals      |
-| `seuratDisk/`  | no visuals      |
-| seurat_PCA/    | 2 results .png  |
-|                |                 |
+| Folder         | Description      |
+|----------------|------------------|
+| `merged_h5/`   | no visuals       |
+| `cell_filter/` | 5 resuming .png  |
+| `SCTransform/` | no visuals       |
+| `seuratDisk/`  | no visuals       |
+| seurat_PCA/    | 2 resulting .png |
+| seura_cellType | 2 resulting .png |
 
 ------------------------------------------------------------------------
 
