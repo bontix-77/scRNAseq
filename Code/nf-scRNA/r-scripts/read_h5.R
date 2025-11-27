@@ -54,7 +54,7 @@ Alfa <- c(
   "TRAV30",
   "TRAV26-2",
   "TRAV34",
-  "TRAV35",samples
+  "TRAV35",
   "TRAJ53",
   "TRAJ52",
   "TRAJ51",

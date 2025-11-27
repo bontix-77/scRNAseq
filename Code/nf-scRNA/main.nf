@@ -224,7 +224,7 @@ process RUN_Seurat_pseudoBulk {
     path "*.rds"
     script:
     """
-    Rscript "${params.scriptFile}/seurat_pseudoBulk.R" "${Markers} ${samples}"
+    Rscript "${params.scriptFile}/seurat_pseudoBulk.R" "${Markers}"
     """
 
 

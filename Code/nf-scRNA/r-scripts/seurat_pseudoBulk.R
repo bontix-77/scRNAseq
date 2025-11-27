@@ -26,7 +26,7 @@ DimPlot(pb, group.by = "group", pt.size = 3)
 pseudo_HIV@assays$SCT@layers$counts@Dimnames[1] <- HIV_pp_mks@assays$SCT@data@Dimnames[1]
 head(pseudo_HIV@assays$SCT$counts)
 pseudo_HIV@meta.data
-glimpse(pseudo_HIV)
+
 
 # just to clean up the look a little bit
 pseudo_HIV <- RenameCells(pseudo_HIV, new.names = gsub("_.*", "", pseudo_HIV$orig.ident))
@@ -63,7 +63,7 @@ bulk_HIV_de[c("TCR_A", "TRC_B"), ]
 ## visualize the DE genes
 
 Idents(HIV_pp) <- "seurat_clusters"
-DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3) + coord_flip()
+DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3) 
 
 # violine as alternative visualization
 
