@@ -82,7 +82,7 @@ workflow {
 process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
-    container 'bontix77/sc_rna:v1.0'
+    // container 'bontix77/sc_rna:v1.0'
 
     input:
     path folders
@@ -94,7 +94,7 @@ process RUN_readh5 {
     script:
     
     """
-    Rscript "${params.scriptFile}/test.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
     """
 }
 
@@ -108,7 +108,7 @@ process RUN_readh5 {
 process RUN_cell_filter {
     // Organize outputs into a dedicated subdirectory for clarity.
     publishDir "${params.resultDir}/cell_filter", mode: 'copy', overwrite: true
-    container 'bontix77/sc_rna:v1.0'
+    // container 'bontix77/sc_rna:v1.0'
 
     input:
 
