@@ -54,21 +54,7 @@ Alfa <- c(
   "TRAV30",
   "TRAV26-2",
   "TRAV34",
-  "TRAV35",
-  "TRAV36DV7",
-  "TRAV38-1",
-  "TRAV38-2DV8",
-  "TRAV39",
-  "TRAV40",
-  "TRAV41",
-  "TRAJ61",
-  "TRAJ60",
-  "TRAJ59",
-  "TRAJ58",
-  "TRAJ57",
-  "TRAJ56",
-  "TRAJ55",
-  "TRAJ54",
+  "TRAV35",samples
   "TRAJ53",
   "TRAJ52",
   "TRAJ51",
@@ -329,14 +315,15 @@ HIV <- mapply(
 
 
 rm(reads)
-# assign metadata group
-HIV$`GSM6817423`$group <- "detectable"
-HIV$`GSM6817431`$group <- "undetectable"
-HIV$`GSM6817432`$group <- "undetectable"
-HIV$`GSM6817433`$group <- "detectable"
-HIV$`GSM6817434`$group <- "undetectable"
-HIV$`GSM6817435`$group <- "undetectable"
-HIV$`GSM6817436`$group <- "detectable"
+# Include the group of the samples metadata as determined in the nextflow.config parameter samples.
+samples <- args[4]
+samples <- paste0("list(",samples,")")
+samples <- eval(parse(text=samples))
+for (item in names(samples)){
+HIV[[item]]$group <- samples[[item]]
+print (paste0(item, " is here ",samples[[item]]))
+HIV[[item]]$group
+}
 
 HIV <- merge(
   HIV[[1]],

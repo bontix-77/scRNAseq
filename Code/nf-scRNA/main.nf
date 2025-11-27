@@ -25,7 +25,7 @@ workflow {
     // The glob `*` selects all immediate entries under params.inputDir.
     // `type: "dir"` ensures only directories are matched (not files).
     folder_ch = channel.fromPath("${params.inputDir}/*", type: "dir")
-
+    
     // Read an analysis mode from params, normalize to lowercase for robust matching.
     def mode = params.analysis.toString().toLowerCase()
      
@@ -39,10 +39,10 @@ workflow {
     // `.collect()` turns the multi-value channel into a single list value for the process.
     // in the final implementation this process is not necessary, so has been commented out.
     //RUN_PRINT_R(folder_ch.collect())
-
+    def samples =params.samples
     // Run the HDF5 reading/merging step, passing both the collected list of folders
     // and the base input directory (params.inputDir) as an additional value.
-    RUN_readh5(folder_ch.collect(), params.inputDir)
+    RUN_readh5(folder_ch.collect(), params.inputDir,samples)
 
     // Filter cells based on quality metrics or other criteria. This consumes the
     // merged RDS produced by the prior step.
@@ -58,6 +58,7 @@ workflow {
     if (mode == 'seurat') {
         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
         RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
+        RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster)
         // Read from params cellType_manual to include manual cell type annotation (stillin development)
         def man_annotation = params.cellType_manual.toString().toLowerCase()
         if (man_annotation == "yes"){
@@ -86,13 +87,14 @@ process RUN_readh5 {
     input:
     path folders
     val base_dir
-
+    val samples
     output:
     path "HIV_merged.rds", emit: merged_rds
 
     script:
+    
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}"
+    Rscript "${params.scriptFile}/test.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
     """
 }
 
@@ -194,6 +196,7 @@ process RUN_Seurat_PCA_UMAP {
     """
 }
 process RUN_Seurat_markers {
+
     publishDir "${params.resultDir}/seurat_Markers", mode: 'copy', overwrite: true
     // container 'bontix77/sc_rna:v1.0'
 
@@ -209,6 +212,22 @@ process RUN_Seurat_markers {
     """
     Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
     """
+}
+
+
+process RUN_Seurat_pseudoBulk {
+    publishDir "${params.resultDir}/Pseudo_bulk", mode: 'copy', overwrite: true
+
+    input:
+    path Markers
+    output:
+    path "*.rds"
+    script:
+    """
+    Rscript "${params.scriptFile}/seurat_pseudoBulk.R" "${Markers} ${samples}"
+    """
+
+
 }
 process RUN_Seurat_cellTypes_manual {
 
@@ -235,7 +254,7 @@ process RUN_Seurat_cellType_automatic {
     // container 'sc_rna:v1.1'
 
     input:
-    path CellType
+    path Markers
 
     output:
     path "CellType_celldex.png"
@@ -245,6 +264,6 @@ process RUN_Seurat_cellType_automatic {
     script:
 
     """
-    Rscript "${params.scriptFile}/seurat_celldex.R" "${CellType}"
+    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}"
     """
 }
