@@ -94,65 +94,73 @@ FeatureScatter(HIV, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by
 # filter
 # Set one set of parameters for Day 0 samples;
 # keep the rownames (Cell barcodes)
-F_30 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817430",
-     nFeature_RNA > 500,
-     nFeature_RNA < 4000,
+# F_30 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817423",
+#      nFeature_RNA > 500,
+#      nFeature_RNA < 4000,
+#     percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_31 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817431",
+#          nFeature_RNA > 500,
+#          percent.mt < 10,
+#          nFeature_RNA < 4000
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_32 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817432",
+#          percent.mt < 10,
+#          nFeature_RNA > 500,
+#         nFeature_RNA < 4000
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+
+# F_33 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817433",
+#          nFeature_RNA > 500,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_34 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817434",
+#          nFeature_RNA > 700,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_35 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817435",
+#          nFeature_RNA > 500,
+#          nFeature_RNA < 4000,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+# F_36 <- HIV@meta.data |>
+#   filter(orig.ident=="GSM6817436",
+#          nFeature_RNA > 500,
+#          nFeature_RNA < 4000,
+#          percent.mt < 10
+#   ) |>
+#   tibble::rownames_to_column("Cell") |>
+#   pull(Cell)
+
+cells_keep <- HIV@meta.data |>
+  filter(nFeature_RNA > 500,
+     nFeature_RNA < 2500,
     percent.mt < 10
   ) |>
   tibble::rownames_to_column("Cell") |>
   pull(Cell)
-F_31 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817431",
-         nFeature_RNA > 500,
-         percent.mt < 10,
-         nFeature_RNA < 4000
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_32 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817432",
-         percent.mt < 10,
-         nFeature_RNA > 500,
-        nFeature_RNA < 4000
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
 
-F_33 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817433",
-         nFeature_RNA > 500,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_34 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817434",
-         nFeature_RNA > 700,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_35 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817435",
-         nFeature_RNA > 500,
-         nFeature_RNA < 4000,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-F_36 <- HIV@meta.data |>
-  filter(orig.ident=="GSM6817436",
-         nFeature_RNA > 500,
-         nFeature_RNA < 4000,
-         percent.mt < 10
-  ) |>
-  tibble::rownames_to_column("Cell") |>
-  pull(Cell)
-
-keep <- c(F_30,F_31,F_32,F_33,F_34,F_35,F_36)
+# keep <- c(F_30,F_31,F_32,F_33,F_34,F_35,F_36)
 # use different parameters; established above
-HIV_filt <- subset(HIV, cells = keep)
+HIV_filt <- subset(HIV, cells = cells_keep)
 features <- FeatureScatter(HIV_filt, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by = "orig.ident", log = TRUE)
 png("filtered_nCount_vs_nFeature.png", width = 1200, height = 900, res = 150)
 print(features)
