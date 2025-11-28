@@ -27,13 +27,13 @@ Code/
         ├── main.nf # Nextflow main workflow 
         ├── nextflow.config # Config parameters (paths, results) 
         ├── Docker_files/
-        │   ├── Seurat_base/        # folder containing all documents            │   │   │                     for the sc_rna:v1.0 docker image
+        │   ├── Seurat_base/        # folder containing all documents for the sc_rna:v1.0 docker image
         │   │   ├── building.log         # complet log of the image  
         │   │   │                          building step
         │   │   ├── dockerfile           # source dockerfile
-        │   │   ├── packages_list.csv    # complete list of the packages         │   │   │                          included in the image
+        │   │   ├── packages_list.csv    # complete list of the packages included in the image
         │   │   └── README.md            # documentation
-        │   └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with          │        │                     seurat fix/v.5.3.1 celldex and
+        │   └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with seurat fix/v.5.3.1 celldex and
         │        └── dockerfile        SingleR
         ├── slurm_HPC/              #contains all the files for running 
         │   ├── main_hpc.nf          the pipeline on HPC. Please read 
@@ -44,7 +44,7 @@ Code/
         │   ├── read_h5.R          # Read & merge 10x data  
         │   ├── cell_filter.R      # Filter the cell based on            
         │   │                          countings and mitocondrial RNAs
-        │   ├── RDS_to_scanpy.R    # convert the seurat object to a              │   │                          scanpy object .h5ad
+        │   ├── RDS_to_scanpy.R    # convert the seurat object to a scanpy object .h5ad
         │   ├── SCTransform.R      # Seurat normalization using 
         │   │                          negative binomila distribution
         │   ├── seurat_PCA_UMAP.R  # Implementation of PCA y UMAP. 
