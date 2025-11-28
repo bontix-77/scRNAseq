@@ -8,7 +8,7 @@
 4.  **PCA and following UMAP** dimension reduction first with PCA then feed into UMAP (harmony batch effect calculation is included).
 5.  **Cell markers extrapolation** Markers for every cluster are calculated.
 6.  **Cell type annotation** Clusters are cell annotated using celldex. Manual annotatio is under development
-
+7.  **slurm files added** for running the pipleine using singularity on HPC
 in alternative after SCTransform the pipeline can be switched to **scanpy**
 
 **see nextflow.config** for details on available options.
