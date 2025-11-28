@@ -7,9 +7,10 @@
 3.  **SCTransformation** for the normalization using Negative Binomial distribution.
 4.  **PCA and following UMAP** dimension reduction first with PCA then feed into UMAP (harmony batch effect calculation is included).
 5.  **Cell markers extrapolation** Markers for every cluster are calculated.
-6.  **Cell type annotation** Clusters are cell annotated using celldex. Manual annotatio is under development
+6.  **Cell type annotation** Clusters are cell annotated using celldex. Manual annotation is under development
 7.  **slurm files added** for running the pipleine using singularity on HPC
-in alternative after SCTransform the pipeline can be switched to **scanpy**
+
+In alternative after SCTransform the pipeline can be switched to **scanpy**
 
 **see nextflow.config** for details on available options.
 
@@ -66,7 +67,7 @@ Code/
 | Process | Description | Output |
 |-------------------|----------------------------------|-------------------|
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
-| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | `5 .png analytics immages` |
+| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | 5 .png analytics images |
 | **RUN_SCTransform** | Normalize the count | no images |
 | **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad | list of the genes |
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
