@@ -33,10 +33,10 @@ scRNAseq/
 │   │   │    │   ├── dockerfile           # source dockerfile
 │   │   │    │   ├── packages_list.csv    # complete list of the packages included in the image
 │   │   │    │   └── README.md            # documentation
-│   │   │    └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with seurat fix/v.5.3.1 celldex and
-│   │   │        └── dockerfile        SingleR
-│   │   ├── slurm_HPC/              #contains all the files for running  the pipeline on HPC. Please read  the README.md for limitations.
-│   │   │   ├── main_hpc.nf         
+│   │   │    └── Seurat+celldex      # sc_rna:v1.1 expandiding v1.0 with seurat fix/v.5.3.1 
+│   │   │        └── dockerfile        celldex and SingleR
+│   │   ├── slurm_HPC/              #contains all the files for running  the pipeline on HPC. 
+│   │   │   ├── main_hpc.nf          Please read  the README.md for limitations.
 │   │   │   ├── nexflow.config      
 │   │   │   ├── seurat_slurm.sh
 │   │   │   └── README.md        
