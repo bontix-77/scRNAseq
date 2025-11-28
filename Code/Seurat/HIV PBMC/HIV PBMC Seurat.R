@@ -14,7 +14,7 @@ library(Seurat)
 #      [[2]] is the name/tag of each cell   
 # x is the gene expression 
 #     in the exemple above the gen 34 in the cell 1 has expression 1. looking into Dimnames[[1]] i can find the name of the gene 34
-setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM1")
+setwd("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/data")
 
 # List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
 dirs <- list.dirs()
@@ -22,9 +22,9 @@ dirs_name <- basename(dirs[dirs !="./"])
 dirs_name <- dirs_name[-1]
 
 # Create a list of count matrices
-paste( "/home/alexander-bontempo/Desktop/HIV GSM/GSM1/",dirs[2])
+paste( "/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/data",dirs[2])
 
-reads <- lapply(paste0("/home/alexander-bontempo/Desktop/HIV GSM/GSM1/",dirs_name,"/")
+reads <- lapply(paste0("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/data",dirs_name,"/")
   , Read10X)
 # Assign names manually GEO serie GSE220790
 #names(reads) <- c("6817423", "6817424", "6817425", "6817426", "6817427", "6817428")
