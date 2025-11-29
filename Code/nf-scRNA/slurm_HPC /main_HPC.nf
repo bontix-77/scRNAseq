@@ -58,7 +58,7 @@ workflow {
     if (mode == 'seurat') {
         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
         RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
-        RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster)
+        // RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster)
         // Read from params cellType_manual to include manual cell type annotation (stillin development)
         def man_annotation = params.cellType_manual.toString().toLowerCase()
         if (man_annotation == "yes"){
@@ -94,7 +94,7 @@ process RUN_readh5 {
     script:
     
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}" 
     """
 }
 
@@ -264,6 +264,6 @@ process RUN_Seurat_cellType_automatic {
     script:
 
     """
-    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}"
+    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}" "${params.scriptFile}"
     """
 }
