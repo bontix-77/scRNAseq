@@ -6,4 +6,4 @@ Please pull the docker image in the nf-scRNA folder on the HPC using :
 singularity pull docker://bontix77/sc_rna:v1.1
 ```
 
-ATTENTION: to run the HPC version of the nextflow please use the `nextflow.config` and the `seurat_celldex.R` version contained in this folde. Include to the `r-scripts` folder the file `celldex.rds`.
+ATTENTION: to run the HPC version of the nextflow please use the `nextflow.config` and the `seurat_celldex.R` versions contained in this folder. Include to the `r-scripts` folder the file `celldex.rds`.
