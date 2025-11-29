@@ -106,6 +106,7 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 -   **QC visualization:** automatic PNG reports of filtering thresholds and cell statistics.
 -   **Modular structure:** every stage can be run independently or within the main pipeline.
 -   **Local container support:** Docker/Singularity optional, no internet required.
+-   **HPC slurm files** The pipline can be run on a HPC. Please read carefully the relative README.md for instructions.
 
 ------------------------------------------------------------------------
 
