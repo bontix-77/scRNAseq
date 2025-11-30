@@ -18,14 +18,12 @@ library(Seurat)
 library(SingleR)
 # library(MAST)
 
-# HIV_pp_mks <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/work/78/7b6dab1202a195fd238b385c79d9c5/markers_cluster.rds")
 
 args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
 HIV_pp_mks <- readRDS(path)
 
 HIV.sce <- as.SingleCellExperiment(HIV_pp_mks, assay = "SCT") # This selects *only* the SCT assay
-#mouseRNASeq <- celldex::MouseRNAseqData()
 
 cellde_path <- paste0(args[2],"/celldex.rds")
 humanRNA <- readRDS(cellde_path)
