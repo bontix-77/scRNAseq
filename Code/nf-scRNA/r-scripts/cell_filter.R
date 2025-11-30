@@ -64,7 +64,7 @@ slotNames(HIV[["RNA"]])
 # determine number of features (genes)
 
 plot_featur <- VlnPlot(HIV, features = "nFeature_RNA", group.by = "orig.ident") +
-  geom_hline(yintercept = 500, color = "red")
+  geom_hline(yintercept = 2500, color = "red")
 show(plot_featur)
 png("nFeature_RNA_per_sample.png", width = 1200, height = 900, res = 150)
 print(plot_featur)

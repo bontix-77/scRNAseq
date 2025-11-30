@@ -18,6 +18,6 @@ WORK_DIR="/home/abontemp/nf-scRNA"
 cd "$WORK_DIR"
 
 echo "Starting Seurat"
-nextflow run main.nf -offline
+nextflow run main_HPC.nf -offline
 
 echo "Done."
