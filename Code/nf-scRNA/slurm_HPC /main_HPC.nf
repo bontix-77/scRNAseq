@@ -55,10 +55,11 @@ workflow {
     // Branch the workflow based on the selected mode. If 'seurat', continue
     // with PCA in Seurat. Otherwise (for 'scanpy' or 'parallel'), convert the
     // Seurat object to h5Seurat/h5ad using SeuratDisk and proceed toward Scanpy.
+    def pval = params.pseudoBulk_p
     if (mode == 'seurat') {
         RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
         RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
-        // RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster)
+        RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster,pval)
         // Read from params cellType_manual to include manual cell type annotation (stillin development)
         def man_annotation = params.cellType_manual.toString().toLowerCase()
         if (man_annotation == "yes"){
@@ -220,11 +221,13 @@ process RUN_Seurat_pseudoBulk {
 
     input:
     path Markers
+    val pval
     output:
-    path "*.rds"
+    path "differentialExpression_singlecell.csv"
+    path "differentialExpression_bulk.csv"
     script:
     """
-    Rscript "${params.scriptFile}/seurat_pseudoBulk.R" "${Markers}"
+    Rscript "${params.scriptFile}/seurat_pseudoBulk.R" "${Markers}" ${pval}
     """
 
 

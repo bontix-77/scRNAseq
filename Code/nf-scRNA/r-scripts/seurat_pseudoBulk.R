@@ -39,16 +39,25 @@ pseudo_HIV@meta.data
 Idents(HIV_pp_mks) <- "group"
 Idents(pseudo_HIV) <- "group"
 table(Idents(HIV_pp_mks))
-scDE <- FindMarkers(HIV_pp_mks, ident.1 = "undetectable",ident.2 = "detectable", test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
+
+groups <- unique(HIV_pp_mks$group)
+scDE <- FindMarkers(HIV_pp_mks, ident.1 = groups[1],ident.2 = groups[2], test.use = "wilcox", min.pct = 0.01, logfc.threshold = 0.1)
 
 
-bulk_HIV_de <- FindMarkers(pseudo_HIV, ident.1 = "undetectable", ident.2 = "detectable", test.use = "DESeq2")
+bulk_HIV_de <- FindMarkers(pseudo_HIV, ident.1 = groups[1], ident.2 = groups[2], test.use = "DESeq2")
 head(bulk_HIV_de)
 
 # comparing how many differentially expressed genes between SC and bulk analisys comparing the conditions
 
-scDE.genes <- rownames(scDE)[which(scDE$p_val_adj < 0.05)]
-bulkDE.genes <- rownames(bulk_HIV_de)[which(bulk_HIV_de$p_val_adj < 0.2)]
+scDE.genes <- rownames(scDE)[which(scDE$p_val_adj < pval)]
+pval=args[2]
+bulkDE.genes <- rownames(bulk_HIV_de)[which(bulk_HIV_de$p_val_adj < pval)]
+
+
+#write tables
+write.csv(scDE, file = "differentialExpression_singlecell.csv", row.names = TRUE, quote = FALSE)
+write.csv(bulk_HIV_de, file = "differentialExpression_bulk.csv", row.names = TRUE, quote = FALSE)
+
 length(scDE.genes)
 length(bulkDE.genes)
 
@@ -62,19 +71,17 @@ bulk_HIV_de[c("TCR_A", "TRC_B"), ]
 
 ## visualize the DE genes
 
-Idents(HIV_pp) <- "seurat_clusters"
 DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3) 
 
 # violine as alternative visualization
 
-Idents(HIV_pp) <- "time_point"
 VlnPlot(HIV_pp, features = c("Acta2", "Cd36"), alpha = 0.1)
 
 
 ## anotate the differential genes
 
 markers <- c("CCR7", "NKG7", "LYZ", "MS4A1", "MZB1", "PPBP", "TCF7")
-Idents(HIV_pp_mks) <- "SCT_snn_res.0.13"
+Idents(HIV_pp_mks) <- "seurat_clusters"
 avgExp <- AverageExpression(HIV_pp_mks, markers, assay = "SCT")$SCT
 avgExp
 DimPlot(HIV_pp_mks, label = T)
