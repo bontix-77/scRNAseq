@@ -16,8 +16,7 @@ sbatch seurat_slurm.sh
 
 ## Expected folder structure
 
-
-
+```         
 ├── nf_scRNA
     ├── r-scripts/ 
     │     ├── read_h5.R 
@@ -46,3 +45,4 @@ sbatch seurat_slurm.sh
     ├── main_HPC.nf
     ├── nextflow.config              # Make sure to use the version found in slurm_HPC/
     └── seurat_slurm.sh
+```
