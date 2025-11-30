@@ -11,11 +11,6 @@
 module load nextflow
 module load singularity
 
-# Define paths
-WORK_DIR="/home/abontemp/nf-scRNA"
-
-
-cd "$WORK_DIR"
 
 echo "Starting Seurat"
 nextflow run main_HPC.nf -offline
