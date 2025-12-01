@@ -8,6 +8,8 @@ singularity pull docker://bontix77/sc_rna:v1.1
 
 ATTENTION: to run the HPC version of the nextflow please use the `nextflow.config` and the `seurat_celldex.R` versions contained in this folder. Include to the `r-scripts` folder the file `celldex.rds`.
 
+modules required in the HPC: slurm, nextflow and singularity.
+
 run the slum file by:
 
 ``` bash
@@ -42,7 +44,8 @@ sbatch seurat_slurm.sh
     │     .
     │     . 
     │
+    ├── sc_rna_v1.1.sif   # obtained by : singularity pull docker://bontix77/sc_rna:v1.1
     ├── main_HPC.nf
-    ├── nextflow.config              # Make sure to use the version found in slurm_HPC/
+    ├── nextflow.config            # Make sure to use the version found in slurm_HPC/
     └── seurat_slurm.sh
 ```
