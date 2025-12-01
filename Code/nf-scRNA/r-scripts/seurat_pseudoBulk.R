@@ -8,30 +8,30 @@ path <- args[1]
 HIV <- readRDS(path)
 
 HIV_pp_mks <- readRDS(path)
-pseudo_HIV<- AggregateExpression(HIV_pp_mks, assays = "SCT", return.seurat = T, group.by = c("orig.ident","group"))#, "time_point", "condition", "condition_tp"))
+pseudo_HIV<- AggregateExpression(HIV_pp_mks, assays = "RNA", return.seurat = T, group.by = c("orig.ident","group"))#, "time_point", "condition", "condition_tp"))
 
 
 # Assuming 'pb' is your aggregated Seurat object
 # Run standard PCA on the pseudo-bulk samples
 pb <- NormalizeData(pseudo_HIV)
 pb <- FindVariableFeatures(pb)
-pb <- ScaleData(pb)
+pb <- ScaleData(pb,features = VariableFeatures(pb))
 pcs <- length(pb@meta.data$orig.ident) - 1
 
-pb <- RunPCA(pb, npcs = pcs)
+pb <- RunPCA(pb, npcs = pcs,features = VariableFeatures(pb))
 
 DimPlot(pb, group.by = "group", pt.size = 3)
 
 
-pseudo_HIV@assays$SCT@layers$counts@Dimnames[1] <- HIV_pp_mks@assays$SCT@data@Dimnames[1]
-head(pseudo_HIV@assays$SCT$counts)
+# pseudo_HIV@assays$SCT@layers$counts@Dimnames[1] <- HIV_pp_mks@assays$SCT@data@Dimnames[1]
+# head(pseudo_HIV@assays$SCT$counts)
 pseudo_HIV@meta.data
 
 
 # just to clean up the look a little bit
 pseudo_HIV <- RenameCells(pseudo_HIV, new.names = gsub("_.*", "", pseudo_HIV$orig.ident))
 pseudo_HIV$orig.ident <- gsub("_.*", "", pseudo_HIV$orig.ident)
-head(pseudo_HIV@assays$SCT$counts)
+head(pseudo_HIV@assays$RNA$counts)
 pseudo_HIV@meta.data
 
 ## performin bulk DE
@@ -53,7 +53,12 @@ scDE.genes <- rownames(scDE)[which(scDE$p_val_adj < pval)]
 pval=args[2]
 bulkDE.genes <- rownames(bulk_HIV_de)[which(bulk_HIV_de$p_val_adj < pval)]
 
+# histogram of adjusted p values
+ ggplot(bulk_HIV_de,aes(x=p_val_adj))+
+ geom_histogram()
 
+ ggplot(scDE,aes(x=p_val_adj))+
+ geom_histogram()
 #write tables
 write.csv(scDE, file = "differentialExpression_singlecell.csv", row.names = TRUE, quote = FALSE)
 write.csv(bulk_HIV_de, file = "differentialExpression_bulk.csv", row.names = TRUE, quote = FALSE)
@@ -75,7 +80,6 @@ DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3)
 
 # violine as alternative visualization
 
-VlnPlot(HIV_pp, features = c("Acta2", "Cd36"), alpha = 0.1)
 
 
 ## anotate the differential genes
