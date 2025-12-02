@@ -29,3 +29,4 @@ Code/nf-scRNA/r-scripts/test.R
 
 RDS_markers_13samples.rds
 Code/Scrublet/Scrublet.py
+Code/Scrublet/scrublet_basics.ipynb
