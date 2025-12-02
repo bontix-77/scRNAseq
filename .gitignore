@@ -28,3 +28,4 @@ Code/nf-scRNA/Docker_files/Seurat_base/seurat_v.5.3.1_base.tar
 Code/nf-scRNA/r-scripts/test.R
 
 RDS_markers_13samples.rds
+Code/Scrublet/Scrublet.py
