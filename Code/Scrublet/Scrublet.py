@@ -69,3 +69,6 @@ scrub.plot_embedding('UMAP', order_points=True);
 
 # scrub.plot_embedding('tSNE', order_points=True);
 # scrub.plot_embedding('FA', order_points=True);
+
+#the predicted doublets are :
+scrub.predicted_doublets_
