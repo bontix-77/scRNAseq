@@ -8,7 +8,8 @@
 
 ------------------------------------------------------------------------
 
-> [!IMPORTANT] **🚀 NEW RELEASE: Seurat 5.3.1 Docker Support** Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(**`bontix77/sc_rna:v1.1`**)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for **Seurat 5.3.1**.
+> [!IMPORTANT]
+> **🚀 NEW RELEASE: Seurat 5.3.1 Docker Support** Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(**`bontix77/sc_rna:v1.1`**)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for **Seurat 5.3.1**.
 >
 > ## Previously unavailable in public repositories, this image resolves complex dependency conflicts (including Matrix and GEOS libraries), providing the community with the first plug-and-play environment for reproducible Seurat v5.3.1 analysis.
 >
