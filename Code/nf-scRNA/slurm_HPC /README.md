@@ -17,6 +17,7 @@ sbatch seurat_slurm.sh
 ```
 
 ## Expected folder structure
+(All the R script for HPC are same of those found in nf-scRNA/r-script/ except seurat_celldex.R)
 
 ```         
 ├── nf_scRNA
