@@ -1,24 +1,20 @@
-# nf-scRNA: Nextflow Pipeline for 10x scRNA-seq Processing (In Progress)
+# nf-scRNA: Modular 10x scRNA-seq Analysis Pipeline
 
-![](Code/nf-scRNA/results/seurat_PCA_UMAP/harmony.png)This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. At this stage, the workflow includes the following functional processes:
+![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.10-23aa62.svg) ![Docker](https://img.shields.io/badge/docker-bontix77%2Fsc__rna-blue) ![Seurat](https://img.shields.io/badge/Seurat-v5.3.1-ff69b4) ![License](https://img.shields.io/badge/license-MIT-green)
 
-1.  **Reading and merging** multiple 10x Chromium output folders into a unified Seurat object.
-2.  **Filtering** low-quality cells based on customizable thresholds.
-3.  **SCTransformation** for the normalization using Negative Binomial distribution.
-4.  **PCA and following UMAP** dimension reduction first with PCA then feed into UMAP (harmony batch effect calculation is included).
-5.  **Cell markers extrapolation** Markers for every cluster are calculated.
-6.  **Cell type annotation** Clusters are cell annotated using celldex. Manual annotation is under development
-7.  **slurm files added** for running the pipleine using singularity on HPC
+> \[!IMPORTANT\] \### 🚀 NEW RELEASE: Seurat 5.3.1 Docker Support **Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(bontix77/sc_rna:v1.1)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for Seurat 5.3.1.**
+>
+> Previously unavailable in public repositories, this image resolves complex dependency conflicts (including Matrix and GEOS libraries), providing the community with the first plug-and-play environment for reproducible Seurat V5 analysis.
 
-In alternative after SCTransform the pipeline can be switched to **scanpy**
+------------------------------------------------------------------------
 
-**see nextflow.config** for details on available options.
+## 🧠 Overview
 
-## Docker image available at hub bontix77/s_rna:v1.1
+\[cite_start\]This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. \[cite_start\]It is designed to be modular, reproducible, and scalable for HPC environments using Slurm and Singularity.
 
-| PCA Dimensions | Cell Types | scanpy UMAP |
-|:----------------------:|:----------------------:|:----------------------:|
-| ![](results/seurat_PCA_UMAP/DimHeatmap.png) | ![](results/seurat_cellType/CellType_final.png) | ![](HIV_scanpy/Results/UMAP_res_1.4.png) |
+**Key Capabilities:** 1. \[cite_start\]**Ingestion:** Reading and merging multiple 10x Chromium output folders into a unified Seurat object. 2. \[cite_start\]**QC:** Filtering low-quality cells based on customizable thresholds (counts, mitochondrial content). 3. \[cite_start\]**Normalization:** SCTransformation using Negative Binomial distribution. 4. \[cite_start\]**Dimensionality Reduction:** PCA followed by UMAP (includes Harmony batch effect integration). 5. \[cite_start\]**Annotation:** Automated cell type annotation using `celldex` and `SingleR`. 6. \[cite_start\]**Interoperability:** Seamless conversion to **Scanpy** (`.h5ad`) for downstream Python-based analysis.
+
+\[cite_start\]**Docker Support:** Full environment available at `bontix77/sc_rna:v1.1`. \| PCA Dimensions \| Cell Types \| scanpy UMAP \| \|:----------------------:\|:----------------------:\|:----------------------:\| \| ![](results/seurat_PCA_UMAP/DimHeatmap.png) \| ![](results/seurat_cellType/CellType_final.png) \| ![](HIV_scanpy/Results/UMAP_res_1.4.png) \|
 
 ## 🧩 Current Workflow Overview
 
@@ -67,7 +63,7 @@ Code/
 | Process | Description | Output |
 |-------------------|----------------------------------|-------------------|
 | **RUN_readh5** | Reads multiple 10x directories (e.g. GSM folders) and merges them into one Seurat object | no images |
-| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitochondrial content) | 5 .png analytics images |
+| **RUN_cell_filter** | Filters cells by quality metrics (features, counts, mitocondrial content) | 5 .png analytics images |
 | **RUN_SCTransform** | Normalize the count | no images |
 | **RUN_seuratDisk** | Convert Seurat object .rds in a scanpy object .h5ad | list of the genes |
 | **RUN_Seurat_PCA_UMAP** | perform the PCA or optionally Harmony and then the UMAP. | 4 .png resume images |
