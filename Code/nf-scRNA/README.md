@@ -23,8 +23,7 @@
 4.  **Dimensionality Reduction:** PCA followed by UMAP (includes Harmony batch effect integration).
 5.  **Annotation:** Automated cell type annotation using `celldex` and `SingleR`.
 6.  **Interoperability:** Seamless conversion to **Scanpy** (`.h5ad`) for downstream Python-based analysis.
-
-[cite_start]**Docker Support:** Full environment available at `bontix77/sc_rna:v1.1`.
+7.  **Docker Support:** Full environment available at `bontix77/sc_rna:v1.1`.
 
 | PCA & Batch Correction | Automated Annotation | Scanpy Integration |
 |:----------------------:|:----------------------:|:----------------------:|
@@ -155,4 +154,8 @@ flowchart TB
 
 ## 🧪 Running the Pipeline
 
-\`\`\`bash git clone / https://github.com/bontix-77/scRNAseq.git cd scRNAseq/Code/nf-scRNA nextflow run main.nf
+```bash
+git clone / https://github.com/bontix-77/scRNAseq.git
+cd scRNAseq/Code/nf-scRNA
+nextflow run main.nf
+```
