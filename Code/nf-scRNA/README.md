@@ -150,7 +150,9 @@ flowchart TB
 
 ✅ RUN_seurat_cellType - perform cluster annotation using celldex
 
-🔜 more scanpy analysis coming soon
+✅ RUN_Seurat_pseudoBulk - aggregate the expression of cell in each sample and perform a pssudo bulk differential analysis using DESeq2 
+
+🔜 more scanpy and Trajectory analysis coming soon
 
 ## 🧪 Running the Pipeline
 
