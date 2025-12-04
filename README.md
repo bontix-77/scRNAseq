@@ -8,6 +8,12 @@
 
 ------------------------------------------------------------------------
 
+> \[!IMPORTANT\] **🚀 NEW RELEASE: Seurat 5.3.1 Docker Support** Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(**`bontix77/sc_rna:v1.1`**)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for **Seurat 5.3.1**.
+>
+> ## Previously unavailable in public repositories, this image resolves complex dependency conflicts (including Matrix and GEOS libraries), providing the community with the first plug-and-play environment for reproducible Seurat v5.3.1 analysis.
+>
+> **Author:** Alexander Bontempo \| **Repository:** [bontix-77/scRNAseq](https://github.com/bontix-77/scRNAseq)
+
 ## 🧠 Overview
 
 This repository provides a **complete and modular single-cell RNA-seq (scRNA-seq) analysis framework**, built to handle every step from raw data to biological interpretation. It combines **R-based analysis** (Seurat, SCTransform, QC, visualization) with **Nextflow orchestration** for reproducibility and scalability.
@@ -165,7 +171,7 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 ------------------------------------------------------------------------
 
-🧭 Purpose & Vision This repository bridges the gap between bench experience and bioinformatic automation. It demonstrates how wet-lab researchers can transition individual analysis scripts into robust, portable workflows.
+🧭 **Purpose & Vision** This repository bridges the gap between bench experience and bioinformatic automation. It demonstrates how wet-lab researchers can transition in a short period of time individual an analysis scripts into robust, portable workflows.
 
 Future Roadmap:
 
