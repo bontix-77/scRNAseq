@@ -1,21 +1,36 @@
 # nf-scRNA: Modular 10x scRNA-seq Analysis Pipeline
 
-![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.10-23aa62.svg) ![Docker](https://img.shields.io/badge/docker-bontix77%2Fsc__rna-blue) ![Seurat](https://img.shields.io/badge/Seurat-v5.3.1-ff69b4) ![License](https://img.shields.io/badge/license-MIT-green)
+![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.10-23aa62.svg) 
+![Docker](https://img.shields.io/badge/docker-bontix77%2Fsc__rna-blue) 
+![Seurat](https://img.shields.io/badge/Seurat-v5.3.1-ff69b4) 
+![License](https://img.shields.io/badge/license-MIT-green)
 
-> \[!IMPORTANT\] \### 🚀 NEW RELEASE: Seurat 5.3.1 Docker Support **Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(bontix77/sc_rna:v1.1)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for Seurat 5.3.1.**
+> [!IMPORTANT]
+> ### 🚀 NEW RELEASE: Seurat 5.3.1 Docker Support
+> **Addressing a critical gap in the bioinformatics container ecosystem, this repository releases a custom-engineered Docker image [(bontix77/sc_rna:v1.1)](https://hub.docker.com/r/bontix77/sc_rna) specifically configured for Seurat 5.3.1.**
 >
-> Previously unavailable in public repositories, this image resolves complex dependency conflicts (including Matrix and GEOS libraries), providing the community with the first plug-and-play environment for reproducible Seurat V5 analysis.
+> Previously unavailable in public repositories, this image resolves complex dependency conflicts (including Matrix and GEOS libraries), providing the community with the first plug-and-play environment for reproducible Seurat v5.3.1 analysis.
 
 ------------------------------------------------------------------------
 
 ## 🧠 Overview
+[cite_start]This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. [cite_start]It is designed to be modular, reproducible, and scalable for HPC environments using Slurm and Singularity.
 
-\[cite_start\]This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. \[cite_start\]It is designed to be modular, reproducible, and scalable for HPC environments using Slurm and Singularity.
+**Key Capabilities:**
+1.  **Ingestion:** Reading and merging multiple 10x Chromium output folders into a unified Seurat object.
+2.  **QC:** Filtering low-quality cells based on customizable thresholds (counts, mitochondrial content).
+3.  **Normalization:** SCTransformation using Negative Binomial distribution.
+4.  **Dimensionality Reduction:** PCA followed by UMAP (includes Harmony batch effect integration).
+5.  **Annotation:** Automated cell type annotation using `celldex` and `SingleR`.
+6.  **Interoperability:** Seamless conversion to **Scanpy** (`.h5ad`) for downstream Python-based analysis.
 
-**Key Capabilities:** 1. \[cite_start\]**Ingestion:** Reading and merging multiple 10x Chromium output folders into a unified Seurat object. 2. \[cite_start\]**QC:** Filtering low-quality cells based on customizable thresholds (counts, mitochondrial content). 3. \[cite_start\]**Normalization:** SCTransformation using Negative Binomial distribution. 4. \[cite_start\]**Dimensionality Reduction:** PCA followed by UMAP (includes Harmony batch effect integration). 5. \[cite_start\]**Annotation:** Automated cell type annotation using `celldex` and `SingleR`. 6. \[cite_start\]**Interoperability:** Seamless conversion to **Scanpy** (`.h5ad`) for downstream Python-based analysis.
+[cite_start]**Docker Support:** Full environment available at `bontix77/sc_rna:v1.1`.
 
-\[cite_start\]**Docker Support:** Full environment available at `bontix77/sc_rna:v1.1`. \| PCA Dimensions \| Cell Types \| scanpy UMAP \| \|:----------------------:\|:----------------------:\|:----------------------:\| \| ![](results/seurat_PCA_UMAP/DimHeatmap.png) \| ![](results/seurat_cellType/CellType_final.png) \| ![](HIV_scanpy/Results/UMAP_res_1.4.png) \|
+| PCA & Batch Correction | Automated Annotation | Scanpy Integration |
+|:----------------------:|:----------------------:|:----------------------:|
+| ![](results/seurat_PCA_UMAP/harmony.png) | ![](results/seurat_cellType/CellType_final.png) | ![](HIV_scanpy/Results/UMAP_res_1.4.png) |
 
+---
 ## 🧩 Current Workflow Overview
 
 ```         
