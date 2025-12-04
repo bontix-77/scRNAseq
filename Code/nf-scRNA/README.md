@@ -14,7 +14,8 @@
 ------------------------------------------------------------------------
 
 ## 🧠 Overview
-[cite_start]This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. [cite_start]It is designed to be modular, reproducible, and scalable for HPC environments using Slurm and Singularity.
+This repository hosts a **Nextflow** pipeline under active development for processing **10x Genomics single-cell RNA-seq** data. 
+It is designed to be modular, reproducible, and scalable for HPC environments using Slurm and Singularity (see slurm_HPC directory for additional information for runing the HPC version).
 
 **Key Capabilities:**
 1.  **Ingestion:** Reading and merging multiple 10x Chromium output folders into a unified Seurat object.
