@@ -2,7 +2,9 @@
 
 # scRNAseq: A Modular Single-Cell RNA-seq Analysis Framework
 
-**Author:** Alexander Bontempo **Repository:** [bontix-77/scRNAseq](https://github.com/bontix-77/scRNAseq) **Keywords:** scRNA-seq, Seurat, Nextflow, R, Python, Bioinformatics
+![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.04-23aa62.svg) ![Docker](https://img.shields.io/badge/docker-bontix77%2Fsc__rna-blue) ![Seurat](https://img.shields.io/badge/Seurat-v5-ff69b4) ![License](https://img.shields.io/badge/license-MIT-green)
+
+**Author:** Alexander Bontempo \| **Repository:** [bontix-77/scRNAseq](https://github.com/bontix-77/scRNAseq)
 
 ------------------------------------------------------------------------
 
@@ -10,7 +12,7 @@
 
 This repository provides a **complete and modular single-cell RNA-seq (scRNA-seq) analysis framework**, built to handle every step from raw data to biological interpretation. It combines **R-based analysis** (Seurat, SCTransform, QC, visualization) with **Nextflow orchestration** for reproducibility and scalability.
 
-The project’s goal is to serve both as a **research-ready workflow** and a **learning platform** for integrating R, Python, and workflow languages in real scRNA-seq pipelines. The pipeline permits also to pull the T cell receptors diverisy into 4 main groups (alfa, beta, delta and gama) to prevent miss identification of the T cells population as discussed here :https://doi.org/10.1016/j.immuno.2025.100063. The option can be accessed switching parameter in the nextflow.config file.
+The project’s goal is to serve both as a **research-ready workflow** and a **learning platform** for integrating R, Python, and workflow languages in real scRNA-seq pipelines. The pipeline permits also to pull the T cell receptors diverisy into 4 main groups (alpha, beta, delta and gama) to prevent miss identification of the T cells population as discussed here :https://doi.org/10.1016/j.immuno.2025.100063. The option can be accessed switching parameter in the nextflow.config file.
 
 |  |  |  |
 |------------------------|------------------------|------------------------|
@@ -26,7 +28,7 @@ scRNAseq/
 ├── Code/
 │   ├── nf-scRNA/             # Nextflow workflow and process definitions
 │   │   ├── main.nf           # Main workflow (Seurat/Scanpy modes)
-│   │   ├── nexflow.config    Parameter files and environment setup
+│   │   ├── nextflow.config    Parameter files and environment setup
 │   │   ├── Docker_files/
 │   │   │    ├── Seurat_base/        # folder containing all documents for the sc_rna:v1.0 docker image
 │   │   │    │   ├── building.log         # complet log of the image building step
@@ -37,7 +39,7 @@ scRNAseq/
 │   │   │        └── dockerfile        celldex and SingleR
 │   │   ├── slurm_HPC/              #contains all the files for running  the pipeline on HPC. 
 │   │   │   ├── main_hpc.nf          Please read  the README.md for limitations.
-│   │   │   ├── nexflow.config      
+│   │   │   ├── nextflow.config      
 │   │   │   ├── seurat_slurm.sh
 │   │   │   └── README.md        
 │   │   │
@@ -58,7 +60,7 @@ scRNAseq/
 │   │   
 │   ├── CellChat/                    # For cellular comunication analysis\
 │   ├── GO analysis/                 # gene ontology script
-│   ├── Scrublet/                    # dubplets removal
+│   ├── Scrublet/                    # doublets removal
 │   ├── SoupX/                       # removal of environmental RNA
 │   ├── tools/
 │   │   ├── biomaRt_script.R        # to change between gene IDs
@@ -106,7 +108,7 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 -   **QC visualization:** automatic PNG reports of filtering thresholds and cell statistics.
 -   **Modular structure:** every stage can be run independently or within the main pipeline.
 -   **Local container support:** Docker/Singularity optional, no internet required.
--   **HPC slurm files** The pipline can be run on a HPC. Please read carefully the relative README.md for instructions.
+-   **HPC slurm files** The pipeline can be run on a HPC. Please read carefully the relative README.md for instructions.
 
 ------------------------------------------------------------------------
 
@@ -139,10 +141,6 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
     ``` bash
     nextflow run main.nf \
-      --inputDir ../../Data \
-      --resultDir ../../Results \
-      --scriptFile ../R \
-      --analysis scanpy
     ```
 
 3.  **Inspect results**
@@ -154,35 +152,31 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 ## 📊 Outputs
 
-| Folder         | Description      |
-|----------------|------------------|
-| `merged_h5/`   | no visuals       |
-| `cell_filter/` | 5 resuming .png  |
-| `SCTransform/` | no visuals       |
-| `seuratDisk/`  | no visuals       |
-| seurat_PCA/    | 2 resulting .png |
-| seura_cellType | 2 resulting .png |
+| Folder             | Description      |
+|--------------------|------------------|
+| `merged_h5/`       | no visuals       |
+| `cell_filter/`     | 5 resuming .png  |
+| `SCTransform/`     | no visuals       |
+| `seuratDisk/`      | no visuals       |
+| `seurat_PCA_UMAP/` | 2 resulting .png |
+| `seurat_markers/`  | 1 .png, 1 .cvs   |
+| `seura_cellType`   | 2 resulting .png |
+| `Pseudo_bulk`      | 2 .cvs files     |
 
 ------------------------------------------------------------------------
 
-## 🧭 Purpose & Vision
+🧭 Purpose & Vision This repository bridges the gap between bench experience and bioinformatic automation. It demonstrates how wet-lab researchers can transition individual analysis scripts into robust, portable workflows.
 
-The repository is meant to bridge the gap between **bench experience** and **bioinformatic automation**. It shows how a researcher can transform individual R analysis scripts into a full, portable workflow.
+Future Roadmap:
 
-Future directions include:
+-   Integration of Trajectory Analysis (Monocle3).
 
--   Integrating cell-cell communication and trajectory analysis modules (e.g., CellChat, Monocle3)
--   Adding automated report generation via **Quarto** or **RMarkdown**
--   Providing Docker/Singularity containers for reproducible environments
+-   Automated HTML reporting via Quarto.
+
+-   Expansion of the T-cell receptor modularity.
 
 ------------------------------------------------------------------------
 
 ## 📄 License
 
 MIT License © 2025 Alexander Bontempo
-
-------------------------------------------------------------------------
-
-Would you like me to make this version **optimized for public recruiters/labs** (a bit more narrative about your transition and design thinking), or keep it **strictly technical/documentation-style** for GitHub users and contributors?
-
-Database used for the adipocite project can be found [here](https://bioinformatics.ccr.cancer.gov/docs/getting-started-with-scrna-seq/GettingStarted_scRNASeq.zip).
