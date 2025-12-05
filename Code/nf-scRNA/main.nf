@@ -67,8 +67,9 @@ workflow {
         }
         RUN_Seurat_cellType_automatic(RUN_Seurat_markers.out.markers_cluster)
     }
-    else {
+    else if (mode=='scanpy'){
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_scanpy(RUN_seuratDisk.out.h5Seurat_file,RUN_seuratDisk.out.gene_names)
     }
 }
 // ───────────────────────────────────────────────────────────────────────────────
@@ -177,6 +178,24 @@ process RUN_seuratDisk {
     Rscript "${params.scriptFile}/RDS_to_h5ad.R" "${SCTransform}"
     """
 }
+process RUN_scanpy {
+    publishDir "${params.resultDir}/scanpy_analysis", mode: 'copy', overwrite: true
+     container 'python:v1.0'
+    input:
+    path h5Seurat_file
+    path genes_names
+
+    output:
+    path "*_leiden_res_1.2.png"
+    path "rank_genes_groups_leiden_res_1.40.png"
+    // path "*.csv"
+    // path "*.h5ad"
+
+    script:
+    """
+    python "${params.scriptFile}/run_scanpy.py" "${h5Seurat_file}" "${genes_names}"
+    """
+}
 process RUN_Seurat_PCA_UMAP {
     publishDir "${params.resultDir}/seurat_PCA_UMAP", mode: 'copy', overwrite: true
     // container 'bontix77/sc_rna:v1.0'
@@ -222,7 +241,9 @@ process RUN_Seurat_pseudoBulk {
     input:
     path Markers
     val pval
+
     output:
+
     path "differentialExpression_singlecell.csv"
     path "differentialExpression_bulk.csv"
     script:

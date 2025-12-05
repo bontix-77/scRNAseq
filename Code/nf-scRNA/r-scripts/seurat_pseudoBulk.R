@@ -15,23 +15,23 @@ pseudo_HIV<- AggregateExpression(HIV_pp_mks, assays = "RNA", return.seurat = T, 
 # Run standard PCA on the pseudo-bulk samples
 pb <- NormalizeData(pseudo_HIV)
 pb <- FindVariableFeatures(pb)
-pb <- ScaleData(pb,features = VariableFeatures(pb))
+pb <- ScaleData(pb)
 pcs <- length(pb@meta.data$orig.ident) - 1
 
-pb <- RunPCA(pb, npcs = pcs,features = VariableFeatures(pb))
+pb <- RunPCA(pb, npcs = pcs)
 
 DimPlot(pb, group.by = "group", pt.size = 3)
 
 
 # pseudo_HIV@assays$SCT@layers$counts@Dimnames[1] <- HIV_pp_mks@assays$SCT@data@Dimnames[1]
 # head(pseudo_HIV@assays$SCT$counts)
-pseudo_HIV@meta.data
+# pseudo_HIV@meta.data
 
 
 # just to clean up the look a little bit
 pseudo_HIV <- RenameCells(pseudo_HIV, new.names = gsub("_.*", "", pseudo_HIV$orig.ident))
 pseudo_HIV$orig.ident <- gsub("_.*", "", pseudo_HIV$orig.ident)
-head(pseudo_HIV@assays$RNA$counts)
+head(pseudo_HIV@assays$RNAsqueue$counts)
 pseudo_HIV@meta.data
 
 ## performin bulk DE
@@ -48,17 +48,12 @@ bulk_HIV_de <- FindMarkers(pseudo_HIV, ident.1 = groups[1], ident.2 = groups[2],
 head(bulk_HIV_de)
 
 # comparing how many differentially expressed genes between SC and bulk analisys comparing the conditions
-
+pval <- args[2]
 scDE.genes <- rownames(scDE)[which(scDE$p_val_adj < pval)]
 pval=args[2]
 bulkDE.genes <- rownames(bulk_HIV_de)[which(bulk_HIV_de$p_val_adj < pval)]
 
-# histogram of adjusted p values
- ggplot(bulk_HIV_de,aes(x=p_val_adj))+
- geom_histogram()
 
- ggplot(scDE,aes(x=p_val_adj))+
- geom_histogram()
 #write tables
 write.csv(scDE, file = "differentialExpression_singlecell.csv", row.names = TRUE, quote = FALSE)
 write.csv(bulk_HIV_de, file = "differentialExpression_bulk.csv", row.names = TRUE, quote = FALSE)
@@ -76,7 +71,6 @@ bulk_HIV_de[c("TCR_A", "TRC_B"), ]
 
 ## visualize the DE genes
 
-DotPlot(HIV_pp, features = unique(top5PerCluster$gene), dot.scale = 3) 
 
 # violine as alternative visualization
 

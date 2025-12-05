@@ -1,0 +1,27 @@
+# Use a lightweight Python 3.9 base image
+FROM python:3.9-slim
+
+# Set labels for metadata
+LABEL description="Image for Single-Cell RNA-seq with Scanpy and Scrublet"
+LABEL maintainer="Alexander Bontempo"
+
+# Install system dependencies
+# 'build-essential' is for compiling C extensions (numpy/pandas)
+# 'procps' is required by Nextflow to monitor memory/CPU usage
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Install Python libraries
+# We install leidenalg because Scanpy needs it for clustering
+# We specify versions for stability (optional but recommended)
+RUN pip install --no-cache-dir \
+    scanpy \
+    scrublet \
+    leidenalg \
+    matplotlib \
+    pandas \
+    numpy \
+    scipy
