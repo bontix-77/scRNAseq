@@ -48,11 +48,11 @@ sc.pp.neighbors(adata, n_neighbors=10, n_pcs=40)
 
 
 # Leiden clustering
-sc.tl.leiden(adata, resolution=1.2, flavor="igraph")
-# 7️⃣ Compute UMAP embedding
+sc.tl.leiden(adata, resolution=1.4, flavor="igraph")
+# Compute UMAP embedding
 sc.tl.umap(adata)
 # Plot UMAP
-sc.pl.umap(adata, color="leiden", show=False, save="_leiden_res_1.2.png")
+sc.pl.umap(adata, color="leiden", show=False, save="_leiden_res_1.4.png")
 
 
 

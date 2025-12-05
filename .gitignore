@@ -32,3 +32,5 @@ Code/Scrublet/Scrublet.py
 Code/Scrublet/scrublet_basics.ipynb
 Code/nf-scRNA/r-scripts/__pycache__/scanpy.cpython-39.pyc
 Code/nf-scRNA/results/scanpy_analysis/rank_genes_groups_leiden_res_1.40.png
+.nextflow/.nextflow.log
+.nextflow.log

@@ -186,7 +186,7 @@ process RUN_scanpy {
     path genes_names
 
     output:
-    path "*_leiden_res_1.2.png"
+    path "figures/umap_leiden_res_1.4.png"
     path "rank_genes_groups_leiden_res_1.40.png"
     // path "*.csv"
     // path "*.h5ad"
