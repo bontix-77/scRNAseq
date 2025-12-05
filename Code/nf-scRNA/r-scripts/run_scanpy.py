@@ -13,24 +13,6 @@ adata = sc.read_h5ad(path_data)
 
 # for some reason the indexes in the var is not the gene name but a numeric. Thefollowin
 adata.raw.var.set_index(adata.raw.var["_index"], inplace=True)
-######## change gene names
-# Load gene namessc.pl.dotplot(
-#    adata,
-#    marker_genes,
-#    groupby="leiden_res_0.02",
-#    standard_scale="var",
-#    use_raw=False
-# )
-# path_genName=sys.argv[2]
-# with open(path_genName) as f:
-#     gene_names = [line.strip() for line in f]
-
-#     # Replace raw.var_names
-#     # adata.raw.var_names = gene_names
-
-#     # Optional: replace var_names too
-#     adata.var_names = gene_names
-
 
 ########################################################################
 # Find highly variable genes (recommended before PCA)
@@ -64,7 +46,7 @@ adata.obs["leiden"].value_counts()
 sc.tl.rank_genes_groups(adata, groupby="leiden", method="t-test")
 """
 UPDATE: indexing solution below was partial. complete solution has been introduced by line 15
-For some reason adata.uns['rank_genes_groups']['names']
+For some reason adata.uns['rank_genes_groups']['names'] derived from runing seuratData
 doesn't contain gene name but the adata.raw.var['_index'].
 To convert the indexes to gene name i had to recreate a rec assigning dtype (one for cluster).
 
@@ -157,8 +139,6 @@ sc.pl.rank_genes_groups_dotplot(
     adata, groupby="leiden_res_1.40", standard_scale="var", n_genes=5, use_raw=True
 )
 ############ cell type#######################3
-# to look if a gene is present
-
 # to look if a gene is present
 
 [x for x in adata.var_names if "GYPA" in x]
