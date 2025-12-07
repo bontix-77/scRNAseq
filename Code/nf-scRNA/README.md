@@ -52,6 +52,18 @@ Code/
         │   ├── nexflow.config       the README.md for limitations.
         │   ├── seurat_slurm.sh
         │   └── README.md
+        ├── data/                   # In this folder is one sub folder per sample. Folder name same as the sample name.
+        │   │                                For ech sample are required: `matrix.mtx.gx` , `features.tsv.gz` , and `barcodes.tsv.gz`
+        │   ├──  sample 1
+        │   │      ├── matrix.mtx.gz
+        │   │      ├── features.tsv.gz
+        │   │      └── barcodes.tsv.gz
+        │   ├── sample 2
+        │   │      ├── matrix.mtx.gz
+        │   .      ├── features.tsv.gz
+        │   .      └── barcodes.tsv.gz
+        │   .  
+        │  
         ├── r-scripts/  
         │   ├── read_h5.R          # Read & merge 10x data  
         │   ├── cell_filter.R      # Filter the cell based on            
