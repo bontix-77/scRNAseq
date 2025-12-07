@@ -29,6 +29,7 @@ sbatch seurat_slurm.sh
     │     ├── SCTransform.R 
     │     ├── RDS_to_h5ad.R 
     │     ├── seurat_celldex.R     # Make sure to use the version found in slurm_HPC/
+    │     ├── run_scanpy.py
     │     ├── seurat_markers.R 
     │     ├── seurat_PCA_UMAP.R 
     │     ├── seurat_pseudobulk.R
