@@ -108,7 +108,7 @@ The project can be executed in modular R mode or as a complete **Nextflow pipeli
 
 **Main steps:**
 
-1.  **Data import and merging** (`read_h5.R`) Reads 10x Genomics HDF5 or matrix folders, merges across samples.
+1.  **Data import and merging** (`read_h5.R`) Reads 10x Genomics matrix folders and merges across samples, the script also permits to poll T cell receptor in Alph,Beta, Delta                                               and Gama removing variability in T cell population derived by multiple loci.
 
 2.  **Quality control and filtering** (`cell_filter.R`) Filters cells by counts, mitochondrial genes, or customizable metrics.
 
