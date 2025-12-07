@@ -29,6 +29,9 @@ in addition, the pipeline include also the puolling of the T cell receptors dive
 ------------------------------------------------------------------------
 
 ## 🧬 Structure
+>[!note]
+>sample data goes into the data folder.
+>1 subfolder per sample named as the sample and containing for each: matrix.mtx.gz, features.tsv.gz and barcodes.tsv.gz
 
 ```         
 scRNAseq/
@@ -60,6 +63,8 @@ scRNAseq/
 │   │   │     ├── seurat_markers.R
 │   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
 │   │   │                                 (in nextflow.config harmony parameter)
+│   │   ├── data/                   # In this folder is one sub folder per sample. Folder name same as the sample name.
+│   │   │                                 For ech sample there are required: `matrix.mtx.gx` , `features.tsv.gz` , and `barcodes.tsv.gz`
 │   │   ├── HIV scanpy/
 │   │   │       ├── seurat_to_scanpy.py # script to produce clusters and cell markers after seuratDisk
 │   │   │       └── results/            # contains some sample images
