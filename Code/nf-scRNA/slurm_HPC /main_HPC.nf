@@ -30,15 +30,9 @@ workflow {
     def mode = params.analysis.toString().toLowerCase()
      
     // Validate the mode against allowed values. If invalid, abort with a helpful message.
-    assert ['seurat', 'scanpy', 'parallel'].contains(mode) : "Invalid analysis mode: ${mode}. Choose 'seurat'. 'scanpy' or 'parallel params: --analysis"
+    assert ['seurat', 'scanpy', 'parallel'].contains(mode) : "Invalid analysis mode: ${mode}. Choose 'seurat', 'scanpy' or 'parallel params: --analysis"
     
-    //rscript= file("${params.scriptFile}/test.R")
-    // (Commented out) Example of how you might have bound a script path to a file handle.
 
-    // Kick off a quick diagnostic print to verify what folders were captured.
-    // `.collect()` turns the multi-value channel into a single list value for the process.
-    // in the final implementation this process is not necessary, so has been commented out.
-    //RUN_PRINT_R(folder_ch.collect())
     def samples =params.samples
     // Run the HDF5 reading/merging step, passing both the collected list of folders
     // and the base input directory (params.inputDir) as an additional value.
@@ -67,8 +61,22 @@ workflow {
         }
         RUN_Seurat_cellType_automatic(RUN_Seurat_markers.out.markers_cluster)
     }
-    else {
+    else if (mode=='scanpy'){
         RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_scanpy(RUN_seuratDisk.out.h5Seurat_file,RUN_seuratDisk.out.gene_names)
+    }
+    else {
+        RUN_Seurat_PCA_UMAP(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_Seurat_markers(RUN_Seurat_PCA_UMAP.out.PCA_UMAP_seurat)
+        RUN_Seurat_pseudoBulk(RUN_Seurat_markers.out.markers_cluster,pval)
+        // Read from params cellType_manual to include manual cell type annotation (stillin development)
+        def man_annotation = params.cellType_manual.toString().toLowerCase()
+        if (man_annotation == "yes"){
+              RUN_Seurat_cellTypes_manual(RUN_Seurat_markers.out.markers_cluster)
+        }
+        RUN_Seurat_cellType_automatic(RUN_Seurat_markers.out.markers_cluster)
+        RUN_seuratDisk(RUN_SCTransform.out.SCTransformed_rds)
+        RUN_scanpy(RUN_seuratDisk.out.h5Seurat_file,RUN_seuratDisk.out.gene_names)
     }
 }
 // ───────────────────────────────────────────────────────────────────────────────
@@ -95,7 +103,7 @@ process RUN_readh5 {
     script:
     
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}" 
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
     """
 }
 
@@ -175,6 +183,24 @@ process RUN_seuratDisk {
     script:
     """
     Rscript "${params.scriptFile}/RDS_to_h5ad.R" "${SCTransform}"
+    """
+}
+process RUN_scanpy {
+    publishDir "${params.resultDir}/scanpy_analysis", mode: 'copy', overwrite: true
+     container 'python:v1.0'
+    input:
+    path h5Seurat_file
+    path genes_names
+
+    output:
+    path "figures/umap_leiden_res_1.4.png"
+    path "rank_genes_groups_leiden_res_1.40.png"
+    // path "*.csv"
+    // path "*.h5ad"
+
+    script:
+    """
+    python "${params.scriptFile}/run_scanpy.py" "${h5Seurat_file}" "${genes_names}"
     """
 }
 process RUN_Seurat_PCA_UMAP {
