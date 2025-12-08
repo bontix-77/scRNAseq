@@ -152,7 +152,7 @@ FeatureScatter(HIV, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", group.by
 
 cells_keep <- HIV@meta.data |>
   filter(nFeature_RNA > 500,
-     nFeature_RNA < 2500,
+    #  nFeature_RNA < 2500,     # since scrublet is applied, upper limit for nFeature_RNA can be removed
     percent.mt < 10
   ) |>
   tibble::rownames_to_column("Cell") |>

@@ -15,16 +15,24 @@ plt.rcParams['pdf.fonttype'] = 42
 
 #read the argument pointing to the data folder
 root_dir= sys.argv[1]
-
+print("#################################################root_dir: "+root_dir)
 # root_dir = "/home/alexander-bontempo/Desktop/HIV GSM/GSM1"
 
-directories =  [d for d in os.listdir(root_dir) if os.path.isdir(os.path.join(root_dir, d))]
+directories =  [root_dir+p for p in sys.argv[2] ]
 matrixes = {}
 genes={}
+
+print(sys.argv[2]+" :argv[2]################################")
+directories= str(sys.argv[2]).strip().split()
+
 for d in directories:
+    print (f"###########################################d : {d}")
     dir_path = os.path.join(root_dir, d)
-    matrix_path = os.path.join(dir_path, 'matrix.mtx.gz')
+    print (f"###########################################d : {dir_path}")
+    matrix_path = os.path.join(dir_path,"matrix.mtx.gz")
+    print(matrix_path)
     genes_path = os.path.join(dir_path, 'features.tsv.gz')
+    print(genes_path)
     with gzip.open(matrix_path, 'rt') as tar:
          matrixes[d] = scipy.io.mmread(tar).T.tocsc()
     with gzip.open(genes_path, 'rt') as tar1:
@@ -39,7 +47,7 @@ for i in range(len(directories)):
 
 
 
-def scrublet (matrix_):
+def scrublet_ (matrix_):
     scrub = scr.Scrublet(matrix_, expected_doublet_rate=0.06)
   
     doublet_scores, predicted_doublets = scrub.scrub_doublets(min_counts=2, 
@@ -72,7 +80,7 @@ def scrublet (matrix_):
 dublets_vector={}
 for m in range(len(matrixes)):
     matrix=matrixes[directories[m]]
-    matrix=scrublet(matrix)
+    matrix=scrublet_(matrix)
     #adding 1 because the idexes will be used in R where the index start from 1
     dublets_vector[directories[m]]=(matrix+1).tolist()
 

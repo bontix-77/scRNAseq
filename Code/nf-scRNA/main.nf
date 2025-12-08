@@ -36,8 +36,10 @@ workflow {
     def samples =params.samples
     // Run the HDF5 reading/merging step, passing both the collected list of folders
     // and the base input directory (params.inputDir) as an additional value.
-    RUN_readh5(folder_ch.collect(), params.inputDir,samples)
-
+    RUN_scrublet(folder_ch.collect(),params.inputDir)
+    def dublets=RUN_scrublet.out.dublets
+    RUN_readh5(folder_ch.collect(), params.inputDir,samples,dublets)
+    
     // Filter cells based on quality metrics or other criteria. This consumes the
     // merged RDS produced by the prior step.
     RUN_cell_filter(RUN_readh5.out.merged_rds)
@@ -88,6 +90,25 @@ workflow {
 // - `folders` contains the list of directory paths to scan.
 // - `base_dir` passes the original input directory string for the R script's internal logic.
 // ───────────────────────────────────────────────────────────────────────────────
+process RUN_scrublet {
+    publishDir "${params.resultDir}/scrublet", mode: 'copy', overwrite: true
+    container 'python:v1.0'
+
+    input:
+
+    
+    path folders
+    val base_dir
+
+    output:
+    path "dublets_vectors.csv", emit: dublets
+
+    script:
+    """
+    python "${params.scriptFile}/run_scrublet.py" "${base_dir}" "${folders}"
+    """
+}
+
 process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
@@ -97,13 +118,15 @@ process RUN_readh5 {
     path folders
     val base_dir
     val samples
+    val dublets
+
     output:
     path "HIV_merged.rds", emit: merged_rds
 
     script:
     
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}" "${dublets}"
     """
 }
 

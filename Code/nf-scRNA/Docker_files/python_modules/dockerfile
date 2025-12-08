@@ -27,5 +27,5 @@ RUN pip install --no-cache-dir \
     numpy \
     scipy 
 # If you get an error during scrublet about ptp() function, uncomment the following lines and build the image again
-# RUN sed -i "s/y.ptp()/np.ptp(y)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
-# RUN sed -i  "s/x.ptp()/np.ptp(x)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
+RUN sed -i "s/y.ptp()/np.ptp(y)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
+RUN sed -i  "s/x.ptp()/np.ptp(x)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
