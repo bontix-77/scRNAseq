@@ -11,7 +11,7 @@ HIV_pp_mks <- readRDS(path)
 HIV.sce <- as.SingleCellExperiment(HIV_pp_mks, assay = "SCT") # This selects *only* the SCT assay
 #mouseRNASeq <- celldex::MouseRNAseqData()
 humanRNA <- BlueprintEncodeData()
-humanRNA <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/celldex.rds")
+# humanRNA <- readRDS("/home/alexander-bontempo/Desktop/GitHub/scRNAseq/celldex.rds")
 head(humanRNA)
 table(humanRNA$label.main) # principal cell types
 table(humanRNA$label.fine) # subtypes

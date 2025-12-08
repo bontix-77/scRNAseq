@@ -254,15 +254,13 @@ adata.obs["cell_type_lvl1"] = adata.obs["leiden_res_1.40"].map(
 )
 # Obtain cluster-specific differentially expressed genes
 sc.tl.rank_genes_groups(adata, groupby="leiden_res_1.40", method="wilcoxon")
-dotplot = sc.pl.rank_genes_groups_dotplot(
+sc.pl.rank_genes_groups(
     adata,
     groupby="leiden_res_1.40",
     standard_scale="var",
     n_genes=5,
-    use_raw=False,
+    use_raw=True,
     show=False,
-    return_fig=True,
+    save=".png"
 )
-dotplot.savefig(
-    "rank_genes_groups_leiden_res_1.40.png", dpi=300, bbox_inches="tight"
-)
+
