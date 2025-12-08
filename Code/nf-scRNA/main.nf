@@ -263,8 +263,6 @@ process RUN_Seurat_markers {
     Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
     """
 }
-
-
 process RUN_Seurat_pseudoBulk {
     publishDir "${params.resultDir}/Pseudo_bulk", mode: 'copy', overwrite: true
 
@@ -301,7 +299,6 @@ process RUN_Seurat_cellTypes_manual {
     Rscript "${params.scriptFile}/seurat_cellTypes.R" "${CellType}"
     """
 }
-
 process RUN_Seurat_cellType_automatic {
 
     publishDir "${params.resultDir}/seurat_cellType", mode: 'copy', overwrite: true

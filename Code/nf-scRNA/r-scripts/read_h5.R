@@ -17,26 +17,8 @@ dublets_path= args[5]
 dublets <- read.csv(dublets_path,  sep=",")
 rownames(dublets) <- dublets$index
 dublets$index <- NULL
-###########################################################################
 
-
-# #####temporary################
-# setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM1")
-
-# # List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
-# dirs <- list.dirs()
-# dirs_name <- basename(dirs[dirs !="./"])
-# dirs_name <- dirs_name[-1]
-
-# # Create a list of count matrices
-# paste( "/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/data/",dirs[2])
-
-# reads <- lapply(paste0("/home/alexander-bontempo/Desktop/HIV GSM/GSM1/",dirs_name,"/")
-#   , Read10X)
-
-# names(reads) <- c("GSM6817423", "GSM6817431", "GSM6817432", "GSM6817433", "GSM6817434", "GSM6817435","GSM6817436")
-# #####end temporary #############
-
+################### function to remove doublets from the sparse matrix###########################
 remove_doublets   <-  function(data_mtx,vector){
 
              
@@ -62,7 +44,7 @@ for (i in folders){
 for (i in folders){
   reads[[i]] <- remove_doublets (reads[[i]],dublets[i,])
 }
-##################################
+##################################################################
 
 
 
