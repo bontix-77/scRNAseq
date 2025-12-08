@@ -1,5 +1,5 @@
 # Use a lightweight Python 3.9 base image
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 # Set labels for metadata
 LABEL description="Image for Single-Cell RNA-seq with Scanpy and Scrublet"
@@ -11,12 +11,13 @@ LABEL maintainer="Alexander Bontempo"
 RUN apt-get update && apt-get install -y \
     build-essential \
     procps \
+    fonts-dejavu \
     && rm -rf /var/lib/apt/lists/*
 
 
 # Install Python libraries
 # We install leidenalg because Scanpy needs it for clustering
-# We specify versions for stability (optional but recommended)
+
 RUN pip install --no-cache-dir \
     scanpy \
     scrublet \
@@ -24,4 +25,7 @@ RUN pip install --no-cache-dir \
     matplotlib \
     pandas \
     numpy \
-    scipy
+    scipy 
+# If you get an error during scrublet about ptp() function, uncomment the following lines and build the image again
+# RUN sed -i "s/y.ptp()/np.ptp(y)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
+# RUN sed -i  "s/x.ptp()/np.ptp(x)/g" /usr/local/lib/python3.12/site-packages/scrublet/scrublet.py
