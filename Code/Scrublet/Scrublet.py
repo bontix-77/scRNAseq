@@ -37,7 +37,7 @@ for i in range(len(directories)):
     print('Number of genes: {}'.format(matrixes[directories[i]].shape[1]))
     print('Gene names: {}'.format(genes[directories[i]][:10]))  # Print first 10 gene names
 
-scrub = scr.Scrublet(matrixes[directories[0]], expected_doublet_rate=0.06)
+scrub = scr.Scrublet(matrixes[directories[1]], expected_doublet_rate=0.06)
 
 
 print(root_dir +directories[0]+ 'genes.tsv')

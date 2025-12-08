@@ -8,9 +8,58 @@ if (!grepl("/$", base_dir)) {
   base_dir <- paste0(base_dir, "/")
 }
 
-
 reads <- lapply(folders, function(x) Read10X(file.path(base_dir, x)))
 names(reads) <- folders
+
+
+###### reading the csv  containing the scrublet.py results ################
+dublets_path= args[4]
+dublets <- read.csv(dublets_path,  sep=",")
+rownames(dublets) <- dublets$index
+dublets$index <- NULL
+###########################################################################
+
+
+#####temporary################
+setwd("/home/alexander-bontempo/Desktop/HIV GSM/GSM1")
+
+# List of the samples files. In this case we have 3  files for each sample: matrix.mtx, barcodes.tsv.gz and features.tsv.gz used to map raw reads in X10 Genomics Chromium systems.
+dirs <- list.dirs()
+dirs_name <- basename(dirs[dirs !="./"])
+dirs_name <- dirs_name[-1]
+
+# Create a list of count matrices
+paste( "/home/alexander-bontempo/Desktop/GitHub/scRNAseq/Code/nf-scRNA/data/",dirs[2])
+
+reads <- lapply(paste0("/home/alexander-bontempo/Desktop/HIV GSM/GSM1/",dirs_name,"/")
+  , Read10X)
+
+names(reads) <- c("GSM6817423", "GSM6817431", "GSM6817432", "GSM6817433", "GSM6817434", "GSM6817435","GSM6817436")
+#####end temporary #############
+
+remove_doublets   <-  function(data,vector){
+
+             
+                # 1. Remove the brackets "[" and "]"
+              clean_string <- gsub("\\[|\\]", "", vector)
+
+              # 2. Split the string by comma to get individual numbers
+              # unlist() is needed because strsplit returns a list
+              string_numbers <- unlist(strsplit(clean_string, ","))
+
+              # 3. Convert text to actual numbers
+              numeric_indices <- as.numeric(string_numbers)
+
+              # 4. Remove the columns from the sparse matrix
+              filtered_matrix <- data_mtx[, -numeric_indices]
+             
+
+              return (filtered_matrix)
+              }
+reads[["GSM6817423"]] <- remove_doublets (reads[['GSM6817423']],dublets['GSM6817423',])
+
+
+
 
 # function to colapse TCR alfa bete delta and gama in 4 groups
 if (args[3] =="yes"){
@@ -198,7 +247,7 @@ if (args[3] =="yes"){
                   "TRBJ2-5",
                   "TRBJ2-6",
                   "TRBJ2-7")
-                  Gamma <- c(
+                Gamma <- c(
                   "TRGC2",
                   "TRGJ2",
                   "TRGJP2",
