@@ -263,4 +263,4 @@ sc.pl.rank_genes_groups(
     show=False,
     save=".png"
 )
-
+sc.pl.umap(adata, color="cell_type_lvl1", show=False, save="_cell_type_lvl1.png")

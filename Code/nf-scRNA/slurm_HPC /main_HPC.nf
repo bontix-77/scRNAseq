@@ -221,12 +221,12 @@ process RUN_scanpy {
     output:
     path "figures/umap_leiden_res_1.4.png"
     path "figures/rank_genes_groups_leiden_res_1.40.png"
+    path "figures/umap_cell_type_lvl1.png"
     // path "*.csv"
     // path "*.h5ad"
 
     script:
     """
-    # Add these two lines to fix the caching errors
     export NUMBA_CACHE_DIR="\$PWD"
     export MPLCONFIGDIR="\$PWD"
     python "${params.scriptFile}/run_scanpy.py" "${h5Seurat_file}" "${genes_names}"
