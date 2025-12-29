@@ -22,6 +22,7 @@ HIV_pp_mks <- readRDS(path)
 HIV.sce <- as.SingleCellExperiment(HIV_pp_mks, assay = "SCT") # This selects *only* the SCT assay
 
 cellde_path <- paste0(args[2], "/celldex.rds")
+print(paste0("######################################",cellde_path,"###################################"))
 humanRNA <- readRDS(cellde_path)
 head(humanRNA)
 table(humanRNA$label.main) # principal cell types

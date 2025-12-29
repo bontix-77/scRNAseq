@@ -105,7 +105,7 @@ process RUN_scrublet {
 
     script:
     """
-    # the following exports are to avoid issues with numba and matplotlib when running in HPC systems
+    # Add these two lines to fix the caching errors
     export NUMBA_CACHE_DIR="\$PWD"
     export MPLCONFIGDIR="\$PWD"
     python "${params.scriptFile}/run_scrublet.py" "${base_dir}" "${folders}"
@@ -309,6 +309,7 @@ process RUN_Seurat_cellType_automatic {
 
     input:
     path Markers
+   
 
     output:
     path "CellType_celldex.png"
@@ -318,6 +319,6 @@ process RUN_Seurat_cellType_automatic {
     script:
 
     """
-    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}"
+    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}" "${params.scriptFile}"
     """
 }
