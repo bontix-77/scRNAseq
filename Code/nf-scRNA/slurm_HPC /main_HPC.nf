@@ -36,8 +36,10 @@ workflow {
     def samples =params.samples
     // Run the HDF5 reading/merging step, passing both the collected list of folders
     // and the base input directory (params.inputDir) as an additional value.
-    RUN_readh5(folder_ch.collect(), params.inputDir,samples)
-
+    RUN_scrublet(folder_ch.collect(),params.inputDir)
+    def dublets=RUN_scrublet.out.dublets
+    RUN_readh5(folder_ch.collect(), params.inputDir,samples,dublets)
+    
     // Filter cells based on quality metrics or other criteria. This consumes the
     // merged RDS produced by the prior step.
     RUN_cell_filter(RUN_readh5.out.merged_rds)
@@ -88,6 +90,28 @@ workflow {
 // - `folders` contains the list of directory paths to scan.
 // - `base_dir` passes the original input directory string for the R script's internal logic.
 // ───────────────────────────────────────────────────────────────────────────────
+process RUN_scrublet {
+    publishDir "${params.resultDir}/scrublet", mode: 'copy', overwrite: true
+    container '/home/abontemp/nf-scRNA/python_v1.0.sif'
+
+    input:
+
+    
+    path folders
+    val base_dir
+
+    output:
+    path "dublets_vectors.csv", emit: dublets
+
+    script:
+    """
+    # the following exports are to avoid issues with numba and matplotlib when running in HPC systems
+    export NUMBA_CACHE_DIR="\$PWD"
+    export MPLCONFIGDIR="\$PWD"
+    python "${params.scriptFile}/run_scrublet.py" "${base_dir}" "${folders}"
+    """
+}
+
 process RUN_readh5 {
     // Publish all outputs to results/merged_h5 for consistent artifact organization.
     publishDir "${params.resultDir}/read_h5", mode: 'copy', overwrite: true
@@ -97,13 +121,15 @@ process RUN_readh5 {
     path folders
     val base_dir
     val samples
+    val dublets
+
     output:
     path "HIV_merged.rds", emit: merged_rds
 
     script:
     
     """
-    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}"
+    Rscript "${params.scriptFile}/read_h5.R" "${folders}" ${base_dir} "${params.colapse_T_eceptors}" "${samples}" "${dublets}"
     """
 }
 
@@ -187,14 +213,14 @@ process RUN_seuratDisk {
 }
 process RUN_scanpy {
     publishDir "${params.resultDir}/scanpy_analysis", mode: 'copy', overwrite: true
-     container 'python:v1.0'
+     container '/home/abontemp/nf-scRNA/python_v1.0.sif'
     input:
     path h5Seurat_file
     path genes_names
 
     output:
     path "figures/umap_leiden_res_1.4.png"
-    path "rank_genes_groups_leiden_res_1.40.png"
+    path "figures/rank_genes_groups_leiden_res_1.40.png"
     // path "*.csv"
     // path "*.h5ad"
 
@@ -240,15 +266,15 @@ process RUN_Seurat_markers {
     Rscript "${params.scriptFile}/seurat_markers.R" "${PCA_UMAP}"
     """
 }
-
-
 process RUN_Seurat_pseudoBulk {
     publishDir "${params.resultDir}/Pseudo_bulk", mode: 'copy', overwrite: true
 
     input:
     path Markers
     val pval
+
     output:
+
     path "differentialExpression_singlecell.csv"
     path "differentialExpression_bulk.csv"
     script:
@@ -276,7 +302,6 @@ process RUN_Seurat_cellTypes_manual {
     Rscript "${params.scriptFile}/seurat_cellTypes.R" "${CellType}"
     """
 }
-
 process RUN_Seurat_cellType_automatic {
 
     publishDir "${params.resultDir}/seurat_cellType", mode: 'copy', overwrite: true
@@ -293,6 +318,6 @@ process RUN_Seurat_cellType_automatic {
     script:
 
     """
-    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}" "${params.scriptFile}"
+    Rscript "${params.scriptFile}/seurat_celldex.R" "${Markers}"
     """
 }
