@@ -226,6 +226,9 @@ process RUN_scanpy {
 
     script:
     """
+    # Add these two lines to fix the caching errors
+    export NUMBA_CACHE_DIR="\$PWD"
+    export MPLCONFIGDIR="\$PWD"
     python "${params.scriptFile}/run_scanpy.py" "${h5Seurat_file}" "${genes_names}"
     """
 }
