@@ -36,3 +36,4 @@ Code/nf-scRNA/results/scanpy_analysis/rank_genes_groups_leiden_res_1.40.png
 .nextflow.log
 Code/nf-scRNA/r-scripts/__pycache__/scrublet.cpython-313.pyc
 Code/nf-scRNA/r-scripts/__pycache__/scrublet.cpython-312.pyc
+Code/nf-scRNA/results/results.tar
