@@ -6,11 +6,15 @@ https://scanpy.readthedocs.io/en/latest/tutorials/index.htmlhttps://scanpy.readt
 import scanpy as sc
 import sys
 # import louvain    #library can't install: missing dependencices i can't solve
+# Define your seed for random operations
+RANDOM_SEED = 1997
+
 
 path_data= sys.argv[1]
 adata = sc.read_h5ad(path_data)
 
-
+# Define your seed for random operations
+RANDOM_SEED = 1997
 # for some reason the indexes in the var is not the gene name but a numeric. Thefollowin
 adata.raw.var.set_index(adata.raw.var["_index"], inplace=True)
 

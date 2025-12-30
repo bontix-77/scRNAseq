@@ -4,7 +4,7 @@ library(future)
 library(glmGamPoi)
 plan("sequential") 
 ##################
-
+set.seed(1997)
 args <- commandArgs(trailingOnly=TRUE)
 path <- args[1]
 
