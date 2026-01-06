@@ -283,17 +283,17 @@ if (args[3] =="yes"){
                   # extracting the matrix 
                   # mtx <- GetAssayData(seu)#, assay = assay, slot = slot_use)
 
-                  # tengo solo i geni che esistono davvero nella matrice
+                  # keep the genes that exist in the matrix
                   genes_present <- intersect(remove, rownames(mtx))
                   if (length(genes_present) == 0) {
                     stop("Nessuno dei geni indicati esiste nell assay")
                   }
 
-                  # somma per colonna dei geni da accorpare
+                  # column sum of the genes to be grupped
                   grouped_counts <- Matrix::colSums(mtx[genes_present, , drop = FALSE])
 
-                  # aggiungo la nuova "feature" come ultima riga
-                  # costruisco una matrice una riga con i counts raggruppati
+                  # append the new "feature"
+                  # build a new matrix with the gene grupped
                   new_row <- Matrix(
                     grouped_counts,
                     nrow = 1,
@@ -303,7 +303,7 @@ if (args[3] =="yes"){
 
                   mtx_new <- rbind(mtx, new_row)
 
-                  # elimino i geni originali
+                  # remove original genes
                   keep_features <- setdiff(rownames(mtx_new), genes_present)
                   mtx_new <- mtx_new[keep_features, ]
 
@@ -315,10 +315,10 @@ if (args[3] =="yes"){
 
                 reads1 <- list()
 
-                for (i in names(reads)) {
-                  mtx_i <- reads[[i]]   # parto dalla matrice originale
+                for (i in names(reads)) { # loop for all the samples
+                  mtx_i <- reads[[i]]   # read the original matrix
                   
-                  for (g in names(TCR)) {
+                  for (g in names(TCR)) {  # loop for all the TCR groups
                     mtx_i <- group_genes_and_collapse(
                       mtx = mtx_i,
                       remove = TCR[[g]],
@@ -326,7 +326,7 @@ if (args[3] =="yes"){
                     )
                   }
                   
-                  reads[[i]] <- mtx_i  # salvo la versione finale collassata
+                  reads[[i]] <- mtx_i  # store in the object the new matrix with colapsed  TCR
                 }
                   print ("TCR colapsed")
                 }
