@@ -63,8 +63,8 @@ scRNAseq/
 │   │   │     ├── seurat_markers.R
 │   │   │     └── Harmony_PCA.R     # Perform PCA with or whitout harmony 
 │   │   │                                 (in nextflow.config harmony parameter)
-│   │   ├── data/                   # In this folder is one sub folder per sample. Folder name same as the sample name.
-│   │   │   │                            For ech sample are required: `matrix.mtx.gx` , `features.tsv.gz` , and `barcodes.tsv.gz`
+│   │   ├── data/                   # In this folder there is one sub folder per sample. Folder name same as the sample name.
+│   │   │   │                            For each sample are required: `matrix.mtx.gx` , `features.tsv.gz` , and `barcodes.tsv.gz`
 │   │   │   ├──  sample 1
 │   │   │   │      ├── matrix.mtx.gz
 │   │   │   │      ├── features.tsv.gz
