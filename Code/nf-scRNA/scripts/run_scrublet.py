@@ -10,7 +10,8 @@ plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = 'DejaVu Sans' # if in windows 'Arial'
 plt.rc('font', size=14)
 plt.rcParams['pdf.fonttype'] = 42
-
+# Define your seed for random operations
+RANDOM_SEED = 1997
 
 
 #read the argument pointing to the data folder

@@ -203,7 +203,7 @@ Beta <- c(
   "TRBJ2-5",
   "TRBJ2-6",
   "TRBJ2-7")
-  Gamma <- c(
+Gamma <- c(
   "TRGC2",
   "TRGJ2",
   "TRGJP2",
@@ -251,20 +251,20 @@ group_genes_and_collapse <- function(
   remove,
   new_feature_name
 ) {
-  # prendo la matrice dal Seurat object
+  # i extract the matrix from the seurat object
   # mtx <- GetAssayData(seu)#, assay = assay, slot = slot_use)
 
-  # tengo solo i geni che esistono davvero nella matrice
+  # i consider the gene that exist in the matrix
   genes_present <- intersect(remove, rownames(mtx))
   if (length(genes_present) == 0) {
     stop("Nessuno dei geni indicati esiste nell assay")
   }
 
-  # somma per colonna dei geni da accorpare
+  # sum by column the genes to be grupped
   grouped_counts <- Matrix::colSums(mtx[genes_present, , drop = FALSE])
 
-  # aggiungo la nuova "feature" come ultima riga
-  # costruisco una matrice una riga con i counts raggruppati
+  # append the new "feature row" to the matrix
+  # build a row with the grupped counts
   new_row <- Matrix(
     grouped_counts,
     nrow = 1,
@@ -274,11 +274,11 @@ group_genes_and_collapse <- function(
 
   mtx_new <- rbind(mtx, new_row)
 
-  # elimino i geni originali
+  # delete the original genes
   keep_features <- setdiff(rownames(mtx_new), genes_present)
   mtx_new <- mtx_new[keep_features, ]
 
-  # rimetto la matrice dentro il Seurat object
+  # reposition the matrix inside the Seura Object
 
   # if (slot_use == "counts") {
   #   # seu[[assay]]@counts <- NULL   # svuota slot vecchi se esistono
@@ -319,7 +319,7 @@ for (i in names(reads)) {
 }
 
 
-s <- mtx_new
+s <- mtx_i
 s <- s[-5, ]
 
 # reads1 <- copy(reads)
