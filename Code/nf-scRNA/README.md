@@ -107,6 +107,7 @@ flowchart TB
       v0["inputDir"]
     end
     v4([RUN_readh5])
+    v12([RUN-scrublet])
     v5([RUN_cell_filter])
     v6([RUN_SCTransform])
     v7{"Seurat or scanpy"}
@@ -119,7 +120,8 @@ flowchart TB
       v10([RUN_seuratDisk])
     end
     v0 --> v4
-    v4 --> v5
+    v4 --> v12
+    v12 --> v5
     v5 --> v6
     v2 --> v7
     v6 --> v8

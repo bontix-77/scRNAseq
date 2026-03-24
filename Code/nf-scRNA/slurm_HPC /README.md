@@ -25,6 +25,7 @@ sbatch seurat_slurm.sh
 ├── nf_scRNA
     ├── r-scripts/ 
     │     ├── read_h5.R 
+    │     ├── run_scrublet.py
     │     ├── cell_filter.R 
     │     ├── SCTransform.R 
     │     ├── RDS_to_h5ad.R 
